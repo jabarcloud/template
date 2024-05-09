@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Akses Ditolak (403)</title>
+    <title>JabarCloud | Akses Ditolak</title>
     <style>
         body {
             font-family: sans-serif;
@@ -23,20 +23,20 @@
         }
 
         .icon {
-            width: 120px; /* Ukuran lebar awal .icon */
-            height: 120px; /* Ukuran tinggi awal .icon */
-            margin: 0 auto; /* Menempatkan gambar di tengah secara horizontal */
-            text-align: center; /* Menempatkan gambar di tengah secara vertikal (hanya untuk IE/Edge lama) */
-            display: flex; /* Mengaktifkan flexbox untuk .icon */
-            align-items: center; /* Menempatkan konten secara vertikal di tengah */
-            justify-content: center; /* Menempatkan konten secara horizontal di tengah */
-            overflow: hidden; /* Memotong gambar yang melampaui batas .icon */
+            width: 120px;
+            height: 120px;
+            margin: 0 auto;
+            text-align: center; 
+            display: flex; 
+            align-items: center;
+            justify-content: center;
+            overflow: hidden;
         }
 
         .icon img {
-            width: 100%; /* Mengisi penuh lebar .icon */
-            height: 100%; /* Mengisi penuh tinggi .icon */
-            object-fit: contain; /* Menjaga proporsi gambar dan mengisi penuh area */
+            width: 100%;
+            height: 100%;
+            object-fit: contain;
         }
 
 
@@ -44,15 +44,15 @@
             font-size: 24px;
             font-weight: bold;
             margin-bottom: 10px;
-            color: #000; /* Warna default untuk seluruh teks */
+            color: #000;
         }
 
         .message span.akses {
-            color: #000; /* Warna hitam untuk kata "Akses" */
+            color: #000;
         }
 
         .message span.ditolak {
-            color: #ED0A3F; /* Warna merah #ED0A3F untuk kata "Ditolak" */
+            color: #ED0A3F;
         }
 
         .description {
@@ -65,18 +65,20 @@
         }
 
         .additional-info {
-            margin-top: 20px; /* Jarak atas dari deskripsi */
+            margin-top: 20px;
         }
 
         .additional-info ul {
-            list-style-type: disc; /* Tipe bullet (bisa diubah sesuai keinginan) */
-            margin-left: 20px; /* Jarak kiri dari daftar */
-            padding: 0; /* Menghapus padding default */
+            list-style-type: disc;
+            margin-left: 20px;
+            padding: 0;
         }
 
         .additional-info li {
-            font-size: 16px; /* Ukuran font */
-            line-height: 1.5; /* Jarak baris */
+            font-size: 16px;
+            line-height: 1.5;
+            text-align: start;
+
         }
 
 
@@ -100,17 +102,17 @@
 <body>
     <div class="container">
         <div class="icon">
-            <img src="jabarcloud.png" alt="JabarCloud">
+            <img src="https://raw.githubusercontent.com/jabarcloud/template/main/jabarcloud.png" alt="JabarCloud">
         </div>
-        <h2 class="message">Akses <span class="ditolak">Ditolak</span></h2>
-        <p class="description">Anda tidak memiliki izin untuk mengakses halaman ini.</p>
+        <h2 class="message">Akses Anda <span class="ditolak">Ditolak</span></h2>
+        <p class="description">Anda tidak memiliki izin untuk mengakses halaman ini, karena dianggap melanggar ketentuan kami:</p>
         <div class="additional-info">
             <ul>
-                <li>Hubungi administrator untuk mendapatkan akses.</li>
-                <li>Coba halaman lain di situs web ini.</li>
-                <li>Kembali ke beranda.</li>
+                <li>Mengakses domain yang hanya bisa dibuka melalui jaringan intra pemerintah atau VPN provinsi Jawa Barat.</li>
+                <li>Melakukan serangan, atau menggunakan perangkat yang telah terjangkit malware.</li>
+                <li>Melanggar peraturan komunitas internet, yang dapat anda baca di sini.</li>
             </ul>
-        <p class="description">Bila anda merasa hal ini tidak benar, silakan menghubungi <a class="kontak" href="https://wa.me/+6285156357601">kami.</a></p>
+        <p class="description">Bila anda merasa hal ini tidak benar, silakan menghubungi <a class="kontak" href="https://wa.me/+6281231222920">kami.</a></p>
         </div>
             <a href="https://egov.jabarprov.go.id" class="button">Kembali ke Beranda</a>
         </div>
