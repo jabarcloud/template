@@ -1,0 +1,122 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Akses Ditolak (403)</title>
+    <style>
+        body {
+            font-family: sans-serif;
+            background-color: #f2f2f2;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            min-height: 100vh;
+            text-align: center;
+        }
+
+        .container {
+            background-color: #fff;
+            padding: 30px;
+            border-radius: 10px;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+        }
+
+        .icon {
+            width: 120px; /* Ukuran lebar awal .icon */
+            height: 120px; /* Ukuran tinggi awal .icon */
+            margin: 0 auto; /* Menempatkan gambar di tengah secara horizontal */
+            text-align: center; /* Menempatkan gambar di tengah secara vertikal (hanya untuk IE/Edge lama) */
+            display: flex; /* Mengaktifkan flexbox untuk .icon */
+            align-items: center; /* Menempatkan konten secara vertikal di tengah */
+            justify-content: center; /* Menempatkan konten secara horizontal di tengah */
+            overflow: hidden; /* Memotong gambar yang melampaui batas .icon */
+        }
+
+        .icon img {
+            width: 100%; /* Mengisi penuh lebar .icon */
+            height: 100%; /* Mengisi penuh tinggi .icon */
+            object-fit: contain; /* Menjaga proporsi gambar dan mengisi penuh area */
+        }
+
+
+        .message {
+            font-size: 24px;
+            font-weight: bold;
+            margin-bottom: 10px;
+            color: #000; /* Warna default untuk seluruh teks */
+        }
+
+        .message span.akses {
+            color: #000; /* Warna hitam untuk kata "Akses" */
+        }
+
+        .message span.ditolak {
+            color: #ED0A3F; /* Warna merah #ED0A3F untuk kata "Ditolak" */
+        }
+
+        .description {
+            font-size: 16px;
+            line-height: 1.5;
+        }
+
+        .description a.kontak {
+            color: rgb(31, 167, 221);
+        }
+
+        .additional-info {
+            margin-top: 20px; /* Jarak atas dari deskripsi */
+        }
+
+        .additional-info ul {
+            list-style-type: disc; /* Tipe bullet (bisa diubah sesuai keinginan) */
+            margin-left: 20px; /* Jarak kiri dari daftar */
+            padding: 0; /* Menghapus padding default */
+        }
+
+        .additional-info li {
+            font-size: 16px; /* Ukuran font */
+            line-height: 1.5; /* Jarak baris */
+        }
+
+
+        .button {
+            display: inline-block;
+            padding: 10px 20px;
+            background-color: #007bff;
+            color: #fff;
+            text-decoration: none;
+            border-radius: 5px;
+            cursor: pointer;
+        }
+
+        .button:hover {
+            background-color: #0056b3;
+        }
+
+        
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="icon">
+            <img src="jabarcloud.png" alt="JabarCloud">
+        </div>
+        <h2 class="message">Akses <span class="ditolak">Ditolak</span></h2>
+        <p class="description">Anda tidak memiliki izin untuk mengakses halaman ini.</p>
+        <div class="additional-info">
+            <ul>
+                <li>Hubungi administrator untuk mendapatkan akses.</li>
+                <li>Coba halaman lain di situs web ini.</li>
+                <li>Kembali ke beranda.</li>
+            </ul>
+        <p class="description">Bila anda merasa hal ini tidak benar, silakan menghubungi <a class="kontak" href="https://wa.me/+6285156357601">kami.</a></p>
+        </div>
+            <a href="https://egov.jabarprov.go.id" class="button">Kembali ke Beranda</a>
+        </div>
+    <script>
+        // Contoh penggunaan JavaScript untuk animasi atau efek lainnya
+        // ...
+    </script>
+</body>
+</html>
