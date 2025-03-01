@@ -1,0 +1,297 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>JabarCloud: 504 Gateway Time-out</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        
+        @font-face {
+            font-family: 'Material Icons';
+            font-style: normal;
+            font-weight: 400;
+            src: url(https://cdnjs.cloudflare.com/ajax/libs/material-design-icons/3.0.1/iconfont/MaterialIcons-Regular.woff2) format('woff2');
+        }
+        
+        .material-icons {
+            font-family: 'Material Icons';
+            font-weight: normal;
+            font-style: normal;
+            font-size: 20px;
+            line-height: 1;
+            letter-spacing: normal;
+            text-transform: none;
+            display: inline-block;
+            white-space: nowrap;
+            word-wrap: normal;
+            direction: ltr;
+            vertical-align: middle;
+            margin-right: 8px;
+        }
+        
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, 'Open Sans', 'Helvetica Neue', sans-serif;
+            background-color: #f7f9fc;
+            color: #333;
+            height: 100vh;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: 20px;
+        }
+        
+        .container {
+            max-width: 600px;
+            text-align: center;
+            padding: 40px;
+            background-color: white;
+            border-radius: 12px;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.06);
+            position: relative;
+            overflow: hidden;
+        }
+        
+        .error-code {
+            position: absolute;
+            top: 0;
+            right: 0;
+            padding: 8px 16px;
+            background-color: #f3f4f6;
+            color: #9ca3af;
+            font-size: 0.875rem;
+            border-bottom-left-radius: 8px;
+        }
+        
+        .icon {
+            width: 120px;
+            height: 120px;
+            margin: 0 auto 30px;
+            position: relative;
+        }
+        
+        .server {
+            width: 60px;
+            height: 80px;
+            background-color: #7e22ce;
+            border-radius: 6px;
+            position: absolute;
+            left: 20px;
+            top: 10px;
+        }
+        
+        .server::before {
+            content: "";
+            position: absolute;
+            width: 10px;
+            height: 10px;
+            background-color: #a855f7;
+            border-radius: 50%;
+            top: 15px;
+            right: 10px;
+            animation: blink 2s infinite;
+        }
+        
+        .server::after {
+            content: "";
+            position: absolute;
+            width: 40px;
+            height: 6px;
+            background-color: #a855f7;
+            border-radius: 3px;
+            top: 35px;
+            left: 10px;
+            box-shadow: 0 12px 0 #a855f7, 0 24px 0 #a855f7;
+        }
+        
+        .timer {
+            position: absolute;
+            width: 40px;
+            height: 40px;
+            border: 4px solid #ef4444;
+            border-radius: 50%;
+            top: 30px;
+            left: 70px;
+        }
+        
+        .timer::before {
+            content: "";
+            position: absolute;
+            width: 16px;
+            height: 2px;
+            background-color: #ef4444;
+            top: 19px;
+            left: 20px;
+            transform-origin: left center;
+            animation: clockHand 4s linear infinite;
+        }
+        
+        .timer::after {
+            content: "";
+            position: absolute;
+            width: 12px;
+            height: 2px;
+            background-color: #ef4444;
+            top: 19px;
+            left: 20px;
+            transform-origin: left center;
+            animation: clockHandFast 1s linear infinite;
+        }
+        
+        .client {
+            width: 30px;
+            height: 50px;
+            background-color: #9ca3af;
+            border-radius: 6px;
+            position: absolute;
+            right: 10px;
+            top: 25px;
+        }
+        
+        .client::before {
+            content: "";
+            position: absolute;
+            width: 20px;
+            height: 12px;
+            background-color: #d1d5db;
+            border-radius: 2px;
+            top: 10px;
+            left: 5px;
+            box-shadow: 0 16px 0 #d1d5db;
+        }
+        
+        h1 {
+            font-size: 2rem;
+            margin-bottom: 1rem;
+            color: #111827;
+            font-weight: 700;
+        }
+        
+        p {
+            color: #6b7280;
+            line-height: 1.6;
+            margin-bottom: 1.5rem;
+        }
+        
+        .btn {
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            background-color: #7e22ce;
+            color: white;
+            font-weight: 500;
+            padding: 12px 24px;
+            border-radius: 6px;
+            text-decoration: none;
+            transition: all 0.3s ease;
+            border: none;
+            cursor: pointer;
+            font-size: 1rem;
+            margin: 0 8px;
+        }
+        
+        .btn:hover {
+            background-color: #6b21a8;
+            transform: translateY(-2px);
+            box-shadow: 0 4px 12px rgba(126, 34, 206, 0.2);
+        }
+        
+        .btn:active {
+            transform: translateY(0);
+        }
+        
+        .report-btn {
+            background-color: #f97316;
+        }
+        
+        .report-btn:hover {
+            background-color: #ea580c;
+            box-shadow: 0 4px 12px rgba(249, 115, 22, 0.2);
+        }
+        
+        .buttons-container {
+            display: flex;
+            justify-content: center;
+            flex-wrap: wrap;
+            gap: 12px;
+        }
+        
+        .progress {
+            height: 4px;
+            background-color: #e5e7eb;
+            border-radius: 2px;
+            margin: 30px 0;
+            overflow: hidden;
+            position: relative;
+        }
+        
+        .progress::after {
+            content: "";
+            position: absolute;
+            height: 100%;
+            width: 30%;
+            background-color: #7e22ce;
+            border-radius: 2px;
+            animation: progress 2s infinite;
+        }
+        
+        @keyframes blink {
+            0%, 100% { opacity: 1; }
+            50% { opacity: 0.4; }
+        }
+        
+        @keyframes clockHand {
+            0% { transform: rotate(0deg); }
+            100% { transform: rotate(360deg); }
+        }
+        
+        @keyframes clockHandFast {
+            0% { transform: rotate(0deg); }
+            100% { transform: rotate(360deg); }
+        }
+        
+        @keyframes progress {
+            0% { transform: translateX(-100%); }
+            100% { transform: translateX(400%); }
+        }
+        
+        @media (max-width: 640px) {
+            .container {
+                padding: 30px 20px;
+            }
+            
+            h1 {
+                font-size: 1.5rem;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="error-code">504</div>
+        <div class="icon">
+            <div class="server"></div>
+            <div class="timer"></div>
+            <div class="client"></div>
+        </div>
+        <h1>Gateway Time-out</h1>
+        <p>Server kami membutuhkan waktu terlalu lama untuk menanggapi permintaan Anda. Hal ini mungkin disebabkan oleh lalu lintas tinggi atau masalah pada server backend kami.</p>
+        <div class="progress"></div>
+        <p>Silakan coba kembali dalam beberapa saat.</p>
+        <div class="buttons-container">
+            <button class="btn" onclick="window.location.reload()">
+                <span class="material-icons">refresh</span>
+                Muat Ulang
+            </button>
+            <a href="https://wa.me/+6281255559400" class="btn report-btn">
+                <span class="material-icons">call</span>
+                Laporkan kesalahan
+            </a>
+        </div>
+    </div>
+</body>
+</html>
