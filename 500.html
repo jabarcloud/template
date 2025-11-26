@@ -40,10 +40,10 @@
         .status-diagram { display: flex; justify-content: center; align-items: flex-start; flex-wrap: wrap; gap: 10px; margin-bottom: 40px; position: relative; }
         .node { display: flex; flex-direction: column; align-items: center; width: 160px; position: relative; z-index: 2; }
 
-        /* --- USER INFO BOX --- */
+        /* --- USER INFO BOX (Updated for Cloudflare Tokens) --- */
         .user-details-box {
             position: absolute; top: 115%; left: 50%; transform: translateX(-50%);
-            width: 220px; background-color: #ffffff; border: 1px solid #e1e4e8; border-radius: 8px; padding: 15px;
+            width: 240px; background-color: #ffffff; border: 1px solid #e1e4e8; border-radius: 8px; padding: 15px;
             box-shadow: 0 10px 25px rgba(0,0,0,0.08); text-align: left; z-index: 10;
             transition: background-color 0.5s ease, border-color 0.5s ease, box-shadow 0.5s ease;
             opacity: 0; animation: fadeInUp 0.5s ease 0.5s forwards; 
@@ -53,8 +53,10 @@
         .detail-row { margin-bottom: 10px; border-bottom: 1px solid #f0f0f0; padding-bottom: 8px; transition: border-color 0.5s ease; }
         .detail-row:last-child { margin-bottom: 0; border-bottom: none; }
         .detail-label { font-size: 0.65rem; text-transform: uppercase; color: #999; font-weight: 700; letter-spacing: 0.5px; display: block; margin-bottom: 4px; }
-        .detail-value { font-size: 0.8rem; color: #333; font-weight: 500; word-wrap: break-word; line-height: 1.4; transition: color 0.5s ease; }
-        .ua-small { font-family: monospace; font-size: 0.75rem; color: #555; background: #f8f9fa; padding: 6px; border-radius: 4px; display: block; word-break: break-all; transition: background-color 0.5s ease, color 0.5s ease; }
+        .detail-value { font-size: 0.8rem; color: #333; font-weight: 500; word-wrap: break-word; line-height: 1.4; transition: color 0.5s ease; font-family: monospace; }
+        
+        /* Specific Ray ID styling */
+        .ray-id-val { color: #d63031; font-weight: bold; }
 
         /* --- BOTTOM SECTION --- */
         .bottom-section { width: 100%; display: flex; flex-direction: column; align-items: center; padding-bottom: 30px; background: linear-gradient(to top, #fff 20%, transparent); transition: background 0.5s ease; }
@@ -67,8 +69,8 @@
         /* --- ICONS & STATUS --- */
         .icon { width: 60px; height: 45px; margin-bottom: 15px; position: relative; }
         .icon svg { width: 100%; height: 100%; fill: #888; transition: fill 0.5s ease; }
-        .icon-waf svg, .icon-proxy svg { fill: #80c850; } /* Green for successful hops */
-        .icon-server-fail svg { fill: #cb191d; } /* Red for failed node */
+        .icon-waf svg, .icon-proxy svg { fill: #80c850; } 
+        .icon-server-fail svg { fill: #cb191d; } 
         
         .status-badge { display: inline-block; margin-top: -10px; margin-bottom: 10px; background-color: white; border-radius: 50%; padding: 2px; box-shadow: 0 2px 4px rgba(0,0,0,0.1); transition: background-color 0.5s ease; z-index: 5; position: relative; }
         .status-icon { width: 24px; height: 24px; display: flex; align-items: center; justify-content: center; border-radius: 50%; font-weight: bold; color: white; font-size: 14px; }
@@ -83,9 +85,9 @@
 
         /* --- ARROWS --- */
         .arrow-container { display: flex; align-items: center; justify-content: center; width: 60px; margin-top: 10px; }
-        .arrow { color: #80c850; font-size: 1.2rem; font-weight: bold; } /* Arrows are green because network flow is fine */
+        .arrow { color: #80c850; font-size: 1.2rem; font-weight: bold; }
         
-        /* --- ANIMATIONS FOR 500 --- */
+        /* --- ANIMATIONS --- */
         @keyframes pulse-red {
             0% { box-shadow: 0 0 0 0 rgba(203, 25, 29, 0.7); }
             70% { box-shadow: 0 0 0 15px rgba(203, 25, 29, 0); }
@@ -94,29 +96,13 @@
 
         @keyframes shake {
             0% { transform: translate(1px, 1px) rotate(0deg); }
-            10% { transform: translate(-1px, -2px) rotate(-1deg); }
-            20% { transform: translate(-3px, 0px) rotate(1deg); }
-            30% { transform: translate(3px, 2px) rotate(0deg); }
-            40% { transform: translate(1px, -1px) rotate(1deg); }
-            50% { transform: translate(-1px, 2px) rotate(-1deg); }
-            60% { transform: translate(-3px, 1px) rotate(0deg); }
-            70% { transform: translate(3px, 1px) rotate(-1deg); }
-            80% { transform: translate(-1px, -1px) rotate(1deg); }
-            90% { transform: translate(1px, 2px) rotate(0deg); }
             100% { transform: translate(1px, -2px) rotate(-1deg); }
         }
-
+        
         @keyframes fadeInUp { from { opacity: 0; transform: translate(-50%, 20px); } to { opacity: 1; transform: translate(-50%, 0); } }
 
-        /* Apply animation to Failed Server Badge */
-        .server-failed .status-badge {
-            animation: pulse-red 2s infinite;
-        }
-        
-        /* Apply subtle shake to server icon */
-        .server-failed .icon svg {
-            animation: shake 0.8s; /* Shake once on load */
-        }
+        .server-failed .status-badge { animation: pulse-red 2s infinite; }
+        .server-failed .icon svg { animation: shake 0.5s; }
 
         /* =========================================
            DARK MODE STYLES
@@ -132,7 +118,7 @@
         body.dark-mode .detail-row { border-bottom-color: #333; }
         body.dark-mode .detail-label { color: #888; }
         body.dark-mode .detail-value { color: #e0e0e0; }
-        body.dark-mode .ua-small { background-color: #2c2c2c; color: #ccc; }
+        body.dark-mode .ray-id-val { color: #ff6b6b; }
 
         body.dark-mode .node-name { color: #fff; }
         body.dark-mode .wa-label { color: #aaa; }
@@ -153,10 +139,10 @@
 <body>
 
     <div class="main-content">
-        <h1>Internal Server Error <span style="font-size: 0.6em; color: #721c24; background: #f8d7da; padding: 2px 8px; border-radius: 4px;">Error 500</span></h1>
+        <h1>Internal Server Error <span style="font-size: 0.6em; color: #721c24; background: #f8d7da; padding: 2px 8px; border-radius: 4px;">500</span></h1>
         
-        <p>Maaf, layanan sedang mengalami gangguan internal.<br>
-        Permintaan Anda telah diterima, namun server pada domain <span class="domain-highlight dynamic-host-name">Loading...</span> gagal memprosesnya.</p>
+        <p>Maaf, layanan pada domain <span class="domain-highlight dynamic-host-name">Loading...</span> sedang mengalami gangguan.<br>
+        Request Anda melewati JabarCloud namun gagal diproses oleh server tujuan.</p>
 
         <div class="status-diagram">
             
@@ -170,16 +156,16 @@
 
                 <div class="user-details-box">
                     <div class="detail-row">
-                        <span class="detail-label">IP Address</span>
-                        <span class="detail-value" id="user-ip">Scanning...</span>
+                        <span class="detail-label">Cloudflare Ray ID</span>
+                        <span class="detail-value ray-id-val" id="ray-id-display">::RAY_ID::</span>
                     </div>
                     <div class="detail-row">
-                        <span class="detail-label">ISP / Connection</span>
-                        <span class="detail-value" id="user-isp">-</span>
+                        <span class="detail-label">Your IP Address</span>
+                        <span class="detail-value">::CLIENT_IP::</span>
                     </div>
                     <div class="detail-row">
-                        <span class="detail-label">User Agent</span>
-                        <span class="detail-value ua-small" id="user-agent">Loading...</span>
+                        <span class="detail-label">Location</span>
+                        <span class="detail-value">::GEO::</span>
                     </div>
                 </div>
             </div>
@@ -191,19 +177,8 @@
                     <svg viewBox="0 0 24 24"><path d="M12 1L3 5v6c0 5.55 3.84 10.74 9 12 5.16-1.26 9-6.45 9-12V5l-9-4zm-2 16l-4-4 1.41-1.41L10 14.17l6.59-6.59L18 9l-8 8z"/></svg>
                 </div>
                 <div class="status-badge"><div class="status-icon status-green">✓</div></div>
-                <div class="node-name">Security</div>
+                <div class="node-name">JabarCloud Edge</div>
                 <div class="node-status text-green">Traffic Allowed</div>
-            </div>
-
-            <div class="arrow-container"><div class="arrow">➔</div></div>
-
-            <div class="node">
-                <div class="icon icon-proxy">
-                    <svg viewBox="0 0 24 24"><path d="M19.35 10.04C18.67 6.59 15.64 4 12 4 9.11 4 6.6 5.64 5.35 8.04 2.34 8.36 0 10.91 0 14c0 3.31 2.69 6 6 6h13c2.76 0 5-2.24 5-5 0-2.64-2.05-4.78-4.65-4.96z"/></svg>
-                </div>
-                <div class="status-badge"><div class="status-icon status-green">✓</div></div>
-                <div class="node-name dynamic-host-name">Domain</div>
-                <div class="node-status text-green">Routing OK</div>
             </div>
 
             <div class="arrow-container"><div class="arrow">➔</div></div>
@@ -214,27 +189,28 @@
                 </div>
                 <div class="status-badge"><div class="status-icon status-red">✕</div></div>
                 <div class="node-name" id="dynamic-path-node">Upstream Server</div>
-                <div class="node-status text-red">Critical Failure</div>
+                <div class="node-status text-red">Not Responding</div>
             </div>
         </div>
     </div>
 
     <div class="bottom-section">
         <div class="wa-section">
-            <div class="wa-label">Jika masalah berlanjut, harap laporkan ID kejadian ini.</div>
-            <a href="https://wa.me/6281255559400?text=Halo%20Tim%20Teknis%2C%20terjadi%20Error%20500%20(Internal%20Server%20Error)%20saat%20mengakses%20layanan%20JabarCloud." target="_blank" class="wa-button">
+            <div class="wa-label">Harap laporkan <b>Ray ID</b> berikut kepada admin: <span style="font-family:monospace; font-weight:bold;">::RAY_ID::</span></div>
+            <a href="https://wa.me/6281255559400?text=Halo%20Tim%20Teknis%2C%20saya%20mendapatkan%20Error%20500%20di%20JabarCloud.%0A%0ARay%20ID:%20::RAY_ID::%0AIP:%20::CLIENT_IP::" target="_blank" class="wa-button">
                 <svg class="wa-icon" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm1 15h-2v-2h2v2zm0-4h-2V7h2v6z"/></svg>
-                Lapor Gangguan Server
+                Lapor Gangguan (Kirim Ray ID)
             </a>
         </div>
 
         <div class="footer">
-            <p>Powered by JabarCloud since 2019</p>
+            <p>JabarCloud &bull; Ray ID: ::RAY_ID::</p>
         </div>
     </div>
 
     <script>
         document.addEventListener("DOMContentLoaded", function() {
+            // Apply Dark/Light Mode based on time
             function applyTheme() {
                 var now = new Date();
                 var hours = now.getHours();
@@ -243,6 +219,7 @@
             }
             applyTheme();
 
+            // Hostname & Path Logic
             var currentHost = window.location.hostname;
             document.querySelectorAll(".dynamic-host-name").forEach(function(el) { el.textContent = currentHost; });
 
@@ -251,24 +228,16 @@
             if (currentPath.length > 18) currentPath = currentPath.substring(0, 15) + "...";
             document.getElementById("dynamic-path-node").textContent = "Node " + currentPath;
 
-            var ua = navigator.userAgent;
-            document.getElementById("user-agent").textContent = ua;
-
-            fetch('https://ipwho.is/')
-                .then(response => response.json())
-                .then(data => {
-                    if(data.success) {
-                        document.getElementById("user-ip").textContent = data.ip;
-                        var ispInfo = data.connection.isp || data.connection.org || "Tidak terdeteksi";
-                        document.getElementById("user-isp").textContent = ispInfo;
-                    } else {
-                        document.getElementById("user-ip").textContent = "Gagal memuat";
-                    }
-                })
-                .catch(error => {
-                    console.error('Error:', error);
-                    document.getElementById("user-ip").textContent = "Check AdBlock";
+            // Optional: If page is loaded LOCALLY (not via Cloudflare), placeholders won't work.
+            // This is just for local testing visualization.
+            var rayIdEl = document.getElementById("ray-id-display");
+            if (rayIdEl.textContent.includes("::")) {
+                rayIdEl.textContent = "CF-Test-Mode-123"; // Dummy data for local preview
+                document.querySelectorAll(".detail-value").forEach(el => {
+                    if(el.textContent.includes("CLIENT_IP")) el.textContent = "127.0.0.1 (Local)";
+                    if(el.textContent.includes("GEO")) el.textContent = "ID (Local)";
                 });
+            }
         });
     </script>
 </body>
