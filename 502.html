@@ -3,288 +3,336 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>JabarCloud Response: 502 Bad Gateway</title>
+    <title>502 Bad Gateway</title>
     <style>
-        * {
+        /* --- BASE STYLES (LIGHT MODE DEFAULT) --- */
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+            background-color: #fcfcfc;
+            color: #333;
             margin: 0;
             padding: 0;
-            box-sizing: border-box;
-        }
-        
-        @font-face {
-            font-family: 'Material Icons';
-            font-style: normal;
-            font-weight: 400;
-            src: url(https://cdnjs.cloudflare.com/ajax/libs/material-design-icons/3.0.1/iconfont/MaterialIcons-Regular.woff2) format('woff2');
-        }
-        
-        .material-icons {
-            font-family: 'Material Icons';
-            font-weight: normal;
-            font-style: normal;
-            font-size: 20px;
-            line-height: 1;
-            letter-spacing: normal;
-            text-transform: none;
-            display: inline-block;
-            white-space: nowrap;
-            word-wrap: normal;
-            direction: ltr;
-            vertical-align: middle;
-            margin-right: 8px;
-        }
-        
-        body {
-            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, 'Open Sans', 'Helvetica Neue', sans-serif;
-            background-color: #f7f9fc;
-            color: #333;
-            height: 100vh;
             display: flex;
+            flex-direction: column;
             align-items: center;
-            justify-content: center;
+            justify-content: space-between;
+            min-height: 100vh;
+            transition: background-color 0.5s ease, color 0.5s ease;
+        }
+
+        .main-content {
+            max-width: 1100px;
+            width: 100%;
             padding: 20px;
-        }
-        
-        .container {
-            max-width: 600px;
             text-align: center;
-            padding: 40px;
-            background-color: white;
+            flex-grow: 1;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+        }
+
+        h1 { font-size: 2.5rem; font-weight: 300; margin-bottom: 10px; transition: color 0.5s ease; }
+        
+        p { color: #666; margin-bottom: 60px; line-height: 1.6; transition: color 0.5s ease; }
+        
+        .domain-highlight {
+            font-weight: 600;
+            color: #333;
+            background: #eef;
+            padding: 2px 6px;
+            border-radius: 4px;
+            border: 1px solid #dde;
+        }
+
+        /* --- DIAGRAM LAYOUT --- */
+        .status-diagram {
+            display: flex;
+            justify-content: center;
+            align-items: flex-start;
+            flex-wrap: wrap;
+            gap: 15px;
+            margin-bottom: 40px;
+            position: relative;
+        }
+
+        .node {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            width: 150px;
+            position: relative;
+        }
+
+        /* --- USER INFO BOX --- */
+        .user-details-box {
+            position: absolute;
+            top: 110%;
+            left: 50%;
+            transform: translateX(-50%);
+            width: 220px;
+            background-color: #ffffff;
+            border: 1px solid #e1e4e8;
+            border-radius: 8px;
+            padding: 15px;
+            box-shadow: 0 10px 25px rgba(0,0,0,0.08);
+            text-align: left;
+            z-index: 10;
+            transition: background-color 0.5s ease, border-color 0.5s ease, box-shadow 0.5s ease;
+        }
+
+        .user-details-box::before {
+            content: ""; position: absolute; top: -6px; left: 50%; transform: translateX(-50%);
+            border-width: 0 6px 6px 6px; border-style: solid; border-color: transparent transparent #e1e4e8 transparent;
+            transition: border-color 0.5s ease;
+        }
+        .user-details-box::after {
+            content: ""; position: absolute; top: -4px; left: 50%; transform: translateX(-50%);
+            border-width: 0 5px 5px 5px; border-style: solid; border-color: transparent transparent #ffffff transparent;
+            transition: border-color 0.5s ease;
+        }
+
+        .detail-row { margin-bottom: 10px; border-bottom: 1px solid #f0f0f0; padding-bottom: 8px; transition: border-color 0.5s ease; }
+        .detail-row:last-child { margin-bottom: 0; border-bottom: none; }
+        .detail-label { font-size: 0.65rem; text-transform: uppercase; color: #999; font-weight: 700; letter-spacing: 0.5px; display: block; margin-bottom: 4px; }
+        
+        .detail-value { 
+            font-size: 0.8rem; 
+            color: #333; 
+            font-weight: 500; 
+            word-wrap: break-word;
+            line-height: 1.4;
+            transition: color 0.5s ease;
+        }
+
+        .ua-small {
+            font-family: monospace; 
+            font-size: 0.75rem; 
+            color: #555; 
+            background: #f8f9fa;
+            padding: 6px; 
+            border-radius: 4px; 
+            display: block; 
+            word-break: break-all;
+            transition: background-color 0.5s ease, color 0.5s ease;
+        }
+
+        /* --- BOTTOM SECTION --- */
+        .bottom-section {
+            width: 100%;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            padding-bottom: 30px;
+            background: linear-gradient(to top, #fff 20%, transparent);
+            transition: background 0.5s ease;
+        }
+
+        /* --- WA SECTION --- */
+        .wa-section {
+            margin-top: 20px;
+            padding: 25px;
+            background-color: transparent;
             border-radius: 12px;
-            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.06);
-            position: relative;
-            overflow: hidden;
+            border: none; 
+            width: auto;
+            max-width: 90%;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            text-align: center;
         }
-        
-        .error-code {
-            position: absolute;
-            top: 0;
-            right: 0;
-            padding: 8px 16px;
-            background-color: #f3f4f6;
-            color: #9ca3af;
-            font-size: 0.875rem;
-            border-bottom-left-radius: 8px;
-        }
-        
-        .icon {
-            width: 100px;
-            height: 100px;
-            margin: 0 auto 30px;
-            position: relative;
-        }
-        
-        .server {
-            width: 60px;
-            height: 80px;
-            background-color: #4f46e5;
-            border-radius: 6px;
-            position: absolute;
-            left: 20px;
-            top: 10px;
-        }
-        
-        .server::before {
-            content: "";
-            position: absolute;
-            width: 10px;
-            height: 10px;
-            background-color: #818cf8;
-            border-radius: 50%;
-            top: 15px;
-            right: 10px;
-            animation: blink 2s infinite;
-        }
-        
-        .server::after {
-            content: "";
-            position: absolute;
-            width: 40px;
-            height: 6px;
-            background-color: #818cf8;
-            border-radius: 3px;
-            top: 35px;
-            left: 10px;
-            box-shadow: 0 12px 0 #818cf8, 0 24px 0 #818cf8;
-        }
-        
-        .connection {
-            position: absolute;
-            width: 40px;
-            height: 4px;
-            background-color: #ef4444;
-            top: 50px;
-            left: 80px;
-            transform-origin: left center;
-            animation: break 3s infinite;
-        }
-        
-        .connection::before, .connection::after {
-            content: "";
-            position: absolute;
-            width: 8px;
-            height: 8px;
-            border-radius: 50%;
-        }
-        
-        .connection::before {
-            background-color: #4f46e5;
-            left: -10px;
-            top: -2px;
-        }
-        
-        .connection::after {
-            background-color: #9ca3af;
-            right: -10px;
-            top: -2px;
-        }
-        
-        .client {
-            width: 30px;
-            height: 50px;
-            background-color: #9ca3af;
-            border-radius: 6px;
-            position: absolute;
-            right: 10px;
-            top: 25px;
-        }
-        
-        .client::before {
-            content: "";
-            position: absolute;
-            width: 20px;
-            height: 12px;
-            background-color: #d1d5db;
-            border-radius: 2px;
-            top: 10px;
-            left: 5px;
-            box-shadow: 0 16px 0 #d1d5db;
-        }
-        
-        h1 {
-            font-size: 2rem;
-            margin-bottom: 1rem;
-            color: #111827;
-            font-weight: 700;
-        }
-        
-        p {
-            color: #6b7280;
-            line-height: 1.6;
-            margin-bottom: 1.5rem;
-        }
-        
-        .btn {
+
+        .wa-label { font-size: 0.95rem; color: #666; margin-bottom: 15px; font-weight: 500; transition: color 0.5s ease; }
+
+        .wa-button {
             display: inline-flex;
             align-items: center;
-            justify-content: center;
-            background-color: #4f46e5;
+            background-color: #25D366;
             color: white;
-            font-weight: 500;
             padding: 12px 24px;
-            border-radius: 6px;
+            border-radius: 30px;
             text-decoration: none;
-            transition: all 0.3s ease;
-            border: none;
-            cursor: pointer;
+            font-weight: 600;
             font-size: 1rem;
-            margin: 0 8px;
+            box-shadow: 0 4px 10px rgba(37, 211, 102, 0.3);
+            transition: transform 0.2s, box-shadow 0.2s, background-color 0.2s;
         }
+        .wa-button:hover { transform: translateY(-2px); box-shadow: 0 6px 15px rgba(37, 211, 102, 0.4); background-color: #20bd5a; }
+        .wa-icon { width: 22px; height: 22px; fill: white; margin-right: 10px; }
+
+        /* --- ICONS --- */
+        .icon { width: 60px; height: 45px; margin-bottom: 15px; }
+        .icon svg { width: 100%; height: 100%; fill: #888; transition: fill 0.5s ease; }
+        .icon-waf svg, .icon-proxy svg { fill: #81d4fa; } 
         
-        .btn:hover {
-            background-color: #4338ca;
-            transform: translateY(-2px);
-            box-shadow: 0 4px 12px rgba(79, 70, 229, 0.2);
-        }
+        .status-badge { display: inline-block; margin-top: -10px; margin-bottom: 10px; background-color: white; border-radius: 50%; padding: 2px; box-shadow: 0 2px 4px rgba(0,0,0,0.1); transition: background-color 0.5s ease; }
+        .status-icon { width: 24px; height: 24px; display: flex; align-items: center; justify-content: center; border-radius: 50%; font-weight: bold; color: white; font-size: 14px; }
+        .status-green { background-color: #80c850; } .status-red { background-color: #cb191d; }
         
-        .btn:active {
-            transform: translateY(0);
-        }
+        .node-name { font-weight: 600; font-size: 0.95rem; margin-bottom: 5px; color: #444; word-break: break-word; line-height: 1.3; transition: color 0.5s ease; }
+        .node-status { font-size: 0.8rem; } .text-green { color: #80c850; } .text-red { color: #cb191d; }
+        .arrow { margin-top: 20px; color: #ccc; font-size: 1.2rem; padding: 0 2px; }
+        .footer { margin-top: 30px; font-size: 0.8rem; color: #ccc; }
+
+        /* =========================================
+           DARK MODE STYLES
+           ========================================= */
+        body.dark-mode { background-color: #121212; color: #e0e0e0; }
+        body.dark-mode h1 { color: #ffffff; }
+        body.dark-mode p { color: #b0b0b0; }
+        body.dark-mode .domain-highlight { background: #2c2c2c; color: #fff; border-color: #444; }
+
+        body.dark-mode .user-details-box { background-color: #1e1e1e; border-color: #333; box-shadow: 0 10px 25px rgba(0,0,0,0.3); }
+        body.dark-mode .user-details-box::before { border-color: transparent transparent #333 transparent; }
+        body.dark-mode .user-details-box::after { border-color: transparent transparent #1e1e1e transparent; }
         
-        .report-btn {
-            background-color: #f97316;
-        }
-        
-        .report-btn:hover {
-            background-color: #ea580c;
-            box-shadow: 0 4px 12px rgba(249, 115, 22, 0.2);
-        }
-        
-        .buttons-container {
-            display: flex;
-            justify-content: center;
-            flex-wrap: wrap;
-            gap: 12px;
-        }
-        
-        .progress {
-            height: 4px;
-            background-color: #e5e7eb;
-            border-radius: 2px;
-            margin: 30px 0;
-            overflow: hidden;
-            position: relative;
-        }
-        
-        .progress::after {
-            content: "";
-            position: absolute;
-            height: 100%;
-            width: 30%;
-            background-color: #4f46e5;
-            border-radius: 2px;
-            animation: progress 2s infinite;
-        }
-        
-        @keyframes blink {
-            0%, 100% { opacity: 1; }
-            50% { opacity: 0.4; }
-        }
-        
-        @keyframes break {
-            0%, 100% { transform: scaleX(1) rotate(0deg); background-color: #ef4444; }
-            40% { transform: scaleX(0.6) rotate(5deg); background-color: #fca5a5; }
-            60% { transform: scaleX(0.6) rotate(-5deg); background-color: #fca5a5; }
-        }
-        
-        @keyframes progress {
-            0% { transform: translateX(-100%); }
-            100% { transform: translateX(400%); }
-        }
-        
-        @media (max-width: 640px) {
-            .container {
-                padding: 30px 20px;
-            }
-            
-            h1 {
-                font-size: 1.5rem;
-            }
+        body.dark-mode .detail-row { border-bottom-color: #333; }
+        body.dark-mode .detail-label { color: #888; }
+        body.dark-mode .detail-value { color: #e0e0e0; }
+        body.dark-mode .ua-small { background-color: #2c2c2c; color: #ccc; }
+
+        body.dark-mode .node-name { color: #fff; }
+        body.dark-mode .wa-label { color: #aaa; }
+        body.dark-mode .status-badge { background-color: #1e1e1e; }
+        body.dark-mode .icon svg { fill: #666; } 
+        body.dark-mode .bottom-section { background: linear-gradient(to top, #121212 20%, transparent); }
+
+        @media (max-width: 800px) {
+            .status-diagram { flex-direction: column; align-items: center; gap: 40px; margin-bottom: 40px; }
+            .arrow { transform: rotate(90deg); margin: 0; }
+            .node { width: 100%; }
+            .user-details-box { position: relative; top: auto; left: auto; transform: none; margin-top: 15px; width: 260px; }
+            .user-details-box::before, .user-details-box::after { display: none; }
         }
     </style>
 </head>
 <body>
-    <div class="container">
-        <div class="error-code">503</div>
-        <div class="icon">
-            <div class="server"></div>
-            <div class="connection"></div>
-            <div class="client"></div>
-        </div>
-        <h1>Bad Gateway</h1>
-        <p>Server kami sedang mengalami masalah teknis sementara dan tidak dapat memenuhi permintaan Anda saat ini. Tim JabarCloud sedang bekerja untuk mengatasi masalah ini.</p>
-        <div class="progress"></div>
-        <p>Silakan coba kembali dalam beberapa saat.</p>
-        <div class="buttons-container">
-            <button class="btn" onclick="window.location.reload()">
-                <span class="material-icons">refresh</span>
-                Muat Ulang
-            </button>
-            <a href="https://wa.me/+6281255559400" class="btn report-btn">
-                <span class="material-icons">call</span>
-                Laporkan kesalahan
-            </a>
+
+    <div class="main-content">
+        <h1>Bad Gateway <span style="font-size: 0.6em; color: #666; background: #eee; padding: 2px 8px; border-radius: 4px;">Error code 502</span></h1>
+        
+        <p>Server upstream mengirimkan respons yang tidak valid atau sedang tidak tersedia.<br>
+        Mohon konsultasikan terlebih dahulu dengan pengelola domain <span class="domain-highlight dynamic-host-name">Loading...</span></p>
+
+        <div class="status-diagram">
+            
+            <div class="node">
+                <div class="icon">
+                    <svg viewBox="0 0 24 24"><path d="M20 18c1.1 0 2-.9 2-2V6c0-1.1-.9-2-2-2H4c-1.1 0-2 .9-2 2v10c0 1.1.9 2 2 2H0v2h24v-2h-4zM4 6h16v10H4V6z"/></svg>
+                </div>
+                <div class="status-badge"><div class="status-icon status-green">✓</div></div>
+                <div class="node-name">Wargi Jabar</div>
+                <div class="node-status text-green">Browser Working</div>
+
+                <div class="user-details-box">
+                    <div class="detail-row">
+                        <span class="detail-label">IP Address</span>
+                        <span class="detail-value" id="user-ip">Scanning...</span>
+                    </div>
+                    <div class="detail-row">
+                        <span class="detail-label">ISP / Connection</span>
+                        <span class="detail-value" id="user-isp">-</span>
+                    </div>
+                    <div class="detail-row">
+                        <span class="detail-label">User Agent</span>
+                        <span class="detail-value ua-small" id="user-agent">Loading...</span>
+                    </div>
+                </div>
+            </div>
+
+            <div class="arrow">➔</div>
+
+            <div class="node">
+                <div class="icon icon-waf">
+                    <svg viewBox="0 0 24 24"><path d="M12 1L3 5v6c0 5.55 3.84 10.74 9 12 5.16-1.26 9-6.45 9-12V5l-9-4zm-2 16l-4-4 1.41-1.41L10 14.17l6.59-6.59L18 9l-8 8z"/></svg>
+                </div>
+                <div class="status-badge"><div class="status-icon status-green">✓</div></div>
+                <div class="node-name">WAF</div>
+                <div class="node-status text-green">Security Passed</div>
+            </div>
+
+            <div class="arrow">➔</div>
+
+            <div class="node">
+                <div class="icon icon-proxy">
+                    <svg viewBox="0 0 24 24"><path d="M19.35 10.04C18.67 6.59 15.64 4 12 4 9.11 4 6.6 5.64 5.35 8.04 2.34 8.36 0 10.91 0 14c0 3.31 2.69 6 6 6h13c2.76 0 5-2.24 5-5 0-2.64-2.05-4.78-4.65-4.96z"/></svg>
+                </div>
+                <div class="status-badge"><div class="status-icon status-green">✓</div></div>
+                <div class="node-name dynamic-host-name">Domain</div>
+                <div class="node-status text-green">JabarCloud Working</div>
+            </div>
+
+            <div class="arrow">➔</div>
+
+            <div class="node">
+                <div class="icon">
+                    <svg viewBox="0 0 24 24"><path d="M2 20h20v-4H2v4zm2-3h2v2H4v-2zM2 4v4h20V4H2zm4 3H4V5h2v2zm-4 7h20v-4H2v4zm2-3h2v2H4v-2z"/></svg>
+                </div>
+                <div class="status-badge"><div class="status-icon status-red">✕</div></div>
+                <div class="node-name" id="dynamic-path-node">Node Upstream</div>
+                <div class="node-status text-red">Node Error</div>
+            </div>
         </div>
     </div>
+
+    <div class="bottom-section">
+        <div class="wa-section">
+            <div class="wa-label">Bila Anda adalah pengelola aplikasi, mohon laporkan.</div>
+            <a href="https://wa.me/6281255559400?text=Halo%20Tim%20Teknis%2C%20saya%20adalah%20pengelola%20aplikasi%20dan%20mengalami%20kendala%20502%20Bad%20Gateway%20pada%20layanan%20JabarProv.%20Mohon%20bantuannya." target="_blank" class="wa-button">
+                <svg class="wa-icon" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 01-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 01-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 012.893 6.994c-.003 5.45-4.437 9.884-9.885 9.884m8.413-18.297A11.815 11.815 0 0012.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L.057 24l6.305-1.654a11.882 11.882 0 005.683 1.448h.005c6.554 0 11.89-5.335 11.893-11.893a11.821 11.821 0 00-3.48-8.413z"/></svg>
+                Aduan Sistem JabarCloud
+            </a>
+        </div>
+
+        <div class="footer">
+            <p>Powered by JabarCloud since 2019</p>
+        </div>
+    </div>
+
+    <script>
+        document.addEventListener("DOMContentLoaded", function() {
+            // --- TIME BASED THEME (DARK/LIGHT MODE) ---
+            function applyTheme() {
+                var now = new Date();
+                var hours = now.getHours();
+                
+                // Jika jam 18:00 ke atas ATAU sebelum jam 06:00 pagi
+                if (hours >= 18 || hours < 6) {
+                    document.body.classList.add('dark-mode');
+                } else {
+                    document.body.classList.remove('dark-mode');
+                }
+            }
+            applyTheme();
+
+            // --- STANDARD DYNAMIC FUNCTIONS ---
+            var currentHost = window.location.hostname;
+            document.querySelectorAll(".dynamic-host-name").forEach(function(el) { el.textContent = currentHost; });
+
+            var currentPath = window.location.pathname;
+            if (currentPath === "/" || currentPath === "") currentPath = "/ (Root)";
+            if (currentPath.length > 18) currentPath = currentPath.substring(0, 15) + "...";
+            document.getElementById("dynamic-path-node").textContent = "Node " + currentPath;
+
+            var ua = navigator.userAgent;
+            document.getElementById("user-agent").textContent = ua;
+
+            fetch('https://ipwho.is/')
+                .then(response => response.json())
+                .then(data => {
+                    if(data.success) {
+                        document.getElementById("user-ip").textContent = data.ip;
+                        var ispInfo = data.connection.isp || data.connection.org || "Tidak terdeteksi";
+                        document.getElementById("user-isp").textContent = ispInfo;
+                    } else {
+                        document.getElementById("user-ip").textContent = "Gagal memuat";
+                    }
+                })
+                .catch(error => {
+                    console.error('Error:', error);
+                    document.getElementById("user-ip").textContent = "Check AdBlock";
+                });
+        });
+    </script>
 </body>
 </html>
