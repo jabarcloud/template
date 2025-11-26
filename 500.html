@@ -55,7 +55,6 @@
         .detail-label { font-size: 0.65rem; text-transform: uppercase; color: #999; font-weight: 700; letter-spacing: 0.5px; display: block; margin-bottom: 4px; }
         .detail-value { font-size: 0.8rem; color: #333; font-weight: 500; word-wrap: break-word; line-height: 1.4; transition: color 0.5s ease; font-family: monospace; }
         
-        /* Specific Ray ID styling */
         .ray-id-val { color: #d63031; font-weight: bold; }
 
         /* --- BOTTOM SECTION --- */
@@ -137,6 +136,8 @@
     </style>
 </head>
 <body>
+
+    <div style="display:none">::CLOUDFLARE_ERROR_500S_BOX::</div>
 
     <div class="main-content">
         <h1>Internal Server Error <span style="font-size: 0.6em; color: #721c24; background: #f8d7da; padding: 2px 8px; border-radius: 4px;">500</span></h1>
@@ -229,10 +230,9 @@
             document.getElementById("dynamic-path-node").textContent = "Node " + currentPath;
 
             // Optional: If page is loaded LOCALLY (not via Cloudflare), placeholders won't work.
-            // This is just for local testing visualization.
             var rayIdEl = document.getElementById("ray-id-display");
             if (rayIdEl.textContent.includes("::")) {
-                rayIdEl.textContent = "CF-Test-Mode-123"; // Dummy data for local preview
+                rayIdEl.textContent = "CF-Test-Mode-123"; 
                 document.querySelectorAll(".detail-value").forEach(el => {
                     if(el.textContent.includes("CLIENT_IP")) el.textContent = "127.0.0.1 (Local)";
                     if(el.textContent.includes("GEO")) el.textContent = "ID (Local)";
