@@ -18,6 +18,7 @@
             justify-content: space-between;
             min-height: 100vh;
             transition: background-color 0.5s ease, color 0.5s ease;
+            overflow-x: hidden;
         }
 
         .main-content {
@@ -43,7 +44,7 @@
         /* --- USER INFO BOX --- */
         .user-details-box {
             position: absolute; top: 110%; left: 50%; transform: translateX(-50%);
-            width: 220px; background-color: #ffffff; border: 1px solid #e1e4e8; border-radius: 8px; padding: 15px;
+            width: 240px; background-color: #ffffff; border: 1px solid #e1e4e8; border-radius: 8px; padding: 15px;
             box-shadow: 0 10px 25px rgba(0,0,0,0.08); text-align: left; z-index: 10;
             transition: background-color 0.5s ease, border-color 0.5s ease, box-shadow 0.5s ease;
         }
@@ -52,8 +53,10 @@
         .detail-row { margin-bottom: 10px; border-bottom: 1px solid #f0f0f0; padding-bottom: 8px; transition: border-color 0.5s ease; }
         .detail-row:last-child { margin-bottom: 0; border-bottom: none; }
         .detail-label { font-size: 0.65rem; text-transform: uppercase; color: #999; font-weight: 700; letter-spacing: 0.5px; display: block; margin-bottom: 4px; }
-        .detail-value { font-size: 0.8rem; color: #333; font-weight: 500; word-wrap: break-word; line-height: 1.4; transition: color 0.5s ease; }
+        .detail-value { font-size: 0.8rem; color: #333; font-weight: 500; word-wrap: break-word; line-height: 1.4; transition: color 0.5s ease; font-family: monospace; }
         .ua-small { font-family: monospace; font-size: 0.75rem; color: #555; background: #f8f9fa; padding: 6px; border-radius: 4px; display: block; word-break: break-all; transition: background-color 0.5s ease, color 0.5s ease; }
+        
+        .ray-id-val { color: #d63031; font-weight: bold; }
 
         /* --- BOTTOM SECTION --- */
         .bottom-section { width: 100%; display: flex; flex-direction: column; align-items: center; padding-bottom: 30px; background: linear-gradient(to top, #fff 20%, transparent); transition: background 0.5s ease; }
@@ -67,9 +70,7 @@
         .icon { width: 60px; height: 45px; margin-bottom: 15px; }
         .icon svg { width: 100%; height: 100%; fill: #888; transition: fill 0.5s ease; }
         
-        /* Grey Icon untuk yang unreachable */
         .icon-grey svg { fill: #d0d0d0; }
-        /* Error icon for WAF (Red) */
         .icon-error svg { fill: #cb191d; } 
         
         /* STATUS BADGES & COLORS */
@@ -87,8 +88,18 @@
         .text-grey { color: #aaa; font-style: italic; }
 
         .arrow { margin-top: 20px; color: #ccc; font-size: 1.2rem; padding: 0 2px; }
-        /* Arrow Grey (Unreachable path) */
         .arrow-grey { color: #eee; }
+
+        /* --- CLOUDFLARE COMPLIANCE HIDDEN BOX --- */
+        .cf-compliance-hidden {
+            position: absolute;
+            left: -9999px;
+            top: -9999px;
+            width: 1px;
+            height: 1px;
+            overflow: hidden;
+            opacity: 0.01;
+        }
 
         /* =========================================
            DARK MODE STYLES
@@ -106,13 +117,13 @@
         body.dark-mode .detail-label { color: #888; }
         body.dark-mode .detail-value { color: #e0e0e0; }
         body.dark-mode .ua-small { background-color: #2c2c2c; color: #ccc; }
+        body.dark-mode .ray-id-val { color: #ff6b6b; }
 
         body.dark-mode .node-name { color: #fff; }
         body.dark-mode .wa-label { color: #aaa; }
         body.dark-mode .status-badge { background-color: #1e1e1e; }
         body.dark-mode .icon svg { fill: #666; } 
         
-        /* Specific Dark Mode Colors */
         body.dark-mode .icon-grey svg { fill: #333; } 
         body.dark-mode .icon-error svg { fill: #ef5350; } 
         body.dark-mode .status-grey { background-color: #333; color: #666; }
@@ -129,6 +140,10 @@
     </style>
 </head>
 <body>
+
+    <div class="cf-compliance-hidden">
+        ::CLOUDFLARE_ERROR_1000S_BOX::
+    </div>
 
     <div class="main-content">
         <h1>Access Denied <span style="font-size: 0.6em; color: #666; background: #eee; padding: 2px 8px; border-radius: 4px;">Error code 403</span></h1>
@@ -148,12 +163,16 @@
 
                 <div class="user-details-box">
                     <div class="detail-row">
-                        <span class="detail-label">IP Address</span>
-                        <span class="detail-value" id="user-ip">Scanning...</span>
+                        <span class="detail-label">Cloudflare Ray ID</span>
+                        <span class="detail-value ray-id-val" id="ray-id-display">::RAY_ID::</span>
                     </div>
                     <div class="detail-row">
-                        <span class="detail-label">ISP / Connection</span>
-                        <span class="detail-value" id="user-isp">-</span>
+                        <span class="detail-label">IP Address</span>
+                        <span class="detail-value">::CLIENT_IP::</span>
+                    </div>
+                    <div class="detail-row">
+                        <span class="detail-label">Location</span>
+                        <span class="detail-value">::GEO::</span>
                     </div>
                     <div class="detail-row">
                         <span class="detail-label">User Agent</span>
@@ -199,15 +218,15 @@
 
     <div class="bottom-section">
         <div class="wa-section">
-            <div class="wa-label">Jika Anda yakin Anda memiliki izin, silakan hubungi kami.</div>
-            <a href="https://wa.me/6281255559400?text=Halo%20Tim%20Teknis%2C%20saya%20mendapatkan%20error%20403%20Access%20Denied%20pada%20layanan%20JabarProv%2C%20mohon%20pengecekan%20policy%20akses." target="_blank" class="wa-button">
+            <div class="wa-label">Jika Anda yakin Anda memiliki izin, silakan hubungi kami dengan menyertakan Ray ID di atas.</div>
+            <a href="https://wa.me/6281255559400?text=Halo%20Tim%20Teknis%2C%20saya%20mendapatkan%20error%20403%20Access%20Denied%20(WAF)%20di%20JabarCloud.%0A%0ARay%20ID:%20::RAY_ID::%0AIP:%20::CLIENT_IP::" target="_blank" class="wa-button">
                 <svg class="wa-icon" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 01-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 01-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 012.893 6.994c-.003 5.45-4.437 9.884-9.885 9.884m8.413-18.297A11.815 11.815 0 0012.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L.057 24l6.305-1.654a11.882 11.882 0 005.683 1.448h.005c6.554 0 11.89-5.335 11.893-11.893a11.821 11.821 0 00-3.48-8.413z"/></svg>
                 Aduan Sistem JabarCloud
             </a>
         </div>
 
         <div class="footer">
-            <p>Powered by JabarCloud since 2019</p>
+            <p>Powered by JabarCloud since 2019 &bull; Ray ID: ::RAY_ID::</p>
         </div>
     </div>
 
@@ -232,21 +251,15 @@
             var ua = navigator.userAgent;
             document.getElementById("user-agent").textContent = ua;
 
-            fetch('https://ipwho.is/')
-                .then(response => response.json())
-                .then(data => {
-                    if(data.success) {
-                        document.getElementById("user-ip").textContent = data.ip;
-                        var ispInfo = data.connection.isp || data.connection.org || "Tidak terdeteksi";
-                        document.getElementById("user-isp").textContent = ispInfo;
-                    } else {
-                        document.getElementById("user-ip").textContent = "Gagal memuat";
-                    }
-                })
-                .catch(error => {
-                    console.error('Error:', error);
-                    document.getElementById("user-ip").textContent = "Check AdBlock";
+            // Placeholder handling for local development (Non-Cloudflare environment)
+            var rayIdEl = document.getElementById("ray-id-display");
+            if (rayIdEl.textContent.includes("::")) {
+                rayIdEl.textContent = "CF-Test-Mode-123"; 
+                document.querySelectorAll(".detail-value").forEach(el => {
+                    if(el.textContent.includes("CLIENT_IP")) el.textContent = "127.0.0.1 (Local)";
+                    if(el.textContent.includes("GEO")) el.textContent = "ID (Local)";
                 });
+            }
         });
     </script>
 </body>
