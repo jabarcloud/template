@@ -69,7 +69,7 @@
             top: 110%;
             left: 50%;
             transform: translateX(-50%);
-            width: 220px;
+            width: 240px;
             background-color: #ffffff;
             border: 1px solid #e1e4e8;
             border-radius: 8px;
@@ -78,6 +78,7 @@
             text-align: left;
             z-index: 10;
             transition: background-color 0.5s ease, border-color 0.5s ease, box-shadow 0.5s ease;
+            opacity: 0; animation: fadeInUp 0.5s ease 0.5s forwards;
         }
 
         .user-details-box::before {
@@ -102,6 +103,7 @@
             word-wrap: break-word;
             line-height: 1.4;
             transition: color 0.5s ease;
+            font-family: monospace;
         }
 
         .ua-small {
@@ -115,6 +117,8 @@
             word-break: break-all;
             transition: background-color 0.5s ease, color 0.5s ease;
         }
+        
+        .ray-id-val { color: #d63031; font-weight: bold; }
 
         /* --- BOTTOM SECTION --- */
         .bottom-section {
@@ -173,10 +177,12 @@
         .node-status { font-size: 0.8rem; } .text-green { color: #80c850; } .text-red { color: #cb191d; }
         .arrow { margin-top: 20px; color: #ccc; font-size: 1.2rem; padding: 0 2px; }
         .footer { margin-top: 30px; font-size: 0.8rem; color: #ccc; }
+        
+        @keyframes fadeInUp { from { opacity: 0; transform: translate(-50%, 20px); } to { opacity: 1; transform: translate(-50%, 0); } }
 
         /* =========================================
-           DARK MODE STYLES
-           ========================================= */
+            DARK MODE STYLES
+            ========================================= */
         body.dark-mode { background-color: #121212; color: #e0e0e0; }
         body.dark-mode h1 { color: #ffffff; }
         body.dark-mode p { color: #b0b0b0; }
@@ -190,6 +196,7 @@
         body.dark-mode .detail-label { color: #888; }
         body.dark-mode .detail-value { color: #e0e0e0; }
         body.dark-mode .ua-small { background-color: #2c2c2c; color: #ccc; }
+        body.dark-mode .ray-id-val { color: #ff6b6b; }
 
         body.dark-mode .node-name { color: #fff; }
         body.dark-mode .wa-label { color: #aaa; }
@@ -201,12 +208,14 @@
             .status-diagram { flex-direction: column; align-items: center; gap: 40px; margin-bottom: 40px; }
             .arrow { transform: rotate(90deg); margin: 0; }
             .node { width: 100%; }
-            .user-details-box { position: relative; top: auto; left: auto; transform: none; margin-top: 15px; width: 260px; }
+            .user-details-box { position: relative; top: auto; left: auto; transform: none; margin-top: 15px; width: 260px; animation: none; opacity: 1; }
             .user-details-box::before, .user-details-box::after { display: none; }
         }
     </style>
 </head>
 <body>
+
+    <div style="display:none">::CLOUDFLARE_ERROR_500S_BOX::</div>
 
     <div class="main-content">
         <h1>Bad Gateway <span style="font-size: 0.6em; color: #666; background: #eee; padding: 2px 8px; border-radius: 4px;">Error code 502</span></h1>
@@ -226,12 +235,16 @@
 
                 <div class="user-details-box">
                     <div class="detail-row">
-                        <span class="detail-label">IP Address</span>
-                        <span class="detail-value" id="user-ip">Scanning...</span>
+                        <span class="detail-label">Cloudflare Ray ID</span>
+                        <span class="detail-value ray-id-val" id="ray-id-display">::RAY_ID::</span>
                     </div>
                     <div class="detail-row">
-                        <span class="detail-label">ISP / Connection</span>
-                        <span class="detail-value" id="user-isp">-</span>
+                        <span class="detail-label">IP Address</span>
+                        <span class="detail-value" id="user-ip">::CLIENT_IP::</span>
+                    </div>
+                    <div class="detail-row">
+                        <span class="detail-label">Location/ISP</span>
+                        <span class="detail-value" id="user-location">::GEO::</span>
                     </div>
                     <div class="detail-row">
                         <span class="detail-label">User Agent</span>
@@ -277,61 +290,181 @@
 
     <div class="bottom-section">
         <div class="wa-section">
-            <div class="wa-label">Bila Anda adalah pengelola aplikasi, mohon laporkan.</div>
-            <a href="https://wa.me/6281255559400?text=Halo%20Tim%20Teknis%2C%20saya%20adalah%20pengelola%20aplikasi%20dan%20mengalami%20kendala%20502%20Bad%20Gateway%20pada%20layanan%20JabarProv.%20Mohon%20bantuannya." target="_blank" class="wa-button">
+            <div class="wa-label">Harap laporkan <b>Ray ID</b> berikut kepada admin: <span style="font-family:monospace; font-weight:bold;" id="ray-id-footer">::RAY_ID::</span></div>
+            <a href="#" id="wa-link" target="_blank" class="wa-button">
                 <svg class="wa-icon" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 01-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 01-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 012.893 6.994c-.003 5.45-4.437 9.884-9.885 9.884m8.413-18.297A11.815 11.815 0 0012.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L.057 24l6.305-1.654a11.882 11.882 0 005.683 1.448h.005c6.554 0 11.89-5.335 11.893-11.893a11.821 11.821 0 00-3.48-8.413z"/></svg>
                 Aduan Sistem JabarCloud
             </a>
         </div>
 
         <div class="footer">
-            <p>Powered by JabarCloud since 2019</p>
+            <p>Powered by JabarCloud since 2019 &bull; Ray ID: <span class="ray-id-text">::RAY_ID::</span></p>
         </div>
     </div>
 
     <script>
         document.addEventListener("DOMContentLoaded", function() {
-            // --- TIME BASED THEME (DARK/LIGHT MODE) ---
+            // --- 1. THEME & BASIC UI LOGIC ---
             function applyTheme() {
                 var now = new Date();
                 var hours = now.getHours();
-                
-                // Jika jam 18:00 ke atas ATAU sebelum jam 06:00 pagi
-                if (hours >= 18 || hours < 6) {
-                    document.body.classList.add('dark-mode');
-                } else {
-                    document.body.classList.remove('dark-mode');
-                }
+                if (hours >= 18 || hours < 6) { document.body.classList.add('dark-mode'); } 
+                else { document.body.classList.remove('dark-mode'); }
             }
             applyTheme();
 
-            // --- STANDARD DYNAMIC FUNCTIONS ---
             var currentHost = window.location.hostname;
             document.querySelectorAll(".dynamic-host-name").forEach(function(el) { el.textContent = currentHost; });
 
             var currentPath = window.location.pathname;
             if (currentPath === "/" || currentPath === "") currentPath = "/ (Root)";
-            if (currentPath.length > 18) currentPath = currentPath.substring(0, 15) + "...";
-            document.getElementById("dynamic-path-node").textContent = "Node " + currentPath;
+            var displayPath = currentPath;
+            if (displayPath.length > 18) displayPath = displayPath.substring(0, 15) + "...";
+            document.getElementById("dynamic-path-node").textContent = "Node " + displayPath;
 
             var ua = navigator.userAgent;
             document.getElementById("user-agent").textContent = ua;
 
-            fetch('https://ipwho.is/')
-                .then(response => response.json())
-                .then(data => {
-                    if(data.success) {
-                        document.getElementById("user-ip").textContent = data.ip;
-                        var ispInfo = data.connection.isp || data.connection.org || "Tidak terdeteksi";
-                        document.getElementById("user-isp").textContent = ispInfo;
-                    } else {
-                        document.getElementById("user-ip").textContent = "Gagal memuat";
+            // --- 2. DYNAMIC WHATSAPP LINK UPDATER ---
+            function updateWALink(rayId, ip, locationOrIsp) {
+                var fullUrl = window.location.href;
+                var waNumber = "6281255559400";
+                
+                var message = "Halo Tim Teknis JabarCloud,\n\n" +
+                              "Saya mengalami Error 502 (Bad Gateway).\n" +
+                              "Mohon dicek respon upstream server.\n\n" +
+                              "Detail:\n" +
+                              "Ke URL: " + fullUrl + "\n" +
+                              "Dengan Ray ID: " + rayId + "\n" +
+                              "Dari IP: " + ip + "\n" +
+                              "Lewat Location/ISP: " + locationOrIsp + "\n" +
+                              "Pakai User Agent: " + ua;
+                
+                var waLink = document.getElementById("wa-link");
+                if(waLink) {
+                    waLink.href = "https://wa.me/" + waNumber + "?text=" + encodeURIComponent(message);
+                }
+            }
+
+            // --- 3. HANDLE CLOUDFLARE PLACEHOLDERS & LOCAL FALLBACK ---
+            var rayIdEl = document.getElementById("ray-id-display");
+            var rayIdFooterEl = document.getElementById("ray-id-footer");
+            var ipEl = document.getElementById("user-ip");
+            var locEl = document.getElementById("user-location");
+
+            var currentRayId = rayIdEl.textContent;
+            var currentIp = ipEl.textContent;
+            
+            // Cek apakah script berjalan di lokal (placeholder belum terganti)
+            if (currentRayId.includes("::")) {
+                currentRayId = "N/A (Local Testing)";
+                rayIdEl.textContent = currentRayId;
+                rayIdFooterEl.textContent = currentRayId;
+                // Update footer Ray ID text juga
+                document.querySelectorAll(".ray-id-text").forEach(el => el.textContent = currentRayId);
+                
+                // Jika di lokal, force trigger IP detection
+                currentIp = "::CLIENT_IP::"; 
+            } else {
+                 // Sync footer dengan Ray ID asli
+                 document.querySelectorAll(".ray-id-text").forEach(el => el.textContent = currentRayId);
+                 if(rayIdFooterEl) rayIdFooterEl.textContent = currentRayId;
+            }
+
+            // --- 4. ROBUST IP DETECTION (WATERFALL METHOD) ---
+            async function getIpData() {
+                // Jika IP sudah diset oleh Cloudflare (bukan placeholder), kita pakai itu.
+                var ipIsSetByServer = !currentIp.includes("::") && currentIp.length > 5;
+                
+                const sources = [
+                    { 
+                        url: 'https://ipwho.is/', 
+                        type: 'json', 
+                        fieldIp: 'ip', 
+                        fieldIsp: 'connection.isp',
+                        fieldCity: 'city'
+                    },
+                    { 
+                        url: 'https://api.db-ip.com/v2/free/self', 
+                        type: 'json', 
+                        fieldIp: 'ipAddress', 
+                        fieldIsp: 'isp'
+                    },
+                    { 
+                        url: 'https://www.cloudflare.com/cdn-cgi/trace', 
+                        type: 'text', 
+                        fieldIp: 'ip', 
+                        fieldIsp: null 
                     }
-                })
-                .catch(error => {
-                    console.error('Error:', error);
-                    document.getElementById("user-ip").textContent = "Check AdBlock";
-                });
+                ];
+
+                for (let source of sources) {
+                    try {
+                        // Jika IP sudah ada dari server, skip source 'text' karena kita hanya butuh ISP detail
+                        if (ipIsSetByServer && source.type === 'text') continue;
+
+                        const response = await fetch(source.url);
+                        if (!response.ok) throw new Error('Network error');
+                        
+                        let detectedIp = "Unknown";
+                        let detectedIsp = "Tidak terdeteksi";
+
+                        if (source.type === 'json') {
+                            const data = await response.json();
+                            detectedIp = data[source.fieldIp];
+                            
+                            // Ambil ISP
+                            if (source.fieldIsp && source.fieldIsp.includes('.')) {
+                                let parts = source.fieldIsp.split('.');
+                                if(data[parts[0]] && data[parts[0]][parts[1]]) detectedIsp = data[parts[0]][parts[1]];
+                            } else if (source.fieldIsp) {
+                                detectedIsp = data[source.fieldIsp] || detectedIsp;
+                            }
+                            
+                            // Tambahan info kota
+                            if(data.city && !ipIsSetByServer) {
+                                detectedIsp = data.city + " (" + detectedIsp + ")";
+                            }
+
+                            if (source.url.includes('ipwho.is') && !data.success) throw new Error('API limit');
+
+                        } else if (source.type === 'text') {
+                            const text = await response.text();
+                            const lines = text.split('\n');
+                            lines.forEach(line => {
+                                const [key, value] = line.split('=');
+                                if (key === 'ip') detectedIp = value;
+                            });
+                            detectedIsp = "Mode Privat";
+                        }
+
+                        // UPDATE UI
+                        // Jika IP belum valid dari server, update IP di layar
+                        if (!ipIsSetByServer) {
+                            currentIp = detectedIp;
+                            document.getElementById("user-ip").textContent = currentIp;
+                        }
+                        
+                        // Update Lokasi/ISP dengan data yang lebih kaya
+                        document.getElementById("user-location").textContent = detectedIsp;
+
+                        // Update WA Link
+                        updateWALink(currentRayId, currentIp, detectedIsp);
+                        return;
+
+                    } catch (e) {
+                        console.log("Source gagal, mencoba backup...");
+                    }
+                }
+
+                // Fallback
+                if (!ipIsSetByServer) document.getElementById("user-ip").textContent = "Gagal memuat";
+                document.getElementById("user-location").textContent = "Offline/Blocked";
+                updateWALink(currentRayId, currentIp, "Offline");
+            }
+
+            // Jalankan deteksi
+            getIpData();
         });
     </script>
 </body>
