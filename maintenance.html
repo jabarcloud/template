@@ -1,0 +1,484 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>JabarCloud | Maintenance</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@300;400;700;900&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@500;700&display=swap" rel="stylesheet">
+
+    <style>
+        /* --- VARIABLES (LIGHT MODE DEFAULT) --- */
+        :root {
+            --bg-color: #f4f7f6; 
+            --text-color: #2c3e50;
+            --accent-color: #00b894; /* Jabar Greenish Teal */
+            
+            /* Lapangan */
+            --court-bg: #3e8e41;
+            --court-border: #2e7d32;
+            --line-color: #ffffff;
+            
+            /* Game Objects */
+            --ball-color: #f1c40f;
+            --racket-frame: #e74c3c;
+            --racket-grip: #34495e;
+            
+            /* UI */
+            --scoreboard-bg: #dfe6e9;
+            --scoreboard-text: #2d3436;
+            
+            /* Logo Effect */
+            --logo-shadow: drop-shadow(0 4px 6px rgba(0,0,0,0.1));
+        }
+
+        /* --- DARK MODE (NIGHT) --- */
+        body.dark-mode {
+            --bg-color: #1a1a2e;
+            --text-color: #ecf0f1;
+            --accent-color: #00d2fc; /* Cyber Blue */
+            
+            --court-bg: #16213e;
+            --court-border: #0f3460;
+            --line-color: #00d2fc;
+            
+            --ball-color: #ff2e63;
+            --racket-frame: #00d2fc;
+            
+            --scoreboard-bg: #16213e;
+            --scoreboard-text: #00d2fc;
+            
+            /* Logo Glow Effect for Night */
+            --logo-shadow: drop-shadow(0 0 15px rgba(0, 210, 252, 0.6));
+        }
+
+        body {
+            margin: 0;
+            padding: 0;
+            background-color: var(--bg-color);
+            color: var(--text-color);
+            font-family: 'Roboto', sans-serif;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            min-height: 100vh;
+            overflow-x: hidden;
+            text-align: center;
+            transition: all 0.5s ease;
+        }
+
+        /* --- LOGO SECTION --- */
+        .logo-container {
+            margin-top: 2rem;
+            margin-bottom: 1rem;
+            animation: floatLogo 3s ease-in-out infinite;
+        }
+        
+        .main-logo {
+            max-width: 220px;
+            height: auto;
+            /* Efek Shadow & Glow */
+            filter: var(--logo-shadow);
+            transition: filter 0.5s ease;
+        }
+
+        @keyframes floatLogo {
+            0%, 100% { transform: translateY(0); }
+            50% { transform: translateY(-5px); }
+        }
+
+        h1 {
+            font-size: 2rem;
+            margin-bottom: 0.5rem;
+            font-weight: 900;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+        }
+        
+        .subtitle {
+            font-weight: 300;
+            margin-bottom: 2rem;
+            font-size: 1rem;
+            opacity: 0.8;
+        }
+
+        /* --- GAME AREA --- */
+        .game-wrapper {
+            position: relative;
+            margin-bottom: 1.5rem;
+        }
+
+        .game-container {
+            position: relative;
+            width: 600px;
+            height: 340px;
+            cursor: none; 
+        }
+
+        .court-perspective {
+            position: absolute; top: 0; left: 0; width: 100%; height: 100%;
+            perspective: 900px; z-index: 0;
+        }
+
+        .court-floor {
+            width: 100%; height: 100%;
+            background-color: var(--court-bg);
+            transform: rotateX(35deg) scale(0.95);
+            border: 8px solid var(--court-border);
+            box-shadow: 0 20px 50px rgba(0,0,0,0.3);
+            position: relative;
+            transition: background-color 0.5s;
+        }
+
+        .line { position: absolute; background-color: var(--line-color); opacity: 0.8; }
+        .line-mid { top: 0; bottom: 0; left: 50%; width: 4px; transform: translateX(-50%); }
+        .line-h-top { top: 20%; left: 0; right: 0; height: 4px; }
+        .line-h-bot { bottom: 20%; left: 0; right: 0; height: 4px; }
+        
+        .court-net {
+            position: absolute; top: -25px; bottom: 0; left: 50%; width: 2px;
+            background: repeating-linear-gradient(0deg, #fff 0px, #fff 4px, transparent 4px, transparent 8px);
+            border-left: 2px solid #bbb; border-right: 2px solid #bbb;
+            transform: translateX(-50%); z-index: 2;
+        }
+
+        /* Game Elements */
+        .game-element { position: absolute; transform: translate(-50%, -50%); z-index: 10; pointer-events: none; }
+        .racket-container { width: 45px; height: 110px; }
+        .racket-svg { width: 100%; height: 100%; display: block; filter: drop-shadow(2px 4px 6px rgba(0,0,0,0.3)); }
+        .svg-frame { fill: none; stroke: var(--racket-frame); stroke-width: 5; }
+        .svg-grip { fill: var(--racket-grip); }
+        .svg-strings { stroke: rgba(255,255,255,0.5); stroke-width: 1; }
+
+        #racketLeftSvg { transform: rotate(-10deg); transition: transform 0.1s; }
+        #racketRightSvg { transform: scaleX(-1) rotate(-10deg); transition: transform 0.1s; }
+        .hit-anim-left { animation: hitL 0.2s linear; }
+        .hit-anim-right { animation: hitR 0.2s linear; }
+        @keyframes hitL { 0% { transform: rotate(-10deg); } 50% { transform: rotate(15deg); } 100% { transform: rotate(-10deg); } }
+        @keyframes hitR { 0% { transform: scaleX(-1) rotate(-10deg); } 50% { transform: scaleX(-1) rotate(15deg); } 100% { transform: scaleX(-1) rotate(-10deg); } }
+
+        .ball {
+            width: 18px; height: 18px; background-color: var(--ball-color);
+            border-radius: 50%; box-shadow: 0 0 10px rgba(0,0,0,0.2); z-index: 11;
+        }
+
+        /* --- SCOREBOARD --- */
+        .scoreboard {
+            display: flex; justify-content: center; gap: 2rem; margin-top: 10px;
+            background: var(--scoreboard-bg); padding: 10px 30px; border-radius: 12px;
+            font-family: 'Orbitron', sans-serif; color: var(--scoreboard-text);
+            box-shadow: inset 0 2px 5px rgba(0,0,0,0.1);
+            transition: background 0.5s, color 0.5s;
+        }
+        .score-box { text-align: center; width: 100px; }
+        .player-name { font-size: 0.7rem; letter-spacing: 1px; font-family: 'Roboto', sans-serif; font-weight: 700; margin-bottom: 5px; }
+        .points { font-size: 1.8rem; font-weight: 700; }
+        .sets { font-size: 0.8rem; opacity: 0.7; }
+
+        /* --- COUNTDOWN & BUTTON --- */
+        .countdown-wrapper {
+            margin-top: 2rem;
+            margin-bottom: 3rem;
+        }
+
+        .countdown-container {
+            background: rgba(128, 128, 128, 0.1);
+            padding: 15px 30px;
+            border-radius: 50px;
+            border: 1px solid rgba(128, 128, 128, 0.2);
+            display: inline-block;
+        }
+        .timer { font-size: 1.2rem; font-weight: 700; font-family: 'Orbitron', monospace; }
+        .label { font-size: 0.8rem; opacity: 0.8; margin-top: 5px; }
+
+        /* Tombol Selesai (Default Hidden) */
+        #finish-btn-container {
+            display: none; /* Disembunyikan sampai waktu habis */
+            animation: fadeIn 1s ease;
+        }
+        
+        .btn-main {
+            display: inline-block;
+            padding: 15px 40px;
+            background: linear-gradient(135deg, #00b09b, #96c93d);
+            color: white;
+            text-decoration: none;
+            font-weight: 900;
+            border-radius: 50px;
+            font-size: 1.2rem;
+            box-shadow: 0 4px 15px rgba(0, 176, 155, 0.4);
+            transition: transform 0.2s, box-shadow 0.2s;
+        }
+        .btn-main:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 8px 20px rgba(0, 176, 155, 0.6);
+        }
+        
+        @keyframes fadeIn { from { opacity: 0; transform: translateY(10px); } to { opacity: 1; transform: translateY(0); } }
+
+        /* --- FOOTER --- */
+        footer {
+            font-size: 0.8rem;
+            opacity: 0.6;
+            padding-bottom: 2rem;
+            margin-top: auto;
+            font-weight: 400;
+        }
+
+        /* Mobile */
+        @media (max-width: 700px) {
+            .game-container { width: 95vw; height: 250px; }
+            h1 { font-size: 1.5rem; }
+            .points { font-size: 1.4rem; }
+            .btn-main { padding: 12px 30px; font-size: 1rem; }
+        }
+    </style>
+</head>
+<body>
+
+    <div class="logo-container">
+        <img src="https://raw.githubusercontent.com/jabarcloud/template/refs/heads/main/jabarcloud-removebg.png" alt="JabarCloud Logo" class="main-logo">
+    </div>
+
+    <h1>Mohon Bersabar</h1>
+    <div class="subtitle">Kami sedang main tenis sampai sistem pulih</div>
+
+    <div class="game-wrapper">
+        <div class="game-container" id="gameArea">
+            <div class="court-perspective">
+                <div class="court-floor">
+                    <div class="line line-mid"></div>
+                    <div class="line line-h-top"></div>
+                    <div class="line line-h-bot"></div>
+                    <div class="court-net"></div>
+                </div>
+            </div>
+
+            <div class="game-element racket-container" id="racketLeft">
+                <svg id="racketLeftSvg" class="racket-svg" viewBox="0 0 60 160"><g class="svg-strings"><line x1="15" y1="10" x2="15" y2="80" /><line x1="30" y1="5" x2="30" y2="85" /><line x1="45" y1="10" x2="45" y2="80" /><line x1="5" y1="30" x2="55" y2="30" /><line x1="5" y1="45" x2="55" y2="45" /><line x1="5" y1="60" x2="55" y2="60" /></g><ellipse class="svg-frame" cx="30" cy="45" rx="25" ry="40" /><rect class="svg-grip" x="25" y="85" width="10" height="75" rx="2" /><path class="svg-frame" d="M 20 80 L 25 100 L 35 100 L 40 80" stroke-linejoin="round"/></svg>
+            </div>
+
+            <div class="game-element ball" id="tennisBall"></div>
+
+            <div class="game-element racket-container" id="racketRight">
+                <svg id="racketRightSvg" class="racket-svg" viewBox="0 0 60 160"><g class="svg-strings"><line x1="15" y1="10" x2="15" y2="80" /><line x1="30" y1="5" x2="30" y2="85" /><line x1="45" y1="10" x2="45" y2="80" /><line x1="5" y1="30" x2="55" y2="30" /><line x1="5" y1="45" x2="55" y2="45" /><line x1="5" y1="60" x2="55" y2="60" /></g><ellipse class="svg-frame" cx="30" cy="45" rx="25" ry="40" /><rect class="svg-grip" x="25" y="85" width="10" height="75" rx="2" /><path class="svg-frame" d="M 20 80 L 25 100 L 35 100 L 40 80" stroke-linejoin="round"/></svg>
+            </div>
+        </div>
+
+        <div class="scoreboard">
+            <div class="score-box">
+                <div class="player-name">ADMIN GANTENG</div>
+                <div class="points" id="scoreCPU">0</div>
+                <div class="sets">GAMES: <span id="gamesCPU">0</span></div>
+            </div>
+            <div class="score-box">
+                <div class="player-name">ANDA</div>
+                <div class="points" id="scorePlayer">0</div>
+                <div class="sets">GAMES: <span id="gamesPlayer">0</span></div>
+            </div>
+        </div>
+    </div>
+
+    <div class="countdown-wrapper">
+        <div class="countdown-container" id="timerBox">
+            <div class="timer" id="countdown">-- : -- : -- : --</div>
+            <div class="label">Estimasi Selesai pada 24 November 2025, Pukul 06:00 WIB</div>
+        </div>
+
+        <div id="finish-btn-container">
+            <a href="https://jabarprov.go.id" class="btn-main">BUKA PORTAL JABAR</a>
+            <div class="label" style="margin-top:15px;">Terima kasih atas kesabaran Anda</div>
+        </div>
+    </div>
+
+    <footer>Powered by JabarCloud since 2019</footer>
+
+    <script>
+        // --- DARK MODE AUTO ---
+        function checkTimeMode() {
+            const hour = new Date().getHours();
+            if (hour >= 18 || hour < 6) document.body.classList.add('dark-mode');
+            else document.body.classList.remove('dark-mode');
+        }
+        checkTimeMode();
+        setInterval(checkTimeMode, 60000);
+
+        // --- GAME LOGIC ---
+        let pointsCPU = 0, pointsPlayer = 0, gamesCPU = 0, gamesPlayer = 0;
+        let isResetting = false;
+        const tennisScores = ["0", "15", "30", "40"];
+
+        const gameArea = document.getElementById('gameArea');
+        const ballEl = document.getElementById('tennisBall');
+        const rLeft = document.getElementById('racketLeft');
+        const rRight = document.getElementById('racketRight');
+        const rLeftSvg = document.getElementById('racketLeftSvg');
+        const rRightSvg = document.getElementById('racketRightSvg');
+
+        let width = gameArea.offsetWidth, height = gameArea.offsetHeight;
+        let ball = { x: width/2, y: height/2, vx: 0, vy: 0, r: 9 };
+        let padH = 110, padW = 25, margin = 30;
+        let leftY = height/2, rightY = height/2, targetRightY = height/2;
+        const compSpeed = 4.5, gravity = 0.15;
+
+        function startGame() { serveBall(); requestAnimationFrame(updateGame); }
+        
+        function serveBall() {
+            ball.x = width / 2; ball.y = height / 2;
+            let dir = Math.random() > 0.5 ? 1 : -1;
+            ball.vx = dir * (5 + Math.random() * 2); ball.vy = (Math.random() * 6) - 3;
+            isResetting = false;
+        }
+
+        function updateScoring(winner) {
+            if (isResetting) return; isResetting = true;
+            if (winner === 'player') pointsPlayer++; else pointsCPU++;
+
+            if (pointsPlayer >= 3 && pointsCPU >= 3) {
+                if (Math.abs(pointsPlayer - pointsCPU) >= 2) {
+                    (pointsPlayer > pointsCPU) ? gamesPlayer++ : gamesCPU++;
+                    pointsPlayer = 0; pointsCPU = 0;
+                }
+            } else if (pointsPlayer > 3 || pointsCPU > 3) {
+                (pointsPlayer > 3) ? gamesPlayer++ : gamesCPU++;
+                pointsPlayer = 0; pointsCPU = 0;
+            }
+            updateScoreDisplay();
+            setTimeout(serveBall, 1000);
+        }
+
+        function updateScoreDisplay() {
+            document.getElementById('gamesCPU').innerText = gamesCPU;
+            document.getElementById('gamesPlayer').innerText = gamesPlayer;
+            const tCPU = document.getElementById('scoreCPU');
+            const tPly = document.getElementById('scorePlayer');
+
+            if (pointsPlayer >= 3 && pointsCPU >= 3) {
+                if (pointsPlayer === pointsCPU) { tPly.innerText = "40"; tCPU.innerText = "40"; } 
+                else if (pointsPlayer > pointsCPU) { tPly.innerText = "AD"; tCPU.innerText = "40"; }
+                else { tPly.innerText = "40"; tCPU.innerText = "AD"; }
+            } else {
+                tPly.innerText = tennisScores[Math.min(pointsPlayer, 3)] || "40";
+                tCPU.innerText = tennisScores[Math.min(pointsCPU, 3)] || "40";
+            }
+        }
+
+        gameArea.addEventListener('mousemove', e => {
+            let rect = gameArea.getBoundingClientRect();
+            targetRightY = e.clientY - rect.top;
+        });
+
+        function updateGame() {
+            if (!isResetting) {
+                ball.vy += gravity; ball.x += ball.vx; ball.y += ball.vy;
+                rightY += (targetRightY - rightY) * 0.15;
+                rightY = Math.max(padH/2, Math.min(height - padH/2, rightY));
+
+                if(ball.vx < 0) {
+                    if(leftY < ball.y - 10) leftY += compSpeed;
+                    else if(leftY > ball.y + 10) leftY -= compSpeed;
+                } else { if(leftY < height/2) leftY += 1; else leftY -= 1; }
+                leftY = Math.max(padH/2, Math.min(height - padH/2, leftY));
+
+                if (ball.y + ball.r > height || ball.y - ball.r < 0) {
+                    ball.vy *= -0.85;
+                    if(ball.y+ball.r > height) ball.y=height-ball.r; if(ball.y-ball.r < 0) ball.y=ball.r;
+                }
+
+                if (ball.x + ball.r > width - margin && ball.x < width - margin + padW) {
+                    if (ball.y > rightY - padH/2 && ball.y < rightY + padH/2) {
+                        ball.vx = -Math.abs(ball.vx * 1.1); ball.vy = (ball.y - rightY) * 0.25;
+                        triggerHit(rRightSvg, 'hit-anim-right');
+                    }
+                }
+                if (ball.x - ball.r < margin && ball.x > margin - padW) {
+                    if (ball.y > leftY - padH/2 && ball.y < leftY + padH/2) {
+                        ball.vx = Math.abs(ball.vx * 1.1); ball.vy = (ball.y - leftY) * 0.25;
+                        triggerHit(rLeftSvg, 'hit-anim-left');
+                    }
+                }
+
+                if (ball.x < 0) updateScoring('player');
+                else if (ball.x > width) updateScoring('cpu');
+            }
+            ballEl.style.left = ball.x + 'px'; ballEl.style.top = ball.y + 'px';
+            rLeft.style.top = leftY + 'px'; rLeft.style.left = margin + 'px';
+            rRight.style.top = rightY + 'px'; rRight.style.left = (width - margin) + 'px';
+            requestAnimationFrame(updateGame);
+        }
+
+        function triggerHit(el, cls) {
+            el.classList.remove(cls); void el.offsetWidth; el.classList.add(cls);
+        }
+        window.addEventListener('resize', () => { width = gameArea.offsetWidth; height = gameArea.offsetHeight; });
+        window.onload = () => { startGame(); logVisitorIP(); };
+
+        // --- TIMER LOGIC (WITH LINK TRIGGER) ---
+        const targetDate = new Date("November 24, 2025 06:00:00").getTime();
+        
+        // *UNTUK TESTING (agar tombol muncul sekarang), uncomment baris bawah ini:*
+        // const targetDate = new Date().getTime() - 1000; 
+
+        const timerInterval = setInterval(() => {
+            const now = new Date().getTime();
+            const dist = targetDate - now;
+
+            if (dist < 0) {
+                clearInterval(timerInterval);
+                // Sembunyikan timer, munculkan tombol link
+                document.getElementById("timerBox").style.display = "none";
+                document.getElementById("finish-btn-container").style.display = "block";
+                return;
+            }
+
+            const d = Math.floor(dist / (1000*60*60*24));
+            const h = Math.floor((dist % (1000*60*60*24)) / (1000*60*60));
+            const m = Math.floor((dist % (1000*60*60)) / (1000*60));
+            const s = Math.floor((dist % (1000*60)) / 1000);
+            document.getElementById("countdown").innerHTML = 
+                `${d < 10 ? '0'+d : d} : ${h < 10 ? '0'+h : h} : ${m < 10 ? '0'+m : m} : ${s < 10 ? '0'+s : s}`;
+        }, 1000);
+
+        // --- LOGGING ---
+// --- LOGGING ---
+        async function logVisitorIP() {
+            try {
+                // 1. Ambil IP Publik
+                const res = await fetch('https://api.ipify.org?format=json');
+                const data = await res.json();
+                console.log("Visitor IP:", data.ip);
+                
+                // 2. Kirim ke Google Sheet / Discord
+                // --> TEMPEL URL ANDA DI BAWAH INI <--
+                const WEB_APP_URL = "https://script.google.com/macros/s/AKfycbx-7okV-OLOIv1UU-KT043fbXq-lt9_jP9bxaD2wrvLIAM1RKkUnzstpZlDJnFUWAgh9w/exec"; 
+
+                if(WEB_APP_URL) {
+                    // Data yang akan dikirim
+                    const payload = {
+                        ip: data.ip,
+                        userAgent: navigator.userAgent // Info browser/HP pengunjung
+                    };
+
+                    // Kirim Request
+                    // Gunakan mode 'no-cors' untuk Google Script agar tidak error di browser
+                    await fetch(WEB_APP_URL, {
+                        method: 'POST',
+                        mode: 'no-cors', 
+                        headers: {
+                            'Content-Type': 'application/json' // Untuk Google Script pakai ini
+                            // 'Content-Type': 'application/json' // Jika pakai Discord, format payload harus beda
+                        },
+                        body: JSON.stringify(payload)
+                    });
+                    console.log("Log sent to database.");
+                }
+            } catch(e) { 
+                console.error("Logging error:", e); 
+            }
+        }
+    </script>
+</body>
+</html>
