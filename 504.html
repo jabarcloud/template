@@ -4,7 +4,7 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Status Layanan & Akses JabarCloud</title>
+  <title>Status Layanan & Akses Layanan JabarCloud</title>
 
   <!-- Google Fonts -->
   <link rel="preconnect" href="https://fonts.googleapis.com">
@@ -241,23 +241,13 @@
     }
 
     @keyframes drift-1 {
-      0% {
-        transform: translate(0, 0) scale(1);
-      }
-
-      100% {
-        transform: translate(100px, 80px) scale(1.1);
-      }
+      0% { transform: translate(0, 0) scale(1); }
+      100% { transform: translate(100px, 80px) scale(1.1); }
     }
 
     @keyframes drift-2 {
-      0% {
-        transform: translate(0, 0) scale(1.1);
-      }
-
-      100% {
-        transform: translate(-80px, -100px) scale(0.9);
-      }
+      0% { transform: translate(0, 0) scale(1.1); }
+      100% { transform: translate(-80px, -100px) scale(0.9); }
     }
 
     /* Main Container */
@@ -443,21 +433,9 @@
     }
 
     @keyframes pulse {
-      0% {
-        transform: scale(0.9);
-        opacity: 0.6;
-      }
-
-      50% {
-        transform: scale(1.2);
-        opacity: 1;
-        box-shadow: 0 0 14px var(--theme-color);
-      }
-
-      100% {
-        transform: scale(0.9);
-        opacity: 0.6;
-      }
+      0% { transform: scale(0.9); opacity: 0.6; }
+      50% { transform: scale(1.2); opacity: 1; box-shadow: 0 0 14px var(--theme-color); }
+      100% { transform: scale(0.9); opacity: 0.6; }
     }
 
     .timestamp-label {
@@ -593,15 +571,8 @@
     }
 
     @keyframes bounce-small {
-
-      0%,
-      100% {
-        transform: translateY(0);
-      }
-
-      50% {
-        transform: translateY(-3px);
-      }
+      0%, 100% { transform: translateY(0); }
+      50% { transform: translateY(-3px); }
     }
 
     /* WhatsApp Action Button */
@@ -682,8 +653,7 @@
     @media (max-width: 600px) {
       body {
         padding: 20px 12px;
-        justify-content: flex-start;
-        /* Ensures natural scroll and prevents header overlap */
+        justify-content: flex-start; /* Ensures natural scroll and prevents header overlap */
       }
 
       .page-header {
@@ -717,8 +687,7 @@
       }
 
       .error-code-num {
-        font-size: 1.8rem;
-        /* Small ticket stamp style, prioritize visitor details */
+        font-size: 1.8rem; /* Small ticket stamp style, prioritize visitor details */
         font-weight: 800;
         letter-spacing: -0.02em;
         text-align: center;
@@ -740,11 +709,9 @@
         width: auto;
         flex: 1;
         display: flex;
-        flex-direction: column;
-        /* Stacked vertically to prevent character truncation/wrap */
+        flex-direction: column; /* Stacked vertically to prevent character truncation/wrap */
         gap: 5px;
-        max-width: 75%;
-        /* Prioritize visitor metadata space */
+        max-width: 75%; /* Prioritize visitor metadata space */
       }
 
       .left-meta-item:nth-child(3) {
@@ -761,10 +728,8 @@
       }
 
       .ticket-right {
-        padding: 24px 20px;
-        /* Reduced from 40px 44px */
-        gap: 16px;
-        /* Reduced from 24px */
+        padding: 24px 20px; /* Reduced from 40px 44px */
+        gap: 16px; /* Reduced from 24px */
       }
 
       .ticket-header {
@@ -779,14 +744,12 @@
       }
 
       .error-title {
-        font-size: 1.15rem;
-        /* Reduced from 1.6rem */
+        font-size: 1.15rem; /* Reduced from 1.6rem */
         line-height: 1.3;
       }
 
       .error-desc {
-        font-size: 0.8rem;
-        /* Reduced from 0.92rem */
+        font-size: 0.8rem; /* Reduced from 0.92rem */
         line-height: 1.45;
       }
 
@@ -828,8 +791,7 @@
       .btn-report {
         justify-content: center;
         width: 100%;
-        padding: 10px;
-        /* Reduced padding from 12px */
+        padding: 10px; /* Reduced padding from 12px */
         font-size: 0.78rem;
       }
 
@@ -910,7 +872,7 @@
               <span class="error-code-num" id="ui-code">502</span>
               <span class="error-code-label" id="ui-label">SERVER ERR</span>
             </div>
-
+            
             <!-- Connection Details -->
             <div class="left-meta-container">
               <div class="left-meta-item">
@@ -985,15 +947,11 @@
         Sedang memproses instruksi sistem...
       </p>
       <!-- Encouraging note for reporting -->
-      <div class="info-note-cta"
-        style="margin-top: 12px; padding-top: 12px; border-top: 1px dashed var(--card-border); display: flex; align-items: flex-start; gap: 8px;">
+      <div class="info-note-cta" style="margin-top: 12px; padding-top: 12px; border-top: 1px dashed var(--card-border); display: flex; align-items: flex-start; gap: 8px;">
         <span style="font-size: 1.1rem; line-height: 1;">💡</span>
         <div style="font-size: 0.8rem; line-height: 1.5; color: var(--text-muted);">
           <strong style="color: var(--theme-text);">Mengapa disarankan mengirimkan rincian aman via WhatsApp?</strong>
-          <p style="margin-top: 4px;">Dengan menekan tombol kirim laporan, data diagnostik teknis yang aman (seperti
-            rincian kode perantara, Ray ID, dan waktu akses) akan otomatis terlampir. Informasi ini <strong>sangat
-              membantu tim teknis kami (SecDevOps & Pengembang)</strong> untuk melacak rute akses dan memulihkan
-            konektivitas Anda secara instan tanpa menanyakan rincian manual yang membingungkan.</p>
+          <p style="margin-top: 4px;">Dengan menekan tombol kirim laporan, data diagnostik teknis yang aman (seperti rincian kode perantara, Ray ID, dan waktu akses) akan otomatis terlampir. Informasi ini <strong>sangat membantu tim teknis kami (SecDevOps & Pengembang)</strong> untuk melacak rute akses dan memulihkan konektivitas Anda secara instan tanpa menanyakan rincian manual yang membingungkan.</p>
         </div>
       </div>
     </div>
@@ -1009,214 +967,214 @@
   <script>
     // Copy variables dictionary
     const errorDetails = {
-      "200": {
-        "title": "Status Koneksi Normal",
-        "desc": "Akses komunikasi ke server utama berjalan dengan baik dan lancar. Tidak ada hambatan sistem yang terdeteksi.",
-        "category": "SUCCESS",
-        "label": "SUCCESS OK",
-        "theme": "theme-success",
-        "statusText": "KONEKSI AKTIF",
-        "instruction": "Halaman ini mengindikasikan konektivitas berjalan lancar. Apabila terdapat alur aplikasi yang belum sesuai, silakan tinjau kembali parameter routing Anda."
-      },
-      "301": {
-        "title": "Pengalihan Alamat Layanan",
-        "desc": "Sistem sedang mengarahkan peramban Anda ke alamat layanan yang baru secara permanen.",
-        "category": "REDIRECT",
-        "label": "MOVED PERM",
-        "theme": "theme-redirect",
-        "statusText": "DIALIKHAN",
-        "instruction": "Peramban Anda akan dialihkan secara otomatis. Jika tidak terjadi pengalihan, mohon periksa konfigurasi rute navigasi pada aplikasi Anda."
-      },
-      "302": {
-        "title": "Pengalihan Sementara",
-        "desc": "Sumber daya yang Anda minta saat ini sedang dialihkan ke rute lain untuk sementara waktu.",
-        "category": "REDIRECT",
-        "label": "FOUND TEMP",
-        "theme": "theme-redirect",
-        "statusText": "DIALIKHAN",
-        "instruction": "Akses Anda dialihkan sementara. Kondisi ini wajar dalam alur verifikasi sistem (misalnya penyelesaian sesi otorisasi atau pembayaran)."
-      },
-      "400": {
-        "title": "Penyesuaian Format Permintaan",
-        "desc": "Format data atau parameter yang terkirim memerlukan penyesuaian agar dapat diterima dan diproses secara baik oleh server.",
-        "category": "VALIDATION",
-        "label": "BAD REQUEST",
-        "theme": "theme-client",
-        "statusText": "PENYESUAIAN REQ",
-        "instruction": "Silakan lakukan pembersihan cookie peramban Anda dan coba kembali. Tim pengembang dapat memeriksa log konsol web jika kendala terletak pada variabel skrip."
-      },
-      "401": {
-        "title": "Verifikasi Masuk Diperlukan",
-        "desc": "Akses halaman ini memerlukan verifikasi identitas (autentikasi) akun yang sah sebelum dapat dilanjutkan.",
-        "category": "AUTH REQ",
-        "label": "UNAUTHORIZED",
-        "theme": "theme-client",
-        "statusText": "BUTUH LOGIN",
-        "instruction": "Mohon lakukan proses masuk (login) terlebih dahulu menggunakan kredensial Anda. Jika Anda baru saja logout, silakan muat ulang halaman masuk utama."
-      },
-      "403": {
-        "title": "Akses Halaman Terbatas",
-        "desc": "Kebijakan otorisasi membatasi peninjauan halaman di alamat ini berdasarkan klasifikasi peran (role) akun.",
-        "category": "RESTRICTED",
-        "label": "FORBIDDEN",
-        "theme": "theme-client",
-        "statusText": "AKSES TERBATAS",
-        "instruction": "Pastikan Anda menggunakan akun dengan hak akses yang sesuai. Hubungi tim administrator apabila peran otorisasi akun Anda membutuhkan penyesuaian."
-      },
-      "404": {
-        "title": "Alamat Halaman Tidak Ditemukan",
-        "desc": "Alamat halaman atau dokumen yang Anda cari tidak ditemukan di server. Tautan kemungkinan telah disesuaikan atau kedaluwarsa.",
-        "category": "NOT FOUND",
-        "label": "NOT FOUND",
-        "theme": "theme-client",
-        "statusText": "ALAMAT KOSONG",
-        "instruction": "Silakan periksa kembali ketikan nama alamat URL Anda. Tim teknis dapat memastikan bahwa berkas tujuan telah terdistribusi secara lengkap ke server origin."
-      },
-      "408": {
-        "title": "Batas Waktu Transmisi Habis",
-        "desc": "Koneksi jaringan terputus sebelum seluruh paket data berhasil dikirimkan dan diproses secara lengkap oleh server.",
-        "category": "TIMEOUT",
-        "label": "REQ TIMEOUT",
-        "theme": "theme-client",
-        "statusText": "TIMEOUT KONEKSI",
-        "instruction": "Periksa kestabilan jaringan internet Anda dan muat ulang halaman. Kondisi ini biasanya dipengaruhi oleh tingginya latensi pada jaringan lokal."
-      },
-      "429": {
-        "title": "Aktivitas Akses Sedang Padat",
-        "desc": "Permintaan akses dari perangkat Anda sedang sangat padat dalam waktu singkat. Sistem membatasi demi menjaga stabilitas kinerja layanan.",
-        "category": "RATE LIMIT",
-        "label": "TOO MANY REQ",
-        "theme": "theme-client",
-        "statusText": "LALU LINTAS PADAT",
-        "instruction": "Mohon tunggu beberapa menit sebelum mencoba mengakses kembali. Sistem proteksi akan memulihkan kelancaran akses Anda secara otomatis."
-      },
-      "500": {
-        "title": "Penyesuaian Sistem Internal",
-        "desc": "Sistem internal sedang mengalami penyesuaian operasional. Layanan belum dapat memproses permintaan Anda untuk sementara waktu.",
-        "category": "SYSTEM ADJ",
-        "label": "INTERNAL ERR",
-        "theme": "theme-server",
-        "statusText": "PENYESUAIAN",
-        "instruction": "Notifikasi pemantauan otomatis telah dikirim ke tim teknis untuk peninjauan log berkala. Silakan coba memuat ulang halaman secara bertahap."
-      },
-      "502": {
-        "title": "Konektivitas Layanan Terhambat",
-        "desc": "Server perantara (gateway) menerima respon yang memerlukan penyesuaian dari server aplikasi utama.",
-        "category": "CONNECTIVITY",
-        "label": "BAD GATEWAY",
-        "theme": "theme-server",
-        "statusText": "TERHAMBAT 502",
-        "instruction": "Kondisi ini umumnya terjadi saat server aplikasi utama sedang melakukan sinkronisasi layanan atau pembaruan konfigurasi di origin."
-      },
-      "503": {
-        "title": "Layanan Dalam Pemeliharaan",
-        "desc": "Layanan sedang dinonaktifkan sementara untuk proses pemeliharaan berkala guna meningkatkan stabilitas sistem.",
-        "category": "MAINTENANCE",
-        "label": "SERVICE UNAVAIL",
-        "theme": "theme-server",
-        "statusText": "PEMELIHARAAN",
-        "instruction": "Layanan akan segera aktif kembali setelah proses pemeliharaan selesai dilakukan. Terima kasih atas pengertian Anda."
-      },
-      "504": {
-        "title": "Batas Waktu Respon Terlampaui",
-        "desc": "Server perantara kehabisan batas waktu tunggu yang aman saat menanti respon balik dari server aplikasi utama.",
-        "category": "GATEWAY TO",
-        "label": "GATEWAY TIMEOUT",
-        "theme": "theme-server",
-        "statusText": "TIMEOUT 504",
-        "instruction": "Proses yang Anda jalankan membutuhkan waktu penyelesaian yang lebih panjang. Tim pengembang dapat meninjau optimalisasi query database Anda."
-      },
-      "520": {
-        "title": "Format Respon Origin Disesuaikan",
-        "desc": "Server utama mengirimkan format respon yang tidak sesuai dengan protokol pembacaan standar perantara Web Proxy.",
-        "category": "PROXY DISCORD",
-        "label": "PROXY ERROR 520",
-        "theme": "theme-server",
-        "statusText": "RESP INVALID",
-        "instruction": "Tim pengelola aplikasi dapat meninjau log server web (Nginx/Apache) untuk menganalisis potensi kegagalan runtime pada kode aplikasi."
-      },
-      "521": {
-        "title": "Layanan Origin Origin Nonaktif",
-        "desc": "Server aplikasi utama menolak koneksi jaringan dari perantara Web Proxy (port tujuan tidak merespon).",
-        "category": "PROXY DISCORD",
-        "label": "PROXY ERROR 521",
-        "theme": "theme-server",
-        "statusText": "ORIGIN DOWN",
-        "instruction": "Pastikan layanan server web di origin sedang aktif dan tidak terhalang oleh aturan firewall lokal server (iptables/ufw)."
-      },
-      "522": {
-        "title": "Batas Waktu Jabat Tangan Jaringan Habis",
-        "desc": "Gagal menyelesaikan proses jabat tangan (handshake) TCP antara perantara Web Proxy dan server utama dalam batas waktu aman.",
-        "category": "PROXY TIMEOUT",
-        "label": "PROXY ERROR 522",
-        "theme": "theme-server",
-        "statusText": "TCP TIMEOUT",
-        "instruction": "Ini umumnya disebabkan oleh beban server origin yang sangat tinggi atau kegagalan rute jaringan. Pastikan IP jangkauan perantara jaringan diizinkan masuk ke server origin Anda."
-      },
-      "524": {
-        "title": "Waktu Pembacaan Data Habis",
-        "desc": "Koneksi TCP berhasil terbentuk, tetapi server utama tidak menyelesaikan pengiriman respon data hingga batas waktu aman terlampaui.",
-        "category": "PROXY TIMEOUT",
-        "label": "PROXY ERROR 524",
-        "theme": "theme-server",
-        "statusText": "READ TIMEOUT",
-        "instruction": "Proses server origin memakan waktu penyelesaian yang melebihi batas waktu default (100 detik). Optimalkan skrip database atau runtime aplikasi."
-      },
-      "1000": {
-        "title": "Rute Jaringan DNS Sedang Disesuaikan",
-        "desc": "Konfigurasi rute DNS pada perantara Web Proxy memerlukan penyelarasan alamat IP tujuan untuk kelancaran lalu lintas data.",
-        "category": "PROXY ROUTE",
-        "label": "PROXY ERROR 1000",
-        "theme": "theme-security",
-        "statusText": "RUTE DIBATASI",
-        "instruction": "Tim administrator dapat memeriksa kembali pemetaan A Record/CNAME pada dashboard perantara jaringan agar menunjuk ke IP origin yang tepat."
-      },
-      "1006": {
-        "title": "Verifikasi Identitas Jaringan",
-        "desc": "Akses dari jaringan IP Anda saat ini dibatasi berdasarkan kebijakan proteksi keamanan sistem.",
-        "category": "VERIFICATION",
-        "label": "PROXY ERROR 1006",
-        "theme": "theme-security",
-        "statusText": "IP DIAMANKAN",
-        "instruction": "Kebijakan keamanan mendeteksi pola aktivitas jaringan yang memerlukan konfirmasi ulang. Silakan hubungi tim SecDevOps untuk verifikasi IP Anda."
-      },
-      "1009": {
-        "title": "Akses Wilayah Dibatasi",
-        "desc": "Layanan ini menerapkan penyesuaian rute akses berdasarkan cakupan wilayah geografis negara asal pengunjung.",
-        "category": "GEO POLICY",
-        "label": "PROXY ERROR 1009",
-        "theme": "theme-security",
-        "statusText": "GEO RESTRICTED",
-        "instruction": "Pastikan koneksi internet Anda tidak terhubung melalui server VPN luar negeri yang memicu pembatasan wilayah akses."
-      },
-      "1015": {
-        "title": "Lalu Lintas Akses Terlalu Cepat",
-        "desc": "Laju permintaan akses dari perangkat Anda melampaui batas kecepatan aman yang ditetapkan oleh sistem proteksi Web Proxy.",
-        "category": "RATE SECURITY",
-        "label": "PROXY ERROR 1015",
-        "theme": "theme-security",
-        "statusText": "RATE LIMIT",
-        "instruction": "Sistem membatasi laju akses sementara guna menjaga keamanan sumber daya dari aktivitas otomatis. Akses akan terbuka kembali dalam beberapa menit."
-      },
-      "1016": {
-        "title": "Sinkronisasi DNS Origin Tertunda",
-        "desc": "Sistem perantara Web Proxy belum dapat meresolusi alamat DNS dari server aplikasi utama untuk meneruskan koneksi Anda.",
-        "category": "DNS RESOLVE",
-        "label": "PROXY ERROR 1016",
-        "theme": "theme-security",
-        "statusText": "DNS PENDING",
-        "instruction": "Mohon periksa status keaktifan server nama (nameserver) domain utama Anda. Pastikan konfigurasi records DNS di perantara jaringan telah aktif."
-      },
-      "1020": {
-        "title": "Proteksi Firewall Akses Aktif",
-        "desc": "Kebijakan keamanan firewall (WAF) mendeteksi parameter koneksi yang memerlukan otorisasi akses tambahan.",
-        "category": "WAF SECURE",
-        "label": "PROXY ERROR 1020",
-        "theme": "theme-security",
-        "statusText": "WAF PROTECTED",
-        "instruction": "Penyaringan ini bertujuan untuk menjaga integritas data sistem. Klik tombol laporan di atas agar tim SecDevOps dapat menganalisis parameter koneksi Anda."
-      }
-    };
+  "200": {
+    "title": "Status Koneksi Normal",
+    "desc": "Akses komunikasi ke server utama berjalan dengan baik dan lancar. Tidak ada hambatan sistem yang terdeteksi.",
+    "category": "SUCCESS",
+    "label": "SUCCESS OK",
+    "theme": "theme-success",
+    "statusText": "KONEKSI AKTIF",
+    "instruction": "Halaman ini mengindikasikan konektivitas berjalan lancar. Apabila terdapat alur aplikasi yang belum sesuai, silakan tinjau kembali parameter routing Anda."
+  },
+  "301": {
+    "title": "Pengalihan Alamat Layanan",
+    "desc": "Sistem sedang mengarahkan peramban Anda ke alamat layanan yang baru secara permanen.",
+    "category": "REDIRECT",
+    "label": "MOVED PERM",
+    "theme": "theme-redirect",
+    "statusText": "DIALIKHAN",
+    "instruction": "Peramban Anda akan dialihkan secara otomatis. Jika tidak terjadi pengalihan, mohon periksa konfigurasi rute navigasi pada aplikasi Anda."
+  },
+  "302": {
+    "title": "Pengalihan Sementara",
+    "desc": "Sumber daya yang Anda minta saat ini sedang dialihkan ke rute lain untuk sementara waktu.",
+    "category": "REDIRECT",
+    "label": "FOUND TEMP",
+    "theme": "theme-redirect",
+    "statusText": "DIALIKHAN",
+    "instruction": "Akses Anda dialihkan sementara. Kondisi ini wajar dalam alur verifikasi sistem (misalnya penyelesaian sesi otorisasi atau pembayaran)."
+  },
+  "400": {
+    "title": "Penyesuaian Format Permintaan",
+    "desc": "Format data atau parameter yang terkirim memerlukan penyesuaian agar dapat diterima dan diproses secara baik oleh server.",
+    "category": "VALIDATION",
+    "label": "BAD REQUEST",
+    "theme": "theme-client",
+    "statusText": "PENYESUAIAN REQ",
+    "instruction": "Silakan lakukan pembersihan cookie peramban Anda dan coba kembali. Tim pengembang dapat memeriksa log konsol web jika kendala terletak pada variabel skrip."
+  },
+  "401": {
+    "title": "Verifikasi Masuk Diperlukan",
+    "desc": "Akses halaman ini memerlukan verifikasi identitas (autentikasi) akun yang sah sebelum dapat dilanjutkan.",
+    "category": "AUTH REQ",
+    "label": "UNAUTHORIZED",
+    "theme": "theme-client",
+    "statusText": "BUTUH LOGIN",
+    "instruction": "Mohon lakukan proses masuk (login) terlebih dahulu menggunakan kredensial Anda. Jika Anda baru saja logout, silakan muat ulang halaman masuk utama."
+  },
+  "403": {
+    "title": "Akses Halaman Terbatas",
+    "desc": "Kebijakan otorisasi membatasi peninjauan halaman di alamat ini berdasarkan klasifikasi peran (role) akun.",
+    "category": "RESTRICTED",
+    "label": "FORBIDDEN",
+    "theme": "theme-client",
+    "statusText": "AKSES TERBATAS",
+    "instruction": "Pastikan Anda menggunakan akun dengan hak akses yang sesuai. Hubungi tim administrator apabila peran otorisasi akun Anda membutuhkan penyesuaian."
+  },
+  "404": {
+    "title": "Alamat Halaman Tidak Ditemukan",
+    "desc": "Alamat halaman atau dokumen yang Anda cari tidak ditemukan di server. Tautan kemungkinan telah disesuaikan atau kedaluwarsa.",
+    "category": "NOT FOUND",
+    "label": "NOT FOUND",
+    "theme": "theme-client",
+    "statusText": "ALAMAT KOSONG",
+    "instruction": "Silakan periksa kembali ketikan nama alamat URL Anda. Tim teknis dapat memastikan bahwa berkas tujuan telah terdistribusi secara lengkap ke server origin."
+  },
+  "408": {
+    "title": "Batas Waktu Transmisi Habis",
+    "desc": "Koneksi jaringan terputus sebelum seluruh paket data berhasil dikirimkan dan diproses secara lengkap oleh server.",
+    "category": "TIMEOUT",
+    "label": "REQ TIMEOUT",
+    "theme": "theme-client",
+    "statusText": "TIMEOUT KONEKSI",
+    "instruction": "Periksa kestabilan jaringan internet Anda dan muat ulang halaman. Kondisi ini biasanya dipengaruhi oleh tingginya latensi pada jaringan lokal."
+  },
+  "429": {
+    "title": "Aktivitas Akses Sedang Padat",
+    "desc": "Permintaan akses dari perangkat Anda sedang sangat padat dalam waktu singkat. Sistem membatasi demi menjaga stabilitas kinerja layanan.",
+    "category": "RATE LIMIT",
+    "label": "TOO MANY REQ",
+    "theme": "theme-client",
+    "statusText": "LALU LINTAS PADAT",
+    "instruction": "Mohon tunggu beberapa menit sebelum mencoba mengakses kembali. Sistem proteksi akan memulihkan kelancaran akses Anda secara otomatis."
+  },
+  "500": {
+    "title": "Penyesuaian Sistem Internal",
+    "desc": "Sistem internal sedang mengalami penyesuaian operasional. Layanan belum dapat memproses permintaan Anda untuk sementara waktu.",
+    "category": "SYSTEM ADJ",
+    "label": "INTERNAL ERR",
+    "theme": "theme-server",
+    "statusText": "PENYESUAIAN",
+    "instruction": "Notifikasi pemantauan otomatis telah dikirim ke tim teknis untuk peninjauan log berkala. Silakan coba memuat ulang halaman secara bertahap."
+  },
+  "502": {
+    "title": "Konektivitas Layanan Terhambat",
+    "desc": "Server perantara (gateway) menerima respon yang memerlukan penyesuaian dari server aplikasi utama.",
+    "category": "CONNECTIVITY",
+    "label": "BAD GATEWAY",
+    "theme": "theme-server",
+    "statusText": "TERHAMBAT 502",
+    "instruction": "Kondisi ini umumnya terjadi saat server aplikasi utama sedang melakukan sinkronisasi layanan atau pembaruan konfigurasi di origin."
+  },
+  "503": {
+    "title": "Layanan Dalam Pemeliharaan",
+    "desc": "Layanan sedang dinonaktifkan sementara untuk proses pemeliharaan berkala guna meningkatkan stabilitas sistem.",
+    "category": "MAINTENANCE",
+    "label": "SERVICE UNAVAIL",
+    "theme": "theme-server",
+    "statusText": "PEMELIHARAAN",
+    "instruction": "Layanan akan segera aktif kembali setelah proses pemeliharaan selesai dilakukan. Terima kasih atas pengertian Anda."
+  },
+  "504": {
+    "title": "Batas Waktu Respon Terlampaui",
+    "desc": "Server perantara kehabisan batas waktu tunggu yang aman saat menanti respon balik dari server aplikasi utama.",
+    "category": "GATEWAY TO",
+    "label": "GATEWAY TIMEOUT",
+    "theme": "theme-server",
+    "statusText": "TIMEOUT 504",
+    "instruction": "Proses yang Anda jalankan membutuhkan waktu penyelesaian yang lebih panjang. Tim pengembang dapat meninjau optimalisasi query database Anda."
+  },
+  "520": {
+    "title": "Format Respon Origin Disesuaikan",
+    "desc": "Server utama mengirimkan format respon yang tidak sesuai dengan protokol pembacaan standar perantara Web Proxy.",
+    "category": "PROXY DISCORD",
+    "label": "PROXY ERROR 520",
+    "theme": "theme-server",
+    "statusText": "RESP INVALID",
+    "instruction": "Tim pengelola aplikasi dapat meninjau log server web (Nginx/Apache) untuk menganalisis potensi kegagalan runtime pada kode aplikasi."
+  },
+  "521": {
+    "title": "Layanan Origin Origin Nonaktif",
+    "desc": "Server aplikasi utama menolak koneksi jaringan dari perantara Web Proxy (port tujuan tidak merespon).",
+    "category": "PROXY DISCORD",
+    "label": "PROXY ERROR 521",
+    "theme": "theme-server",
+    "statusText": "ORIGIN DOWN",
+    "instruction": "Pastikan layanan server web di origin sedang aktif dan tidak terhalang oleh aturan firewall lokal server (iptables/ufw)."
+  },
+  "522": {
+    "title": "Batas Waktu Jabat Tangan Jaringan Habis",
+    "desc": "Gagal menyelesaikan proses jabat tangan (handshake) TCP antara perantara Web Proxy dan server utama dalam batas waktu aman.",
+    "category": "PROXY TIMEOUT",
+    "label": "PROXY ERROR 522",
+    "theme": "theme-server",
+    "statusText": "TCP TIMEOUT",
+    "instruction": "Ini umumnya disebabkan oleh beban server origin yang sangat tinggi atau kegagalan rute jaringan. Pastikan IP jangkauan perantara jaringan diizinkan masuk ke server origin Anda."
+  },
+  "524": {
+    "title": "Waktu Pembacaan Data Habis",
+    "desc": "Koneksi TCP berhasil terbentuk, tetapi server utama tidak menyelesaikan pengiriman respon data hingga batas waktu aman terlampaui.",
+    "category": "PROXY TIMEOUT",
+    "label": "PROXY ERROR 524",
+    "theme": "theme-server",
+    "statusText": "READ TIMEOUT",
+    "instruction": "Proses server origin memakan waktu penyelesaian yang melebihi batas waktu default (100 detik). Optimalkan skrip database atau runtime aplikasi."
+  },
+  "1000": {
+    "title": "Rute Jaringan DNS Sedang Disesuaikan",
+    "desc": "Konfigurasi rute DNS pada perantara Web Proxy memerlukan penyelarasan alamat IP tujuan untuk kelancaran lalu lintas data.",
+    "category": "PROXY ROUTE",
+    "label": "PROXY ERROR 1000",
+    "theme": "theme-security",
+    "statusText": "RUTE DIBATASI",
+    "instruction": "Tim administrator dapat memeriksa kembali pemetaan A Record/CNAME pada dashboard perantara jaringan agar menunjuk ke IP origin yang tepat."
+  },
+  "1006": {
+    "title": "Verifikasi Identitas Jaringan",
+    "desc": "Akses dari jaringan IP Anda saat ini dibatasi berdasarkan kebijakan proteksi keamanan sistem.",
+    "category": "VERIFICATION",
+    "label": "PROXY ERROR 1006",
+    "theme": "theme-security",
+    "statusText": "IP DIAMANKAN",
+    "instruction": "Kebijakan keamanan mendeteksi pola aktivitas jaringan yang memerlukan konfirmasi ulang. Silakan hubungi tim SecDevOps untuk verifikasi IP Anda."
+  },
+  "1009": {
+    "title": "Akses Wilayah Dibatasi",
+    "desc": "Layanan ini menerapkan penyesuaian rute akses berdasarkan cakupan wilayah geografis negara asal pengunjung.",
+    "category": "GEO POLICY",
+    "label": "PROXY ERROR 1009",
+    "theme": "theme-security",
+    "statusText": "GEO RESTRICTED",
+    "instruction": "Pastikan koneksi internet Anda tidak terhubung melalui server VPN luar negeri yang memicu pembatasan wilayah akses."
+  },
+  "1015": {
+    "title": "Lalu Lintas Akses Terlalu Cepat",
+    "desc": "Laju permintaan akses dari perangkat Anda melampaui batas kecepatan aman yang ditetapkan oleh sistem proteksi Web Proxy.",
+    "category": "RATE SECURITY",
+    "label": "PROXY ERROR 1015",
+    "theme": "theme-security",
+    "statusText": "RATE LIMIT",
+    "instruction": "Sistem membatasi laju akses sementara guna menjaga keamanan sumber daya dari aktivitas otomatis. Akses akan terbuka kembali dalam beberapa menit."
+  },
+  "1016": {
+    "title": "Sinkronisasi DNS Origin Tertunda",
+    "desc": "Sistem perantara Web Proxy belum dapat meresolusi alamat DNS dari server aplikasi utama untuk meneruskan koneksi Anda.",
+    "category": "DNS RESOLVE",
+    "label": "PROXY ERROR 1016",
+    "theme": "theme-security",
+    "statusText": "DNS PENDING",
+    "instruction": "Mohon periksa status keaktifan server nama (nameserver) domain utama Anda. Pastikan konfigurasi records DNS di perantara jaringan telah aktif."
+  },
+  "1020": {
+    "title": "Proteksi Firewall Akses Aktif",
+    "desc": "Kebijakan keamanan firewall (WAF) mendeteksi parameter koneksi yang memerlukan otorisasi akses tambahan.",
+    "category": "WAF SECURE",
+    "label": "PROXY ERROR 1020",
+    "theme": "theme-security",
+    "statusText": "WAF PROTECTED",
+    "instruction": "Penyaringan ini bertujuan untuk menjaga integritas data sistem. Klik tombol laporan di atas agar tim SecDevOps dapat menganalisis parameter koneksi Anda."
+  }
+};
 
     let currentCode = '502';
     let rawRayId = '';
@@ -1339,14 +1297,111 @@
       }
     }
 
+    function fetchTraceDiagnostics() {
+      // Step 1: Try relative path /cdn-cgi/trace first (works if domain is behind Cloudflare)
+      fetch('/cdn-cgi/trace')
+        .then(res => {
+          if (!res.ok) throw new Error('Relative trace returned non-ok status');
+          return res.text();
+        })
+        .then(text => {
+          parseTraceData(text);
+        })
+        .catch(err => {
+          console.warn('Relative trace failed, falling back to public CORS APIs:', err);
+          // Step 2: Try public geoip API (api.db-ip.com)
+          fetch('https://api.db-ip.com/v2/free/self')
+            .then(res => {
+              if (!res.ok) throw new Error('db-ip returned non-ok status');
+              return res.json();
+            })
+            .then(data => {
+              const uiIp = document.getElementById('ui-ip');
+              const uiGeo = document.getElementById('ui-geo');
+              
+              if (data.ipAddress) {
+                rawClientIp = data.ipAddress;
+                uiIp.textContent = data.ipAddress;
+                uiIp.title = data.ipAddress;
+              }
+              if (data.countryName) {
+                const geoText = (data.countryCode ? data.countryCode + ' ' : '') + '(' + data.countryName + ')';
+                rawGeo = geoText;
+                uiGeo.textContent = geoText;
+                uiGeo.title = geoText;
+              }
+              updateWhatsAppUrl();
+            })
+            .catch(err2 => {
+              console.warn('db-ip failed, trying ipify fallback:', err2);
+              // Step 3: Try ipify API (IP only, supports CORS)
+              fetch('https://api.ipify.org?format=json')
+                .then(res => {
+                  if (!res.ok) throw new Error('ipify returned non-ok status');
+                  return res.json();
+                })
+                .then(data => {
+                  if (data.ip) {
+                    rawClientIp = data.ip;
+                    const uiIp = document.getElementById('ui-ip');
+                    uiIp.textContent = data.ip;
+                    uiIp.title = data.ip;
+                    updateWhatsAppUrl();
+                  }
+                })
+                .catch(err3 => {
+                  console.error('All diagnostic lookup attempts failed:', err3);
+                });
+            });
+        });
+    }
+
+    function parseTraceData(text) {
+      const lines = text.split('\n');
+      const data = {};
+      lines.forEach(line => {
+        const parts = line.split('=');
+        if (parts.length === 2) {
+          data[parts[0].trim()] = parts[1].trim();
+        }
+      });
+
+      const uiIp = document.getElementById('ui-ip');
+      const uiGeo = document.getElementById('ui-geo');
+      
+      if (data.ip) {
+        rawClientIp = data.ip;
+        uiIp.textContent = data.ip;
+        uiIp.title = data.ip;
+      }
+      if (data.loc) {
+        const countryMap = {
+          'ID': 'ID (Indonesia)',
+          'SG': 'SG (Singapore)',
+          'US': 'US (United States)',
+          'MY': 'MY (Malaysia)',
+          'JP': 'JP (Japan)',
+          'DE': 'DE (Germany)'
+        };
+        const geoText = countryMap[data.loc] || data.loc;
+        rawGeo = geoText;
+        uiGeo.textContent = geoText;
+        uiGeo.title = geoText;
+      }
+      if (rawRayId.startsWith('REQ-') && data.ray) {
+        rawRayId = data.ray;
+      }
+      
+      updateWhatsAppUrl();
+    }
+
     function initDiagnostics() {
       rawRayId = sanitizeProxyToken('cf-ray', '');
       if (!rawRayId) {
-        // Attempt random fallback if not set by server
         rawRayId = 'REQ-' + Math.random().toString(36).substring(2, 10).toUpperCase();
       }
-      rawClientIp = sanitizeProxyToken('cf-ip', '110.138.89.242'); // Fallback IP
-      rawGeo = sanitizeProxyToken('cf-geo', 'ID (Indonesia)');
+      rawClientIp = sanitizeProxyToken('cf-ip', '');
+      rawGeo = sanitizeProxyToken('cf-geo', '');
 
       const domainName = window.location.hostname || 'aplikasi.domain.com';
       const uiDomain = document.getElementById('ui-domain');
@@ -1354,17 +1409,21 @@
       uiDomain.title = domainName;
 
       const uiIp = document.getElementById('ui-ip');
-      uiIp.textContent = rawClientIp;
-      uiIp.title = rawClientIp;
+      uiIp.textContent = rawClientIp || 'Mendeteksi...';
+      uiIp.title = rawClientIp || 'Mendeteksi...';
 
       const uiGeo = document.getElementById('ui-geo');
-      uiGeo.textContent = rawGeo;
-      uiGeo.title = rawGeo;
+      uiGeo.textContent = rawGeo || 'Mendeteksi...';
+      uiGeo.title = rawGeo || 'Mendeteksi...';
 
       const fullPath = window.location.pathname + window.location.search;
       const uiPath = document.getElementById('ui-path');
       uiPath.textContent = fullPath;
       uiPath.title = fullPath;
+
+      if (!rawClientIp || !rawGeo || rawRayId.startsWith('REQ-')) {
+        fetchTraceDiagnostics();
+      }
 
       updateErrorCode('504');
     }
