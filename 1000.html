@@ -4,7 +4,7 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Status Layanan & Akses JabarCloud</title>
+  <title>Status Layanan & Akses Layanan JabarCloud</title>
 
   <!-- Google Fonts -->
   <link rel="preconnect" href="https://fonts.googleapis.com">
@@ -1300,49 +1300,101 @@
     }
 
     function fetchTraceDiagnostics() {
-      fetch('https://www.cloudflare.com/cdn-cgi/trace')
-        .then(res => res.text())
+      // Step 1: Try relative path /cdn-cgi/trace first (works if domain is behind Cloudflare)
+      fetch('/cdn-cgi/trace')
+        .then(res => {
+          if (!res.ok) throw new Error('Relative trace returned non-ok status');
+          return res.text();
+        })
         .then(text => {
-          const lines = text.split('\n');
-          const data = {};
-          lines.forEach(line => {
-            const parts = line.split('=');
-            if (parts.length === 2) {
-              data[parts[0].trim()] = parts[1].trim();
-            }
-          });
-
-          const uiIp = document.getElementById('ui-ip');
-          const uiGeo = document.getElementById('ui-geo');
-          
-          if (data.ip) {
-            rawClientIp = data.ip;
-            uiIp.textContent = data.ip;
-            uiIp.title = data.ip;
-          }
-          if (data.loc) {
-            const countryMap = {
-              'ID': 'ID (Indonesia)',
-              'SG': 'SG (Singapore)',
-              'US': 'US (United States)',
-              'MY': 'MY (Malaysia)',
-              'JP': 'JP (Japan)',
-              'DE': 'DE (Germany)'
-            };
-            const geoText = countryMap[data.loc] || data.loc;
-            rawGeo = geoText;
-            uiGeo.textContent = geoText;
-            uiGeo.title = geoText;
-          }
-          if (rawRayId.startsWith('REQ-') && data.ray) {
-            rawRayId = data.ray;
-          }
-          
-          updateWhatsAppUrl();
+          parseTraceData(text);
         })
         .catch(err => {
-          console.warn('Failed to fetch trace diagnostics:', err);
+          console.warn('Relative trace failed, falling back to public CORS APIs:', err);
+          // Step 2: Try public geoip API (api.db-ip.com)
+          fetch('https://api.db-ip.com/v2/free/self')
+            .then(res => {
+              if (!res.ok) throw new Error('db-ip returned non-ok status');
+              return res.json();
+            })
+            .then(data => {
+              const uiIp = document.getElementById('ui-ip');
+              const uiGeo = document.getElementById('ui-geo');
+              
+              if (data.ipAddress) {
+                rawClientIp = data.ipAddress;
+                uiIp.textContent = data.ipAddress;
+                uiIp.title = data.ipAddress;
+              }
+              if (data.countryName) {
+                const geoText = (data.countryCode ? data.countryCode + ' ' : '') + '(' + data.countryName + ')';
+                rawGeo = geoText;
+                uiGeo.textContent = geoText;
+                uiGeo.title = geoText;
+              }
+              updateWhatsAppUrl();
+            })
+            .catch(err2 => {
+              console.warn('db-ip failed, trying ipify fallback:', err2);
+              // Step 3: Try ipify API (IP only, supports CORS)
+              fetch('https://api.ipify.org?format=json')
+                .then(res => {
+                  if (!res.ok) throw new Error('ipify returned non-ok status');
+                  return res.json();
+                })
+                .then(data => {
+                  if (data.ip) {
+                    rawClientIp = data.ip;
+                    const uiIp = document.getElementById('ui-ip');
+                    uiIp.textContent = data.ip;
+                    uiIp.title = data.ip;
+                    updateWhatsAppUrl();
+                  }
+                })
+                .catch(err3 => {
+                  console.error('All diagnostic lookup attempts failed:', err3);
+                });
+            });
         });
+    }
+
+    function parseTraceData(text) {
+      const lines = text.split('\n');
+      const data = {};
+      lines.forEach(line => {
+        const parts = line.split('=');
+        if (parts.length === 2) {
+          data[parts[0].trim()] = parts[1].trim();
+        }
+      });
+
+      const uiIp = document.getElementById('ui-ip');
+      const uiGeo = document.getElementById('ui-geo');
+      
+      if (data.ip) {
+        rawClientIp = data.ip;
+        uiIp.textContent = data.ip;
+        uiIp.title = data.ip;
+      }
+      if (data.loc) {
+        const countryMap = {
+          'ID': 'ID (Indonesia)',
+          'SG': 'SG (Singapore)',
+          'US': 'US (United States)',
+          'MY': 'MY (Malaysia)',
+          'JP': 'JP (Japan)',
+          'DE': 'DE (Germany)'
+        };
+        const geoText = countryMap[data.loc] || data.loc;
+        rawGeo = geoText;
+        uiGeo.textContent = geoText;
+        uiGeo.title = geoText;
+      }
+      if (rawRayId.startsWith('REQ-') && data.ray) {
+        rawRayId = data.ray;
+      }
+      
+      updateWhatsAppUrl();
     }
 
     function initDiagnostics() {
