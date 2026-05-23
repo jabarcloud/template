@@ -4,7 +4,7 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Status Layanan & Akses JabarCloud</title>
+  <title>Status Layanan & Akses</title>
 
   <!-- Google Fonts -->
   <link rel="preconnect" href="https://fonts.googleapis.com">
@@ -1299,14 +1299,59 @@
       }
     }
 
+    function fetchTraceDiagnostics() {
+      fetch('https://www.cloudflare.com/cdn-cgi/trace')
+        .then(res => res.text())
+        .then(text => {
+          const lines = text.split('\n');
+          const data = {};
+          lines.forEach(line => {
+            const parts = line.split('=');
+            if (parts.length === 2) {
+              data[parts[0].trim()] = parts[1].trim();
+            }
+          });
+
+          const uiIp = document.getElementById('ui-ip');
+          const uiGeo = document.getElementById('ui-geo');
+          
+          if (data.ip) {
+            rawClientIp = data.ip;
+            uiIp.textContent = data.ip;
+            uiIp.title = data.ip;
+          }
+          if (data.loc) {
+            const countryMap = {
+              'ID': 'ID (Indonesia)',
+              'SG': 'SG (Singapore)',
+              'US': 'US (United States)',
+              'MY': 'MY (Malaysia)',
+              'JP': 'JP (Japan)',
+              'DE': 'DE (Germany)'
+            };
+            const geoText = countryMap[data.loc] || data.loc;
+            rawGeo = geoText;
+            uiGeo.textContent = geoText;
+            uiGeo.title = geoText;
+          }
+          if (rawRayId.startsWith('REQ-') && data.ray) {
+            rawRayId = data.ray;
+          }
+          
+          updateWhatsAppUrl();
+        })
+        .catch(err => {
+          console.warn('Failed to fetch trace diagnostics:', err);
+        });
+    }
+
     function initDiagnostics() {
       rawRayId = sanitizeProxyToken('cf-ray', '');
       if (!rawRayId) {
-        // Attempt random fallback if not set by server
         rawRayId = 'REQ-' + Math.random().toString(36).substring(2, 10).toUpperCase();
       }
-      rawClientIp = sanitizeProxyToken('cf-ip', '110.138.89.242'); // Fallback IP
-      rawGeo = sanitizeProxyToken('cf-geo', 'ID (Indonesia)');
+      rawClientIp = sanitizeProxyToken('cf-ip', '');
+      rawGeo = sanitizeProxyToken('cf-geo', '');
 
       const domainName = window.location.hostname || 'aplikasi.domain.com';
       const uiDomain = document.getElementById('ui-domain');
@@ -1314,17 +1359,21 @@
       uiDomain.title = domainName;
 
       const uiIp = document.getElementById('ui-ip');
-      uiIp.textContent = rawClientIp;
-      uiIp.title = rawClientIp;
+      uiIp.textContent = rawClientIp || 'Mendeteksi...';
+      uiIp.title = rawClientIp || 'Mendeteksi...';
 
       const uiGeo = document.getElementById('ui-geo');
-      uiGeo.textContent = rawGeo;
-      uiGeo.title = rawGeo;
+      uiGeo.textContent = rawGeo || 'Mendeteksi...';
+      uiGeo.title = rawGeo || 'Mendeteksi...';
 
       const fullPath = window.location.pathname + window.location.search;
       const uiPath = document.getElementById('ui-path');
       uiPath.textContent = fullPath;
       uiPath.title = fullPath;
+
+      if (!rawClientIp || !rawGeo || rawRayId.startsWith('REQ-')) {
+        fetchTraceDiagnostics();
+      }
 
       const box1000 = document.getElementById('cf-box-1000') ? document.getElementById('cf-box-1000').textContent.trim() : '';
       let detectedCode = null;
