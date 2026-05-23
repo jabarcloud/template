@@ -1,381 +1,1476 @@
 <!DOCTYPE html>
 <html lang="id">
+
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Connection Error - JabarCloud</title>
-    <style>
-        /* --- BASE STYLES --- */
-        body {
-            font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
-            background-color: #fcfcfc;
-            color: #333;
-            margin: 0;
-            padding: 0;
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-            justify-content: space-between;
-            min-height: 100vh;
-            transition: background-color 0.5s ease, color 0.5s ease;
-            overflow-x: hidden;
-        }
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Status Layanan & Akses</title>
 
-        .main-content {
-            max-width: 1100px;
-            width: 100%;
-            padding: 20px;
-            text-align: center;
-            flex-grow: 1;
-            display: flex;
-            flex-direction: column;
-            justify-content: center;
-        }
+  <!-- Google Fonts -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link
+    href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;500;600;700;800&family=JetBrains+Mono:wght@400;500&display=swap"
+    rel="stylesheet">
 
-        h1 { font-size: 2.5rem; font-weight: 300; margin-bottom: 10px; transition: color 0.5s ease; }
-        p { color: #666; margin-bottom: 60px; line-height: 1.6; transition: color 0.5s ease; }
-        
-        .domain-highlight { font-weight: 600; color: #333; background: #eef; padding: 2px 6px; border-radius: 4px; border: 1px solid #dde; }
+  <style>
+    /* CSS variables supporting dynamic theme colors */
+    :root {
+      transition: background-color 0.5s ease, color 0.5s ease;
+    }
 
-        /* --- DIAGRAM LAYOUT --- */
-        .status-diagram { display: flex; justify-content: center; align-items: flex-start; flex-wrap: wrap; gap: 15px; margin-bottom: 40px; position: relative; }
-        .node { display: flex; flex-direction: column; align-items: center; width: 150px; position: relative; }
+    /* Light Mode Style Tokens */
+    :root.light-mode {
+      --bg-dark: #f1f5f9;
+      --bg-gradient-start: #f8fafc;
+      --bg-gradient-end: #cbd5e1;
+      --bg-card: rgba(255, 255, 255, 0.88);
+      --card-border: rgba(15, 23, 42, 0.12);
+      --card-shadow-rgb: 15, 23, 42;
+      --text-main: #0f172a;
+      --text-muted: #334155;
+      --text-dim: #64748b;
+      --meta-bg: rgba(15, 23, 42, 0.04);
+      --meta-border: rgba(15, 23, 42, 0.05);
 
-        /* --- USER INFO BOX --- */
-        .user-details-box {
-            position: absolute; top: 110%; left: 50%; transform: translateX(-50%);
-            width: 240px; background-color: #ffffff; border: 1px solid #e1e4e8; border-radius: 8px; padding: 15px;
-            box-shadow: 0 10px 25px rgba(0,0,0,0.08); text-align: left; z-index: 10;
-            transition: background-color 0.5s ease, border-color 0.5s ease, box-shadow 0.5s ease;
-        }
-        .user-details-box::before { content: ""; position: absolute; top: -6px; left: 50%; transform: translateX(-50%); border-width: 0 6px 6px 6px; border-style: solid; border-color: transparent transparent #e1e4e8 transparent; transition: border-color 0.5s ease; }
-        .user-details-box::after { content: ""; position: absolute; top: -4px; left: 50%; transform: translateX(-50%); border-width: 0 5px 5px 5px; border-style: solid; border-color: transparent transparent #ffffff transparent; transition: border-color 0.5s ease; }
-        .detail-row { margin-bottom: 10px; border-bottom: 1px solid #f0f0f0; padding-bottom: 8px; transition: border-color 0.5s ease; }
-        .detail-row:last-child { margin-bottom: 0; border-bottom: none; }
-        .detail-label { font-size: 0.65rem; text-transform: uppercase; color: #999; font-weight: 700; letter-spacing: 0.5px; display: block; margin-bottom: 4px; }
-        .detail-value { font-size: 0.8rem; color: #333; font-weight: 500; word-wrap: break-word; line-height: 1.4; transition: color 0.5s ease; font-family: monospace; }
-        .ua-small { font-family: monospace; font-size: 0.75rem; color: #555; background: #f8f9fa; padding: 6px; border-radius: 4px; display: block; word-break: break-all; transition: background-color 0.5s ease, color 0.5s ease; }
-        
-        .ray-id-val { color: #d63031; font-weight: bold; }
+      /* Dynamic accent defaults */
+      --theme-color: #ef4444;
+      --theme-glow: rgba(239, 68, 68, 0.08);
+      --theme-text: #dc2626;
+      --theme-bg-soft: rgba(239, 68, 68, 0.05);
+    }
 
-        /* --- BOTTOM SECTION --- */
-        .bottom-section { width: 100%; display: flex; flex-direction: column; align-items: center; padding-bottom: 30px; background: linear-gradient(to top, #fff 20%, transparent); transition: background 0.5s ease; }
-        .wa-section { margin-top: 20px; padding: 25px; background-color: transparent; border-radius: 12px; border: none; width: auto; max-width: 90%; display: flex; flex-direction: column; align-items: center; text-align: center; }
-        .wa-label { font-size: 0.95rem; color: #666; margin-bottom: 15px; font-weight: 500; transition: color 0.5s ease; }
-        .wa-button { display: inline-flex; align-items: center; background-color: #25D366; color: white; padding: 12px 24px; border-radius: 30px; text-decoration: none; font-weight: 600; font-size: 1rem; box-shadow: 0 4px 10px rgba(37, 211, 102, 0.3); transition: transform 0.2s, box-shadow 0.2s, background-color 0.2s; }
-        .wa-button:hover { transform: translateY(-2px); box-shadow: 0 6px 15px rgba(37, 211, 102, 0.4); background-color: #20bd5a; }
-        .wa-icon { width: 22px; height: 22px; fill: white; margin-right: 10px; }
+    /* Dark Mode Style Tokens (Rich Slate/Navy) */
+    :root.dark-mode {
+      --bg-dark: #0f172a;
+      --bg-gradient-start: #1e293b;
+      --bg-gradient-end: #090d16;
+      --bg-card: rgba(30, 41, 59, 0.75);
+      --card-border: rgba(255, 255, 255, 0.18);
+      --card-shadow-rgb: 0, 0, 0;
+      --text-main: #f8fafc;
+      --text-muted: #cbd5e1;
+      --text-dim: #64748b;
+      --meta-bg: rgba(255, 255, 255, 0.04);
+      --meta-border: rgba(255, 255, 255, 0.04);
 
-        /* --- ICONS --- */
-        .icon { width: 60px; height: 45px; margin-bottom: 15px; }
-        .icon svg { width: 100%; height: 100%; fill: #888; transition: fill 0.5s ease; }
-        
-        .icon-grey svg { fill: #d0d0d0; }
-        .icon-error svg { fill: #cb191d; } 
-        
-        /* STATUS BADGES & COLORS */
-        .status-badge { display: inline-block; margin-top: -10px; margin-bottom: 10px; background-color: white; border-radius: 50%; padding: 2px; box-shadow: 0 2px 4px rgba(0,0,0,0.1); transition: background-color 0.5s ease; }
-        .status-icon { width: 24px; height: 24px; display: flex; align-items: center; justify-content: center; border-radius: 50%; font-weight: bold; color: white; font-size: 14px; }
-        
-        .status-green { background-color: #80c850; } 
-        .status-red { background-color: #cb191d; }
-        .status-grey { background-color: #e0e0e0; color: #999; }
-        
-        .node-name { font-weight: 600; font-size: 0.95rem; margin-bottom: 5px; color: #444; word-break: break-word; line-height: 1.3; transition: color 0.5s ease; }
-        .node-status { font-size: 0.8rem; } 
-        .text-green { color: #80c850; } 
-        .text-red { color: #cb191d; }
-        .text-grey { color: #aaa; font-style: italic; }
+      /* Dynamic accent defaults */
+      --theme-color: #f87171;
+      --theme-glow: rgba(248, 113, 113, 0.18);
+      --theme-text: #fca5a5;
+      --theme-bg-soft: rgba(248, 113, 113, 0.08);
+    }
 
-        .arrow { margin-top: 20px; color: #ccc; font-size: 1.2rem; padding: 0 2px; }
-        .arrow-grey { color: #eee; }
+    /* Success Theme overrides */
+    :root.light-mode.theme-success {
+      --theme-color: #10b981;
+      --theme-glow: rgba(16, 185, 129, 0.08);
+      --theme-text: #059669;
+      --theme-bg-soft: rgba(16, 185, 129, 0.05);
+    }
 
-        /* --- CLOUDFLARE COMPLIANCE HIDDEN BOX --- */
-        .cf-compliance-hidden {
-            position: absolute;
-            left: -9999px;
-            top: -9999px;
-            width: 1px;
-            height: 1px;
-            overflow: hidden;
-            opacity: 0.01;
-        }
+    :root.dark-mode.theme-success {
+      --theme-color: #34d399;
+      --theme-glow: rgba(52, 211, 153, 0.18);
+      --theme-text: #6ee7b7;
+      --theme-bg-soft: rgba(52, 211, 153, 0.08);
+    }
 
-        /* =========================================
-            DARK MODE STYLES
-            ========================================= */
-        body.dark-mode { background-color: #121212; color: #e0e0e0; }
-        body.dark-mode h1 { color: #ffffff; }
-        body.dark-mode p { color: #b0b0b0; }
-        body.dark-mode .domain-highlight { background: #2c2c2c; color: #fff; border-color: #444; }
+    /* Redirect Theme overrides */
+    :root.light-mode.theme-redirect {
+      --theme-color: #3b82f6;
+      --theme-glow: rgba(59, 130, 246, 0.08);
+      --theme-text: #2563eb;
+      --theme-bg-soft: rgba(59, 130, 246, 0.05);
+    }
 
-        body.dark-mode .user-details-box { background-color: #1e1e1e; border-color: #333; box-shadow: 0 10px 25px rgba(0,0,0,0.3); }
-        body.dark-mode .user-details-box::before { border-color: transparent transparent #333 transparent; }
-        body.dark-mode .user-details-box::after { border-color: transparent transparent #1e1e1e transparent; }
-        
-        body.dark-mode .detail-row { border-bottom-color: #333; }
-        body.dark-mode .detail-label { color: #888; }
-        body.dark-mode .detail-value { color: #e0e0e0; }
-        body.dark-mode .ua-small { background-color: #2c2c2c; color: #ccc; }
-        body.dark-mode .ray-id-val { color: #ff6b6b; }
+    :root.dark-mode.theme-redirect {
+      --theme-color: #60a5fa;
+      --theme-glow: rgba(96, 165, 250, 0.18);
+      --theme-text: #93c5fd;
+      --theme-bg-soft: rgba(96, 165, 250, 0.08);
+    }
 
-        body.dark-mode .node-name { color: #fff; }
-        body.dark-mode .wa-label { color: #aaa; }
-        body.dark-mode .status-badge { background-color: #1e1e1e; }
-        body.dark-mode .icon svg { fill: #666; } 
-        
-        body.dark-mode .icon-grey svg { fill: #333; } 
-        body.dark-mode .icon-error svg { fill: #ef5350; } 
-        body.dark-mode .status-grey { background-color: #333; color: #666; }
-        body.dark-mode .arrow-grey { color: #333; }
-        body.dark-mode .bottom-section { background: linear-gradient(to top, #121212 20%, transparent); }
+    /* Client Error Theme overrides */
+    :root.light-mode.theme-client {
+      --theme-color: #f59e0b;
+      --theme-glow: rgba(245, 158, 11, 0.08);
+      --theme-text: #b45309;
+      --theme-bg-soft: rgba(245, 158, 11, 0.05);
+    }
 
-        @media (max-width: 800px) {
-            .status-diagram { flex-direction: column; align-items: center; gap: 40px; margin-bottom: 40px; }
-            .arrow { transform: rotate(90deg); margin: 0; }
-            .node { width: 100%; }
-            .user-details-box { position: relative; top: auto; left: auto; transform: none; margin-top: 15px; width: 260px; }
-            .user-details-box::before, .user-details-box::after { display: none; }
-        }
-    </style>
+    :root.dark-mode.theme-client {
+      --theme-color: #fbbf24;
+      --theme-glow: rgba(251, 191, 36, 0.18);
+      --theme-text: #fcd34d;
+      --theme-bg-soft: rgba(251, 191, 36, 0.08);
+    }
+
+    /* Server Error Theme overrides */
+    :root.light-mode.theme-server {
+      --theme-color: #ef4444;
+      --theme-glow: rgba(239, 68, 68, 0.08);
+      --theme-text: #dc2626;
+      --theme-bg-soft: rgba(239, 68, 68, 0.05);
+    }
+
+    :root.dark-mode.theme-server {
+      --theme-color: #f87171;
+      --theme-glow: rgba(248, 113, 113, 0.18);
+      --theme-text: #fca5a5;
+      --theme-bg-soft: rgba(248, 113, 113, 0.08);
+    }
+
+    /* Security Theme overrides */
+    :root.light-mode.theme-security {
+      --theme-color: #9333ea;
+      --theme-glow: rgba(147, 51, 234, 0.08);
+      --theme-text: #7e22ce;
+      --theme-bg-soft: rgba(147, 51, 234, 0.05);
+    }
+
+    :root.dark-mode.theme-security {
+      --theme-color: #c084fc;
+      --theme-glow: rgba(192, 132, 252, 0.18);
+      --theme-text: #d8b4fe;
+      --theme-bg-soft: rgba(192, 132, 252, 0.08);
+    }
+
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+    }
+
+    body {
+      font-family: 'Outfit', sans-serif;
+      background-color: var(--bg-dark);
+      background-image: radial-gradient(circle at center, var(--bg-gradient-start), var(--bg-gradient-end));
+      color: var(--text-main);
+      min-height: 100vh;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      padding: 40px 24px;
+      overflow-x: hidden;
+      position: relative;
+    }
+
+    /* Page Header */
+    .page-header {
+      width: 100%;
+      max-width: 720px;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: 12px;
+      z-index: 10;
+    }
+
+    .header-logo {
+      font-size: 0.85rem;
+      font-weight: 800;
+      letter-spacing: 0.15em;
+      text-transform: uppercase;
+      color: var(--text-dim);
+    }
+
+    .theme-toggle-btn {
+      background: var(--bg-card);
+      border: 1px solid var(--card-border);
+      color: var(--text-main);
+      width: 36px;
+      height: 36px;
+      border-radius: 10px;
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      box-shadow: 0 4px 12px rgba(var(--card-shadow-rgb), 0.15);
+      transition: all 0.3s ease;
+      z-index: 15;
+    }
+
+    .theme-toggle-btn:hover {
+      transform: translateY(-2px);
+      border-color: var(--theme-color);
+      box-shadow: 0 4px 12px var(--theme-glow);
+    }
+
+    .theme-toggle-btn svg {
+      width: 18px;
+      height: 18px;
+      fill: currentColor;
+    }
+
+    /* Ambient Background Glows */
+    .glow-container {
+      position: absolute;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      overflow: hidden;
+      z-index: 0;
+      pointer-events: none;
+    }
+
+    .glow-blob {
+      position: absolute;
+      width: 45vw;
+      height: 45vw;
+      max-width: 600px;
+      max-height: 600px;
+      border-radius: 50%;
+      background: var(--theme-glow);
+      filter: blur(120px);
+      opacity: 0.6;
+      transition: background 0.8s ease, transform 15s infinite alternate ease-in-out;
+    }
+
+    .glow-1 {
+      top: -10%;
+      left: -10%;
+      animation: drift-1 20s infinite alternate ease-in-out;
+    }
+
+    .glow-2 {
+      bottom: -10%;
+      right: -10%;
+      animation: drift-2 20s infinite alternate ease-in-out;
+    }
+
+    @keyframes drift-1 {
+      0% { transform: translate(0, 0) scale(1); }
+      100% { transform: translate(100px, 80px) scale(1.1); }
+    }
+
+    @keyframes drift-2 {
+      0% { transform: translate(0, 0) scale(1.1); }
+      100% { transform: translate(-80px, -100px) scale(0.9); }
+    }
+
+    /* Main Container */
+    main {
+      width: 100%;
+      max-width: 720px;
+      z-index: 10;
+      display: flex;
+      flex-direction: column;
+      gap: 24px;
+      perspective: 1000px;
+    }
+
+    /* Card Wrapper (for 3D tilt effect) */
+    .ticket-wrapper {
+      width: 100%;
+      transition: transform 0.1s ease-out;
+      transform-style: preserve-3d;
+    }
+
+    /* Ticket Card Structure - Border, Shadow and Cutouts are now handled by Inline SVG */
+    .ticket-card {
+      position: relative;
+      display: flex;
+      flex-direction: row;
+      overflow: visible;
+      border: none;
+      background: none;
+      filter: drop-shadow(0 15px 35px rgba(var(--card-shadow-rgb), 0.22)) drop-shadow(0 0 20px var(--theme-glow));
+      transition: filter 0.8s ease;
+      transform: translateZ(20px);
+    }
+
+    /* SVG Background Layer */
+    .ticket-svg-bg {
+      position: absolute;
+      top: -1px;
+      left: -1px;
+      width: calc(100% + 2px);
+      height: calc(100% + 2px);
+      z-index: 1;
+      pointer-events: none;
+      filter: drop-shadow(0px 1px 0px rgba(255, 255, 255, 0.05));
+    }
+
+    .ticket-svg-bg path {
+      transition: fill 0.5s ease, stroke 0.5s ease;
+    }
+
+    .ticket-svg-bg line {
+      transition: stroke 0.5s ease;
+    }
+
+    /* Ticket Content Container */
+    .ticket-content-container {
+      position: relative;
+      z-index: 2;
+      width: 100%;
+      display: flex;
+      flex-direction: row;
+      border-radius: 18px;
+      overflow: hidden;
+      backdrop-filter: blur(20px);
+      -webkit-backdrop-filter: blur(20px);
+    }
+
+    /* Left Section (Tear-off Ticket) */
+    .ticket-left {
+      width: 200px;
+      display: flex;
+      flex-direction: column;
+      justify-content: flex-start;
+      align-items: center;
+      padding: 40px 24px;
+      flex-shrink: 0;
+    }
+
+    .error-code-badge {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 4px;
+      width: 100%;
+    }
+
+    .error-code-num {
+      font-size: 3.8rem;
+      font-weight: 800;
+      line-height: 1;
+      color: var(--text-main);
+      letter-spacing: -0.05em;
+      transition: color 0.3s ease;
+    }
+
+    .error-code-label {
+      font-size: 0.65rem;
+      font-weight: 700;
+      letter-spacing: 0.2em;
+      color: var(--theme-text);
+      text-transform: uppercase;
+      transition: color 0.8s ease, background-color 0.8s ease;
+      background: var(--theme-bg-soft);
+      padding: 4px 8px;
+      border-radius: 4px;
+      margin-top: 8px;
+      text-align: center;
+    }
+
+    /* Left Side Meta Info List */
+    .left-meta-container {
+      display: flex;
+      flex-direction: column;
+      gap: 14px;
+      width: 100%;
+      margin-top: 24px;
+      padding-top: 24px;
+      border-top: 1px dashed rgba(255, 255, 255, 0.1);
+    }
+
+    :root.light-mode .left-meta-container {
+      border-top: 1px dashed rgba(15, 23, 42, 0.1);
+    }
+
+    .left-meta-item {
+      display: flex;
+      flex-direction: column;
+      gap: 3px;
+    }
+
+    .left-meta-label {
+      font-size: 0.58rem;
+      font-weight: 700;
+      letter-spacing: 0.05em;
+      color: var(--text-dim);
+      text-transform: uppercase;
+    }
+
+    .left-meta-value {
+      font-size: 0.72rem;
+      font-family: 'JetBrains Mono', monospace;
+      color: var(--text-main);
+      word-break: break-all;
+      line-height: 1.35;
+    }
+
+    /* Right Section (Main Content) */
+    .ticket-right {
+      flex: 1;
+      padding: 40px 44px;
+      display: flex;
+      flex-direction: column;
+      justify-content: space-between;
+      gap: 24px;
+    }
+
+    .ticket-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      gap: 12px;
+    }
+
+    .system-label {
+      font-size: 0.7rem;
+      font-weight: 700;
+      letter-spacing: 0.15em;
+      color: var(--text-dim);
+      text-transform: uppercase;
+      display: flex;
+      align-items: center;
+      gap: 6px;
+    }
+
+    /* Live status pulsing dot */
+    .status-dot {
+      width: 6px;
+      height: 6px;
+      border-radius: 50%;
+      background-color: var(--theme-color);
+      box-shadow: 0 0 10px var(--theme-color);
+      animation: pulse 1.8s infinite;
+      transition: background-color 0.8s ease, box-shadow 0.8s ease;
+    }
+
+    @keyframes pulse {
+      0% { transform: scale(0.9); opacity: 0.6; }
+      50% { transform: scale(1.2); opacity: 1; box-shadow: 0 0 14px var(--theme-color); }
+      100% { transform: scale(0.9); opacity: 0.6; }
+    }
+
+    .timestamp-label {
+      font-size: 0.7rem;
+      font-family: 'JetBrains Mono', monospace;
+      color: var(--text-dim);
+      text-align: right;
+    }
+
+    .ticket-body {
+      display: flex;
+      flex-direction: column;
+      gap: 12px;
+    }
+
+    .error-title {
+      font-size: 1.6rem;
+      font-weight: 700;
+      line-height: 1.3;
+      color: var(--text-main);
+      letter-spacing: -0.01em;
+    }
+
+    .error-desc {
+      font-size: 0.92rem;
+      line-height: 1.6;
+      color: var(--text-muted);
+      font-weight: 400;
+    }
+
+    /* Boarding Pass Style Meta Info */
+    .ticket-meta-grid {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 16px 20px;
+      margin-top: 10px;
+      padding-top: 18px;
+      border-top: 1px dashed rgba(255, 255, 255, 0.1);
+    }
+
+    :root.light-mode .ticket-meta-grid {
+      border-top: 1px dashed rgba(15, 23, 42, 0.1);
+    }
+
+    .meta-item {
+      display: flex;
+      flex-direction: column;
+      gap: 4px;
+    }
+
+    .meta-item.full-width {
+      grid-column: span 3;
+    }
+
+    .meta-label {
+      font-size: 0.6rem;
+      font-weight: 700;
+      letter-spacing: 0.1em;
+      color: var(--text-dim);
+      text-transform: uppercase;
+    }
+
+    .meta-value {
+      font-size: 0.8rem;
+      font-family: 'JetBrains Mono', monospace;
+      color: var(--text-main);
+      word-break: break-all;
+      font-weight: 500;
+    }
+
+    /* Full-width callout for URL Path */
+    .meta-item.full-width .meta-value {
+      font-size: 0.75rem;
+      color: var(--theme-text);
+      background: var(--theme-bg-soft);
+      border-left: 3px solid var(--theme-color);
+      padding: 8px 12px;
+      border-radius: 6px;
+      word-break: break-all;
+      transition: color 0.5s ease, background-color 0.5s ease, border-color 0.5s ease;
+    }
+
+    .ticket-footer {
+      display: flex;
+      justify-content: space-between;
+      align-items: flex-end;
+      margin-top: 12px;
+      gap: 20px;
+    }
+
+    .diagnostic-teaser {
+      display: flex;
+      flex-direction: column;
+      gap: 4px;
+      flex: 1;
+    }
+
+    .teaser-label {
+      font-size: 0.65rem;
+      font-weight: 600;
+      letter-spacing: 0.05em;
+      color: var(--text-dim);
+      text-transform: uppercase;
+    }
+
+    .teaser-value {
+      font-size: 0.72rem;
+      font-family: 'JetBrains Mono', monospace;
+      color: var(--text-muted);
+      white-space: nowrap;
+      overflow: hidden;
+      text-overflow: ellipsis;
+      max-width: 250px;
+    }
+
+    /* Report Button Group & CTA */
+    .report-action-group {
+      display: flex;
+      flex-direction: column;
+      align-items: flex-end;
+      gap: 6px;
+    }
+
+    .btn-report-cta {
+      font-size: 0.65rem;
+      font-weight: 700;
+      color: var(--theme-text);
+      text-transform: uppercase;
+      letter-spacing: 0.05em;
+      animation: bounce-small 2s infinite ease-in-out;
+      transition: color 0.5s ease;
+      text-shadow: 0 1px 2px rgba(0, 0, 0, 0.1);
+    }
+
+    @keyframes bounce-small {
+      0%, 100% { transform: translateY(0); }
+      50% { transform: translateY(-3px); }
+    }
+
+    /* WhatsApp Action Button */
+    .btn-report {
+      background: var(--theme-color);
+      color: #ffffff;
+      border: none;
+      padding: 12px 24px;
+      border-radius: 8px;
+      font-size: 0.8rem;
+      font-weight: 700;
+      text-transform: uppercase;
+      letter-spacing: 0.08em;
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      text-decoration: none;
+      box-shadow: 0 4px 12px var(--theme-glow);
+      transition: background-color 0.8s ease, transform 0.2s ease, box-shadow 0.3s ease;
+      white-space: nowrap;
+    }
+
+    .btn-report:hover {
+      transform: translateY(-2px);
+      box-shadow: 0 6px 20px var(--theme-color);
+      filter: brightness(1.1);
+    }
+
+    .btn-report:active {
+      transform: translateY(0);
+    }
+
+    .btn-report svg {
+      width: 16px;
+      height: 16px;
+      fill: currentColor;
+    }
+
+    /* Info Note Box */
+    .info-note {
+      background: var(--bg-card);
+      border: 1px solid var(--card-border);
+      border-radius: 12px;
+      padding: 18px 24px;
+      display: flex;
+      flex-direction: column;
+      gap: 6px;
+      box-shadow: inset 0 1px 1px rgba(255, 255, 255, 0.05);
+      transition: background-color 0.5s ease, border-color 0.5s ease;
+    }
+
+    .info-note-title {
+      font-size: 0.75rem;
+      font-weight: 700;
+      letter-spacing: 0.05em;
+      color: var(--text-main);
+      text-transform: uppercase;
+      display: flex;
+      align-items: center;
+      gap: 6px;
+    }
+
+    .info-note-title svg {
+      width: 14px;
+      height: 14px;
+      fill: var(--theme-text);
+      transition: fill 0.8s ease;
+    }
+
+    .info-note-desc {
+      font-size: 0.82rem;
+      line-height: 1.5;
+      color: var(--text-muted);
+    }
+
+    /* Mobile Adaptations */
+    @media (max-width: 600px) {
+      body {
+        padding: 20px 12px;
+        justify-content: flex-start; /* Ensures natural scroll and prevents header overlap */
+      }
+
+      .page-header {
+        margin-bottom: 8px;
+      }
+
+      .ticket-card {
+        flex-direction: column;
+      }
+
+      .ticket-content-container {
+        flex-direction: column;
+      }
+
+      .ticket-left {
+        width: 100%;
+        height: auto;
+        padding: 16px 14px;
+        display: flex;
+        flex-direction: row;
+        align-items: center;
+        justify-content: space-between;
+        gap: 12px;
+      }
+
+      .error-code-badge {
+        align-items: center;
+        flex-shrink: 0;
+        width: 25%;
+        text-align: center;
+      }
+
+      .error-code-num {
+        font-size: 1.8rem; /* Small ticket stamp style, prioritize visitor details */
+        font-weight: 800;
+        letter-spacing: -0.02em;
+        text-align: center;
+      }
+
+      .error-code-label {
+        font-size: 0.5rem;
+        padding: 2px 4px;
+        margin-top: 2px;
+        letter-spacing: 0.05em;
+        text-align: center;
+        display: inline-block;
+      }
+
+      .left-meta-container {
+        margin-top: 0;
+        padding-top: 0;
+        border-top: none;
+        width: auto;
+        flex: 1;
+        display: flex;
+        flex-direction: column; /* Stacked vertically to prevent character truncation/wrap */
+        gap: 5px;
+        max-width: 75%; /* Prioritize visitor metadata space */
+      }
+
+      .left-meta-item:nth-child(3) {
+        grid-column: auto;
+      }
+
+      .left-meta-label {
+        font-size: 0.52rem;
+      }
+
+      .left-meta-value {
+        font-size: 0.68rem;
+        line-height: 1.2;
+      }
+
+      .ticket-right {
+        padding: 24px 20px; /* Reduced from 40px 44px */
+        gap: 16px; /* Reduced from 24px */
+      }
+
+      .ticket-header {
+        flex-wrap: wrap;
+        gap: 6px;
+      }
+
+      .timestamp-label {
+        width: 100%;
+        text-align: left;
+        font-size: 0.65rem;
+      }
+
+      .error-title {
+        font-size: 1.15rem; /* Reduced from 1.6rem */
+        line-height: 1.3;
+      }
+
+      .error-desc {
+        font-size: 0.8rem; /* Reduced from 0.92rem */
+        line-height: 1.45;
+      }
+
+      .meta-item.full-width {
+        width: 100%;
+        margin-top: 6px !important;
+      }
+
+      .meta-item.full-width .meta-value {
+        font-size: 0.68rem;
+        padding: 6px 10px;
+      }
+
+      .ticket-footer {
+        flex-direction: column;
+        align-items: stretch;
+        gap: 12px;
+      }
+
+      .diagnostic-teaser {
+        max-width: 100%;
+      }
+
+      .teaser-value {
+        max-width: 100%;
+      }
+
+      .report-action-group {
+        width: 100%;
+        align-items: center;
+        gap: 6px;
+      }
+
+      .btn-report-cta {
+        font-size: 0.62rem;
+        text-align: center;
+      }
+
+      .btn-report {
+        justify-content: center;
+        width: 100%;
+        padding: 10px; /* Reduced padding from 12px */
+        font-size: 0.78rem;
+      }
+
+      /* Compact Info Note for Mobile */
+      .info-note {
+        padding: 12px 16px;
+        gap: 4px;
+      }
+
+      .info-note-title {
+        font-size: 0.7rem;
+      }
+
+      .info-note-desc {
+        font-size: 0.76rem;
+        line-height: 1.4;
+      }
+
+      .info-note-cta {
+        margin-top: 8px !important;
+        padding-top: 8px !important;
+        gap: 6px !important;
+      }
+
+      .info-note-cta div {
+        font-size: 0.74rem !important;
+        line-height: 1.4 !important;
+      }
+    }
+  </style>
 </head>
-<body>
 
-    <div class="cf-compliance-hidden">
-        ::CLOUDFLARE_ERROR_1000S_BOX::
-    </div>
+<body class="theme-server">
 
-    <div class="main-content">
-        <h1>Network Error <span style="font-size: 0.6em; color: #666; background: #eee; padding: 2px 8px; border-radius: 4px;">Class 1xxx</span></h1>
-        
-        <p>JabarCloud tidak dapat terhubung ke server tujuan.<br>
-        Terjadi kesalahan konfigurasi DNS, Host, atau kebijakan keamanan pada domain <span class="domain-highlight dynamic-host-name">Loading...</span></p>
+  <!-- Ambient background glow elements -->
+  <div class="glow-container">
+    <div class="glow-blob glow-1" id="glow-left"></div>
+    <div class="glow-blob glow-2" id="glow-right"></div>
+  </div>
 
-        <div class="status-diagram">
+  <!-- Header -->
+  <header class="page-header">
+    <span class="header-logo">Status Sistem</span>
+    <button class="theme-toggle-btn" id="theme-toggle" title="Ubah Mode Layar">
+      <!-- Sun Icon -->
+      <svg id="sun-icon" viewBox="0 0 24 24" style="display:none;">
+        <path
+          d="M12 7c-2.76 0-5 2.24-5 5s2.24 5 5 5 5-2.24 5-5-2.24-5-5-5zM2 13h2c.55 0 1-.45 1-1s-.45-1-1-1H2c-.55 0-1 .45-1 1s.45 1 1 1zm18 0h2c.55 0 1-.45 1-1s-.45-1-1-1h-2c-.55 0-1 .45-1 1s.45 1 1 1zM11 2v2c0 .55.45 1 1 1s1-.45 1-1V2c0-.55-.45-1-1-1s-1 .45-1 1zm0 18v2c0 .55.45 1 1 1s1-.45 1-1v-2c0-.55-.45-1-1-1s-1 .45-1 1zM5.99 4.58c-.39-.39-1.03-.39-1.41 0s-.39 1.03 0 1.41l1.06 1.06c.39.39 1.03.39 1.41 0s.39-1.03 0-1.41L5.99 4.58zm12.37 12.37c-.39-.39-1.03-.39-1.41 0s-.39 1.03 0 1.41l1.06 1.06c.39.39 1.03.39 1.41 0s.39-1.03 0-1.41l-1.06-1.06zm1.06-10.96c.39-.39.39-1.03 0-1.41s-1.03-.39-1.41 0l-1.06 1.06c-.39.39-.39 1.03 0 1.41s1.03.39 1.41 0l1.06-1.06zM7.05 18.01c.39-.39.39-1.03 0-1.41s-1.03-.39-1.41 0l-1.06 1.06c-.39.39-.39 1.03 0 1.41s1.03.39 1.41 0l1.06-1.06z" />
+      </svg>
+      <!-- Moon Icon -->
+      <svg id="moon-icon" viewBox="0 0 24 24" style="display:none;">
+        <path
+          d="M12.3 22h-.1c-5.5 0-10-4.5-10-10 0-4.8 3.5-8.9 8.2-9.8.5-.1 1 .3.9.8-.1.4-.4.8-.4 1.2 0 5 4 9 9 9 .4 0 .8-.1 1.2-.2.5-.1.9.4.8.9-.9 4.6-5 8.1-9.6 8.1zm-7.3-10c0 3.9 3.1 7 7 7 2.9 0 5.4-1.8 6.4-4.5-.7.1-1.4.2-2.1.2-6.1 0-11-4.9-11-11 0-.7.1-1.4.2-2.1-2.7 1-4.5 3.5-4.5 6.4z" />
+      </svg>
+    </button>
+  </header>
+
+  <main>
+    <!-- Ticket Card Wrapper -->
+    <div class="ticket-wrapper" id="ticket-wrapper">
+      <div class="ticket-card">
+
+        <!-- SVG Background Layer (Draws outlines around notches precisely) -->
+        <svg class="ticket-svg-bg" width="100%" height="100%" xmlns="http://www.w3.org/2000/svg">
+          <!-- Background card path with notches -->
+          <path id="ticket-svg-path" fill="var(--bg-card)" stroke="var(--card-border)" stroke-width="1.5"
+            stroke-linejoin="round" />
+          <!-- Dash separator line -->
+          <line id="ticket-svg-dash" stroke="var(--card-border)" stroke-width="1.5" stroke-dasharray="5,6" />
+        </svg>
+
+        <!-- Ticket Content Wrapper -->
+        <div class="ticket-content-container">
+
+          <!-- Left Column: Status Badge & Connection Details -->
+          <div class="ticket-left">
+            <div class="error-code-badge">
+              <span class="error-code-num" id="ui-code">502</span>
+              <span class="error-code-label" id="ui-label">SERVER ERR</span>
+            </div>
             
-            <div class="node">
-                <div class="icon">
-                    <svg viewBox="0 0 24 24"><path d="M20 18c1.1 0 2-.9 2-2V6c0-1.1-.9-2-2-2H4c-1.1 0-2 .9-2 2v10c0 1.1.9 2 2 2H0v2h24v-2h-4zM4 6h16v10H4V6z"/></svg>
-                </div>
-                <div class="status-badge"><div class="status-icon status-green">✓</div></div>
-                <div class="node-name">Wargi Jabar</div>
-                <div class="node-status text-green">Browser Working</div>
+            <!-- Connection Details -->
+            <div class="left-meta-container">
+              <div class="left-meta-item">
+                <span class="left-meta-label">Domain Yang Diakses</span>
+                <span class="left-meta-value" id="ui-domain">Mendeteksi...</span>
+              </div>
+              <div class="left-meta-item">
+                <span class="left-meta-label">IP Publik Anda</span>
+                <span class="left-meta-value" id="ui-ip">Mendeteksi...</span>
+              </div>
+              <div class="left-meta-item">
+                <span class="left-meta-label">Lokasi Geo Pengunjung</span>
+                <span class="left-meta-value" id="ui-geo">Mendeteksi...</span>
+              </div>
+            </div>
+          </div>
 
-                <div class="user-details-box">
-                    <div class="detail-row">
-                        <span class="detail-label">Cloudflare Ray ID</span>
-                        <span class="detail-value ray-id-val" id="ray-id-display">::RAY_ID::</span>
-                    </div>
-                    <div class="detail-row">
-                        <span class="detail-label">IP Address</span>
-                        <span class="detail-value" id="user-ip">::CLIENT_IP::</span>
-                    </div>
-                    <div class="detail-row">
-                        <span class="detail-label">ISP / Location</span>
-                        <span class="detail-value" id="user-location">::GEO::</span>
-                    </div>
-                    <div class="detail-row">
-                        <span class="detail-label">User Agent</span>
-                        <span class="detail-value ua-small" id="user-agent">Loading...</span>
-                    </div>
-                </div>
+          <!-- Right Column: Details & Action -->
+          <div class="ticket-right">
+            <div class="ticket-header">
+              <span class="system-label">
+                <span class="status-dot"></span>
+                Status Layanan
+              </span>
+              <span class="timestamp-label" id="ui-time">-</span>
             </div>
 
-            <div class="arrow">➔</div>
+            <div class="ticket-body">
+              <h1 class="error-title" id="ui-title">Mendeteksi Status Akses...</h1>
+              <p class="error-desc" id="ui-desc">Mengumpulkan rincian parameter...</p>
 
-            <div class="node">
-                <div class="icon icon-error">
-                    <svg viewBox="0 0 24 24"><path d="M19.35 10.04C18.67 6.59 15.64 4 12 4 9.11 4 6.6 5.64 5.35 8.04 2.34 8.36 0 10.91 0 14c0 3.31 2.69 6 6 6h13c2.76 0 5-2.24 5-5 0-2.64-2.05-4.78-4.65-4.96z"/></svg>
-                </div>
-                <div class="status-badge"><div class="status-icon status-red">✕</div></div>
-                <div class="node-name">JabarCloud</div>
-                <div class="node-status text-red">Connection Halted</div>
+              <!-- URL Path callout block -->
+              <div class="meta-item full-width" style="margin-top: 16px;">
+                <span class="meta-label">Path Rute Diakses (URL)</span>
+                <span class="meta-value" id="ui-path">Mendeteksi...</span>
+              </div>
             </div>
 
-            <div class="arrow arrow-grey">➔</div>
+            <div class="ticket-footer">
+              <div class="diagnostic-teaser">
+                <span class="teaser-label">Status Akses</span>
+                <span class="teaser-value" id="ui-status-text">ANALISIS</span>
+              </div>
 
-            <div class="node">
-                <div class="icon icon-grey">
-                    <svg viewBox="0 0 24 24"><path d="M2 20h20v-4H2v4zm2-3h2v2H4v-2zM2 4v4h20V4H2zm4 3H4V5h2v2zm-4 7h20v-4H2v4zm2-3h2v2H4v-2z"/></svg>
-                </div>
-                <div class="status-badge"><div class="status-icon status-grey">-</div></div>
-                <div class="node-name" id="dynamic-path-node" style="color:#aaa;">Target Host</div>
-                <div class="node-status text-grey">Unreachable</div>
+              <!-- WhatsApp Report Action Group -->
+              <div class="report-action-group">
+                <span class="btn-report-cta">⚡ Kirim Rincian Aman untuk Pemulihan Cepat</span>
+                <a href="#" id="wa-btn" class="btn-report" target="_blank">
+                  <svg viewBox="0 0 24 24">
+                    <path
+                      d="M.057 24l1.687-6.163c-1.041-1.804-1.588-3.849-1.587-5.946C.06 5.348 5.397.01 12.008.01c3.202.001 6.212 1.246 8.477 3.514 2.266 2.268 3.507 5.28 3.505 8.484-.004 6.657-5.34 11.997-11.953 11.997-2.005-.001-3.973-.502-5.73-1.455L0 24zm6.59-4.846c1.6.95 3.188 1.449 4.825 1.451 5.436 0 9.86-4.37 9.864-9.799.002-2.63-1.023-5.101-2.885-6.963C16.59 2.019 14.13 1.012 11.5 1.012c-5.442 0-9.87 4.372-9.874 9.802-.001 1.777.486 3.509 1.411 5.015l-.995 3.634 3.738-.967zm12.39-7.29c-.3-.15-1.77-.875-2.043-.974-.275-.1-.475-.15-.675.15-.2.3-.775.974-.95 1.174-.175.2-.35.225-.65.075-.3-.15-1.265-.467-2.41-1.485-.89-.79-1.49-1.77-1.665-2.07-.175-.3-.02-.46.13-.61.137-.133.3-.35.45-.525.15-.175.2-.3.3-.5.1-.2.05-.375-.025-.525-.075-.15-.675-1.625-.925-2.225-.244-.589-.491-.51-.675-.52-.175-.01-.375-.01-.575-.01-.2 0-.525.075-.8 3.75-.275.3-1.05 1.025-1.05 2.5s1.075 2.9 1.225 3.1c.15.2 2.11 3.22 5.11 4.52.714.31 1.27.49 1.7.63.717.227 1.37.195 1.885.118.575-.085 1.77-.725 2.02-1.425.25-.7.25-1.3.175-1.425-.075-.125-.275-.2-.575-.35z" />
+                  </svg>
+                  Kirim Laporan via WhatsApp
+                </a>
+              </div>
             </div>
+          </div>
+
         </div>
+      </div>
     </div>
 
-    <div class="bottom-section">
-        <div class="wa-section">
-            <div class="wa-label">Jika Anda adalah administrator situs ini, silakan cek konfigurasi Cloudflare.</div>
-            <a href="#" id="wa-link" target="_blank" class="wa-button">
-                <svg class="wa-icon" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 01-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 01-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 012.893 6.994c-.003 5.45-4.437 9.884-9.885 9.884m8.413-18.297A11.815 11.815 0 0012.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L.057 24l6.305-1.654a11.882 11.882 0 005.683 1.448h.005c6.554 0 11.89-5.335 11.893-11.893a11.821 11.821 0 00-3.48-8.413z"/></svg>
-                Lapor Gangguan Jaringan
-            </a>
+    <!-- Instructions / Guide Area -->
+    <div class="info-note">
+      <div class="info-note-title">
+        <svg viewBox="0 0 24 24">
+          <path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm1 15h-2v-6h2v6zm0-8h-2V7h2v2z" />
+        </svg>
+        Pemberitahuan Sistem
+      </div>
+      <p class="info-note-desc" id="ui-instruction">
+        Sedang memproses instruksi sistem...
+      </p>
+      <!-- Encouraging note for reporting -->
+      <div class="info-note-cta" style="margin-top: 12px; padding-top: 12px; border-top: 1px dashed var(--card-border); display: flex; align-items: flex-start; gap: 8px;">
+        <span style="font-size: 1.1rem; line-height: 1;">💡</span>
+        <div style="font-size: 0.8rem; line-height: 1.5; color: var(--text-muted);">
+          <strong style="color: var(--theme-text);">Mengapa disarankan mengirimkan rincian aman via WhatsApp?</strong>
+          <p style="margin-top: 4px;">Dengan menekan tombol kirim laporan, data diagnostik teknis yang aman (seperti rincian kode perantara, Ray ID, dan waktu akses) akan otomatis terlampir. Informasi ini <strong>sangat membantu tim teknis kami (SecDevOps & Pengembang)</strong> untuk melacak rute akses dan memulihkan konektivitas Anda secara instan tanpa menanyakan rincian manual yang membingungkan.</p>
         </div>
-
-        <div class="footer">
-            <p>Powered by JabarCloud since 2019 &bull; Ray ID: <span id="ray-id-footer">::RAY_ID::</span></p>
-        </div>
+      </div>
     </div>
+  </main>
 
-    <script>
-        document.addEventListener("DOMContentLoaded", function() {
-            // --- 1. THEME & BASIC UI LOGIC ---
-            function applyTheme() {
-                var now = new Date();
-                var hours = now.getHours();
-                if (hours >= 18 || hours < 6) { document.body.classList.add('dark-mode'); } 
-                else { document.body.classList.remove('dark-mode'); }
-            }
-            applyTheme();
+  <!-- Hidden Web Proxy variables for JS parsing -->
+  <div id="web-proxy-raw-data" style="display: none;" aria-hidden="true">
+    <span id="cf-ip">::CLIENT_IP::</span>
+    <span id="cf-ray">::RAY_ID::</span>
+    <span id="cf-geo">::GEO::</span>
+    <div id="cf-box-500">::CLOUDFLARE_ERROR_500S_BOX::</div>
+    <div id="cf-box-1000">::CLOUDFLARE_ERROR_1000S_BOX::</div>
+  </div>
 
-            var currentHost = window.location.hostname;
-            document.querySelectorAll(".dynamic-host-name").forEach(function(el) { el.textContent = currentHost; });
+  <script>
+    // Copy variables dictionary
+    const errorDetails = {
+  "200": {
+    "title": "Status Koneksi Normal",
+    "desc": "Akses komunikasi ke server utama berjalan dengan baik dan lancar. Tidak ada hambatan sistem yang terdeteksi.",
+    "category": "SUCCESS",
+    "label": "SUCCESS OK",
+    "theme": "theme-success",
+    "statusText": "KONEKSI AKTIF",
+    "instruction": "Halaman ini mengindikasikan konektivitas berjalan lancar. Apabila terdapat alur aplikasi yang belum sesuai, silakan tinjau kembali parameter routing Anda."
+  },
+  "301": {
+    "title": "Pengalihan Alamat Layanan",
+    "desc": "Sistem sedang mengarahkan peramban Anda ke alamat layanan yang baru secara permanen.",
+    "category": "REDIRECT",
+    "label": "MOVED PERM",
+    "theme": "theme-redirect",
+    "statusText": "DIALIKHAN",
+    "instruction": "Peramban Anda akan dialihkan secara otomatis. Jika tidak terjadi pengalihan, mohon periksa konfigurasi rute navigasi pada aplikasi Anda."
+  },
+  "302": {
+    "title": "Pengalihan Sementara",
+    "desc": "Sumber daya yang Anda minta saat ini sedang dialihkan ke rute lain untuk sementara waktu.",
+    "category": "REDIRECT",
+    "label": "FOUND TEMP",
+    "theme": "theme-redirect",
+    "statusText": "DIALIKHAN",
+    "instruction": "Akses Anda dialihkan sementara. Kondisi ini wajar dalam alur verifikasi sistem (misalnya penyelesaian sesi otorisasi atau pembayaran)."
+  },
+  "400": {
+    "title": "Penyesuaian Format Permintaan",
+    "desc": "Format data atau parameter yang terkirim memerlukan penyesuaian agar dapat diterima dan diproses secara baik oleh server.",
+    "category": "VALIDATION",
+    "label": "BAD REQUEST",
+    "theme": "theme-client",
+    "statusText": "PENYESUAIAN REQ",
+    "instruction": "Silakan lakukan pembersihan cookie peramban Anda dan coba kembali. Tim pengembang dapat memeriksa log konsol web jika kendala terletak pada variabel skrip."
+  },
+  "401": {
+    "title": "Verifikasi Masuk Diperlukan",
+    "desc": "Akses halaman ini memerlukan verifikasi identitas (autentikasi) akun yang sah sebelum dapat dilanjutkan.",
+    "category": "AUTH REQ",
+    "label": "UNAUTHORIZED",
+    "theme": "theme-client",
+    "statusText": "BUTUH LOGIN",
+    "instruction": "Mohon lakukan proses masuk (login) terlebih dahulu menggunakan kredensial Anda. Jika Anda baru saja logout, silakan muat ulang halaman masuk utama."
+  },
+  "403": {
+    "title": "Akses Halaman Terbatas",
+    "desc": "Kebijakan otorisasi membatasi peninjauan halaman di alamat ini berdasarkan klasifikasi peran (role) akun.",
+    "category": "RESTRICTED",
+    "label": "FORBIDDEN",
+    "theme": "theme-client",
+    "statusText": "AKSES TERBATAS",
+    "instruction": "Pastikan Anda menggunakan akun dengan hak akses yang sesuai. Hubungi tim administrator apabila peran otorisasi akun Anda membutuhkan penyesuaian."
+  },
+  "404": {
+    "title": "Alamat Halaman Tidak Ditemukan",
+    "desc": "Alamat halaman atau dokumen yang Anda cari tidak ditemukan di server. Tautan kemungkinan telah disesuaikan atau kedaluwarsa.",
+    "category": "NOT FOUND",
+    "label": "NOT FOUND",
+    "theme": "theme-client",
+    "statusText": "ALAMAT KOSONG",
+    "instruction": "Silakan periksa kembali ketikan nama alamat URL Anda. Tim teknis dapat memastikan bahwa berkas tujuan telah terdistribusi secara lengkap ke server origin."
+  },
+  "408": {
+    "title": "Batas Waktu Transmisi Habis",
+    "desc": "Koneksi jaringan terputus sebelum seluruh paket data berhasil dikirimkan dan diproses secara lengkap oleh server.",
+    "category": "TIMEOUT",
+    "label": "REQ TIMEOUT",
+    "theme": "theme-client",
+    "statusText": "TIMEOUT KONEKSI",
+    "instruction": "Periksa kestabilan jaringan internet Anda dan muat ulang halaman. Kondisi ini biasanya dipengaruhi oleh tingginya latensi pada jaringan lokal."
+  },
+  "429": {
+    "title": "Aktivitas Akses Sedang Padat",
+    "desc": "Permintaan akses dari perangkat Anda sedang sangat padat dalam waktu singkat. Sistem membatasi demi menjaga stabilitas kinerja layanan.",
+    "category": "RATE LIMIT",
+    "label": "TOO MANY REQ",
+    "theme": "theme-client",
+    "statusText": "LALU LINTAS PADAT",
+    "instruction": "Mohon tunggu beberapa menit sebelum mencoba mengakses kembali. Sistem proteksi akan memulihkan kelancaran akses Anda secara otomatis."
+  },
+  "500": {
+    "title": "Penyesuaian Sistem Internal",
+    "desc": "Sistem internal sedang mengalami penyesuaian operasional. Layanan belum dapat memproses permintaan Anda untuk sementara waktu.",
+    "category": "SYSTEM ADJ",
+    "label": "INTERNAL ERR",
+    "theme": "theme-server",
+    "statusText": "PENYESUAIAN",
+    "instruction": "Notifikasi pemantauan otomatis telah dikirim ke tim teknis untuk peninjauan log berkala. Silakan coba memuat ulang halaman secara bertahap."
+  },
+  "502": {
+    "title": "Konektivitas Layanan Terhambat",
+    "desc": "Server perantara (gateway) menerima respon yang memerlukan penyesuaian dari server aplikasi utama.",
+    "category": "CONNECTIVITY",
+    "label": "BAD GATEWAY",
+    "theme": "theme-server",
+    "statusText": "TERHAMBAT 502",
+    "instruction": "Kondisi ini umumnya terjadi saat server aplikasi utama sedang melakukan sinkronisasi layanan atau pembaruan konfigurasi di origin."
+  },
+  "503": {
+    "title": "Layanan Dalam Pemeliharaan",
+    "desc": "Layanan sedang dinonaktifkan sementara untuk proses pemeliharaan berkala guna meningkatkan stabilitas sistem.",
+    "category": "MAINTENANCE",
+    "label": "SERVICE UNAVAIL",
+    "theme": "theme-server",
+    "statusText": "PEMELIHARAAN",
+    "instruction": "Layanan akan segera aktif kembali setelah proses pemeliharaan selesai dilakukan. Terima kasih atas pengertian Anda."
+  },
+  "504": {
+    "title": "Batas Waktu Respon Terlampaui",
+    "desc": "Server perantara kehabisan batas waktu tunggu yang aman saat menanti respon balik dari server aplikasi utama.",
+    "category": "GATEWAY TO",
+    "label": "GATEWAY TIMEOUT",
+    "theme": "theme-server",
+    "statusText": "TIMEOUT 504",
+    "instruction": "Proses yang Anda jalankan membutuhkan waktu penyelesaian yang lebih panjang. Tim pengembang dapat meninjau optimalisasi query database Anda."
+  },
+  "520": {
+    "title": "Format Respon Origin Disesuaikan",
+    "desc": "Server utama mengirimkan format respon yang tidak sesuai dengan protokol pembacaan standar perantara Web Proxy.",
+    "category": "PROXY DISCORD",
+    "label": "PROXY ERROR 520",
+    "theme": "theme-server",
+    "statusText": "RESP INVALID",
+    "instruction": "Tim pengelola aplikasi dapat meninjau log server web (Nginx/Apache) untuk menganalisis potensi kegagalan runtime pada kode aplikasi."
+  },
+  "521": {
+    "title": "Layanan Origin Origin Nonaktif",
+    "desc": "Server aplikasi utama menolak koneksi jaringan dari perantara Web Proxy (port tujuan tidak merespon).",
+    "category": "PROXY DISCORD",
+    "label": "PROXY ERROR 521",
+    "theme": "theme-server",
+    "statusText": "ORIGIN DOWN",
+    "instruction": "Pastikan layanan server web di origin sedang aktif dan tidak terhalang oleh aturan firewall lokal server (iptables/ufw)."
+  },
+  "522": {
+    "title": "Batas Waktu Jabat Tangan Jaringan Habis",
+    "desc": "Gagal menyelesaikan proses jabat tangan (handshake) TCP antara perantara Web Proxy dan server utama dalam batas waktu aman.",
+    "category": "PROXY TIMEOUT",
+    "label": "PROXY ERROR 522",
+    "theme": "theme-server",
+    "statusText": "TCP TIMEOUT",
+    "instruction": "Ini umumnya disebabkan oleh beban server origin yang sangat tinggi atau kegagalan rute jaringan. Pastikan IP jangkauan perantara jaringan diizinkan masuk ke server origin Anda."
+  },
+  "524": {
+    "title": "Waktu Pembacaan Data Habis",
+    "desc": "Koneksi TCP berhasil terbentuk, tetapi server utama tidak menyelesaikan pengiriman respon data hingga batas waktu aman terlampaui.",
+    "category": "PROXY TIMEOUT",
+    "label": "PROXY ERROR 524",
+    "theme": "theme-server",
+    "statusText": "READ TIMEOUT",
+    "instruction": "Proses server origin memakan waktu penyelesaian yang melebihi batas waktu default (100 detik). Optimalkan skrip database atau runtime aplikasi."
+  },
+  "1000": {
+    "title": "Rute Jaringan DNS Sedang Disesuaikan",
+    "desc": "Konfigurasi rute DNS pada perantara Web Proxy memerlukan penyelarasan alamat IP tujuan untuk kelancaran lalu lintas data.",
+    "category": "PROXY ROUTE",
+    "label": "PROXY ERROR 1000",
+    "theme": "theme-security",
+    "statusText": "RUTE DIBATASI",
+    "instruction": "Tim administrator dapat memeriksa kembali pemetaan A Record/CNAME pada dashboard perantara jaringan agar menunjuk ke IP origin yang tepat."
+  },
+  "1006": {
+    "title": "Verifikasi Identitas Jaringan",
+    "desc": "Akses dari jaringan IP Anda saat ini dibatasi berdasarkan kebijakan proteksi keamanan sistem.",
+    "category": "VERIFICATION",
+    "label": "PROXY ERROR 1006",
+    "theme": "theme-security",
+    "statusText": "IP DIAMANKAN",
+    "instruction": "Kebijakan keamanan mendeteksi pola aktivitas jaringan yang memerlukan konfirmasi ulang. Silakan hubungi tim SecDevOps untuk verifikasi IP Anda."
+  },
+  "1009": {
+    "title": "Akses Wilayah Dibatasi",
+    "desc": "Layanan ini menerapkan penyesuaian rute akses berdasarkan cakupan wilayah geografis negara asal pengunjung.",
+    "category": "GEO POLICY",
+    "label": "PROXY ERROR 1009",
+    "theme": "theme-security",
+    "statusText": "GEO RESTRICTED",
+    "instruction": "Pastikan koneksi internet Anda tidak terhubung melalui server VPN luar negeri yang memicu pembatasan wilayah akses."
+  },
+  "1015": {
+    "title": "Lalu Lintas Akses Terlalu Cepat",
+    "desc": "Laju permintaan akses dari perangkat Anda melampaui batas kecepatan aman yang ditetapkan oleh sistem proteksi Web Proxy.",
+    "category": "RATE SECURITY",
+    "label": "PROXY ERROR 1015",
+    "theme": "theme-security",
+    "statusText": "RATE LIMIT",
+    "instruction": "Sistem membatasi laju akses sementara guna menjaga keamanan sumber daya dari aktivitas otomatis. Akses akan terbuka kembali dalam beberapa menit."
+  },
+  "1016": {
+    "title": "Sinkronisasi DNS Origin Tertunda",
+    "desc": "Sistem perantara Web Proxy belum dapat meresolusi alamat DNS dari server aplikasi utama untuk meneruskan koneksi Anda.",
+    "category": "DNS RESOLVE",
+    "label": "PROXY ERROR 1016",
+    "theme": "theme-security",
+    "statusText": "DNS PENDING",
+    "instruction": "Mohon periksa status keaktifan server nama (nameserver) domain utama Anda. Pastikan konfigurasi records DNS di perantara jaringan telah aktif."
+  },
+  "1020": {
+    "title": "Proteksi Firewall Akses Aktif",
+    "desc": "Kebijakan keamanan firewall (WAF) mendeteksi parameter koneksi yang memerlukan otorisasi akses tambahan.",
+    "category": "WAF SECURE",
+    "label": "PROXY ERROR 1020",
+    "theme": "theme-security",
+    "statusText": "WAF PROTECTED",
+    "instruction": "Penyaringan ini bertujuan untuk menjaga integritas data sistem. Klik tombol laporan di atas agar tim SecDevOps dapat menganalisis parameter koneksi Anda."
+  }
+};
 
-            var currentPath = window.location.pathname;
-            if (currentPath === "/" || currentPath === "") currentPath = "/ (Root)";
-            var displayPath = currentPath;
-            if (displayPath.length > 18) displayPath = displayPath.substring(0, 15) + "...";
-            document.getElementById("dynamic-path-node").textContent = "Node " + displayPath;
+    let currentCode = '502';
+    let rawRayId = '';
+    let rawClientIp = '';
+    let rawGeo = '';
 
-            var ua = navigator.userAgent;
-            document.getElementById("user-agent").textContent = ua;
+    function formatIndonesianDate(date) {
+      const months = [
+        'JANUARI', 'FEBRUARI', 'MARET', 'APRIL', 'MEI', 'JUNI',
+        'JULI', 'AGUSTUS', 'SEPTEMBER', 'OKTOBER', 'NOVEMBER', 'DESEMBER'
+      ];
+      const day = date.getDate();
+      const monthIndex = date.getMonth();
+      const year = date.getFullYear();
+      const hours = String(date.getHours()).padStart(2, '0');
+      const minutes = String(date.getMinutes()).padStart(2, '0');
+      const seconds = String(date.getSeconds()).padStart(2, '0');
+      return `${day} ${months[monthIndex]} ${year} - ${hours}:${minutes}:${seconds} WIB`;
+    }
 
-            // --- 2. DYNAMIC WHATSAPP LINK UPDATER ---
-            function updateWALink(rayId, ip, locationOrIsp) {
-                var fullUrl = window.location.href;
-                var waNumber = "6281255559400";
-                
-                var message = "Halo Tim Teknis JabarCloud,\n\n" +
-                              "Terjadi Network Error (Class 1xxx) saat mengakses layanan.\n" +
-                              "Mohon dicek konfigurasi DNS/Host.\n\n" +
-                              "Detail:\n" +
-                              "Ke URL: " + fullUrl + "\n" +
-                              "Dengan Ray ID: " + rayId + "\n" +
-                              "Dari IP: " + ip + "\n" +
-                              "Lewat Location/ISP: " + locationOrIsp + "\n" +
-                              "User Agent: " + ua;
-                
-                var waLink = document.getElementById("wa-link");
-                if(waLink) {
-                    waLink.href = "https://wa.me/" + waNumber + "?text=" + encodeURIComponent(message);
-                }
-            }
+    document.getElementById('ui-time').textContent = formatIndonesianDate(new Date());
 
-            // --- 3. HANDLE CLOUDFLARE PLACEHOLDERS & LOCAL FALLBACK ---
-            var rayIdEl = document.getElementById("ray-id-display");
-            var rayIdFooterEl = document.getElementById("ray-id-footer");
-            var ipEl = document.getElementById("user-ip");
-            var locEl = document.getElementById("user-location");
+    function sanitizeProxyToken(id, fallback) {
+      const el = document.getElementById(id);
+      if (!el) return fallback;
+      const text = el.textContent.trim();
+      if (text.startsWith('::') && text.endsWith('::')) {
+        return fallback;
+      }
+      // Check for SSI tags that didn't render
+      if (text.startsWith('<!--') && text.endsWith('-->')) {
+        return fallback;
+      }
+      return text || fallback;
+    }
 
-            var currentRayId = rayIdEl.textContent;
-            var currentIp = ipEl.textContent;
-            
-            // Cek apakah script berjalan di lokal (placeholder belum terganti)
-            if (currentRayId.includes("::")) {
-                currentRayId = "N/A (Local Testing)";
-                rayIdEl.textContent = currentRayId;
-                rayIdFooterEl.textContent = currentRayId;
-                // Jika di lokal, force trigger IP detection
-                currentIp = "::CLIENT_IP::"; 
-            }
+    function setTheme(mode) {
+      const root = document.documentElement;
+      const sunIcon = document.getElementById('sun-icon');
+      const moonIcon = document.getElementById('moon-icon');
 
-            // --- 4. ROBUST IP DETECTION (WATERFALL METHOD) ---
-            async function getIpData() {
-                // Jika IP sudah diset oleh Cloudflare (bukan placeholder), kita pakai itu.
-                var ipIsSetByServer = !currentIp.includes("::") && currentIp.length > 5;
-                
-                const sources = [
-                    { 
-                        url: 'https://ipwho.is/', 
-                        type: 'json', 
-                        fieldIp: 'ip', 
-                        fieldIsp: 'connection.isp',
-                        fieldCity: 'city'
-                    },
-                    { 
-                        url: 'https://api.db-ip.com/v2/free/self', 
-                        type: 'json', 
-                        fieldIp: 'ipAddress', 
-                        fieldIsp: 'isp'
-                    },
-                    { 
-                        url: 'https://www.cloudflare.com/cdn-cgi/trace', 
-                        type: 'text', 
-                        fieldIp: 'ip', 
-                        fieldIsp: null 
-                    }
-                ];
+      if (mode === 'dark') {
+        root.classList.remove('light-mode');
+        root.classList.add('dark-mode');
+        sunIcon.style.display = 'block';
+        moonIcon.style.display = 'none';
+        localStorage.setItem('preferred-theme', 'dark');
+      } else {
+        root.classList.remove('dark-mode');
+        root.classList.add('light-mode');
+        sunIcon.style.display = 'none';
+        moonIcon.style.display = 'block';
+        localStorage.setItem('preferred-theme', 'light');
+      }
+      drawTicketOutline();
+    }
 
-                for (let source of sources) {
-                    try {
-                        // Jika IP sudah ada dari server, skip source 'text' karena kita hanya butuh ISP detail
-                        if (ipIsSetByServer && source.type === 'text') continue;
+    function initThemeMode() {
+      const savedTheme = localStorage.getItem('preferred-theme');
+      if (savedTheme) {
+        setTheme(savedTheme);
+      } else {
+        const currentHour = new Date().getHours();
+        const isNightTime = currentHour < 6 || currentHour >= 18;
+        setTheme(isNightTime ? 'dark' : 'light');
+      }
+    }
 
-                        const response = await fetch(source.url);
-                        if (!response.ok) throw new Error('Network error');
-                        
-                        let detectedIp = "Unknown";
-                        let detectedIsp = "Tidak terdeteksi";
+    function drawTicketOutline() {
+      const card = document.querySelector('.ticket-card');
+      const svgPath = document.getElementById('ticket-svg-path');
+      const svgDash = document.getElementById('ticket-svg-dash');
+      if (!card || !svgPath || !svgDash) return;
 
-                        if (source.type === 'json') {
-                            const data = await response.json();
-                            detectedIp = data[source.fieldIp];
-                            
-                            // Ambil ISP
-                            if (source.fieldIsp && source.fieldIsp.includes('.')) {
-                                let parts = source.fieldIsp.split('.');
-                                if(data[parts[0]] && data[parts[0]][parts[1]]) detectedIsp = data[parts[0]][parts[1]];
-                            } else if (source.fieldIsp) {
-                                detectedIsp = data[source.fieldIsp] || detectedIsp;
-                            }
-                            
-                            // Tambahan info kota
-                            if(data.city && !ipIsSetByServer) {
-                                detectedIsp = data.city + " (" + detectedIsp + ")";
-                            }
+      const w = card.offsetWidth;
+      const h = card.offsetHeight;
+      const r = 12; // Notch radius
+      const cr = 18; // Card corner radius
+      const isMobile = window.innerWidth <= 600;
+      let d = '';
 
-                            if (source.url.includes('ipwho.is') && !data.success) throw new Error('API limit');
+      if (!isMobile) {
+        const leftSection = document.querySelector('.ticket-left');
+        const x = leftSection ? leftSection.offsetWidth : 200;
 
-                        } else if (source.type === 'text') {
-                            const text = await response.text();
-                            const lines = text.split('\n');
-                            lines.forEach(line => {
-                                const [key, value] = line.split('=');
-                                if (key === 'ip') detectedIp = value;
-                            });
-                            detectedIsp = "Mode Privat";
-                        }
+        d = `M ${cr} 0 `;
+        d += `L ${x - r} 0 `;
+        d += `A ${r} ${r} 0 0 0 ${x + r} 0 `;
+        d += `L ${w - cr} 0 A ${cr} ${cr} 0 0 1 ${w} ${cr} `;
+        d += `L ${w} ${h - cr} A ${cr} ${cr} 0 0 1 ${w - cr} ${h} `;
+        d += `L ${x + r} ${h} `;
+        d += `A ${r} ${r} 0 0 0 ${x - r} ${h} `;
+        d += `L ${cr} ${h} A ${cr} ${cr} 0 0 1 0 ${h - cr} `;
+        d += `L 0 ${cr} A ${cr} ${cr} 0 0 1 ${cr} 0 Z`;
 
-                        // UPDATE UI
-                        // Jika IP belum valid dari server, update IP di layar
-                        if (!ipIsSetByServer) {
-                            currentIp = detectedIp;
-                            document.getElementById("user-ip").textContent = currentIp;
-                        }
-                        
-                        // Update Lokasi/ISP dengan data yang lebih kaya daripada sekadar kode negara
-                        document.getElementById("user-location").textContent = detectedIsp;
+        svgPath.setAttribute('d', d);
+        svgDash.setAttribute('x1', x);
+        svgDash.setAttribute('y1', r);
+        svgDash.setAttribute('x2', x);
+        svgDash.setAttribute('y2', h - r);
+      } else {
+        const leftSection = document.querySelector('.ticket-left');
+        const y = leftSection ? leftSection.offsetHeight : 120;
 
-                        // Update WA Link
-                        updateWALink(currentRayId, currentIp, detectedIsp);
-                        return;
+        d = `M ${cr} 0 `;
+        d += `L ${w - cr} 0 A ${cr} ${cr} 0 0 1 ${w} ${cr} `;
+        d += `L ${w} ${y - r} `;
+        d += `A ${r} ${r} 0 0 0 ${w} ${y + r} `;
+        d += `L ${w} ${h - cr} A ${cr} ${cr} 0 0 1 ${w - cr} ${h} `;
+        d += `L ${cr} ${h} A ${cr} ${cr} 0 0 1 0 ${h - cr} `;
+        d += `L 0 ${y + r} `;
+        d += `A ${r} ${r} 0 0 0 0 ${y - r} `;
+        d += `L 0 ${cr} A ${cr} ${cr} 0 0 1 ${cr} 0 Z`;
 
-                    } catch (e) {
-                        console.log("Source gagal, mencoba backup...");
-                    }
-                }
+        svgPath.setAttribute('d', d);
+        svgDash.setAttribute('x1', r);
+        svgDash.setAttribute('y1', y);
+        svgDash.setAttribute('x2', w - r);
+        svgDash.setAttribute('y2', y);
+      }
+    }
 
-                // Fallback
-                if (!ipIsSetByServer) document.getElementById("user-ip").textContent = "Gagal memuat";
-                document.getElementById("user-location").textContent = "Offline/Blocked";
-                updateWALink(currentRayId, currentIp, "Offline");
-            }
+    function initDiagnostics() {
+      rawRayId = sanitizeProxyToken('cf-ray', '');
+      if (!rawRayId) {
+        // Attempt random fallback if not set by server
+        rawRayId = 'REQ-' + Math.random().toString(36).substring(2, 10).toUpperCase();
+      }
+      rawClientIp = sanitizeProxyToken('cf-ip', '110.138.89.242'); // Fallback IP
+      rawGeo = sanitizeProxyToken('cf-geo', 'ID (Indonesia)');
 
-            // Jalankan deteksi
-            getIpData();
+      const domainName = window.location.hostname || 'aplikasi.domain.com';
+      const uiDomain = document.getElementById('ui-domain');
+      uiDomain.textContent = domainName;
+      uiDomain.title = domainName;
+
+      const uiIp = document.getElementById('ui-ip');
+      uiIp.textContent = rawClientIp;
+      uiIp.title = rawClientIp;
+
+      const uiGeo = document.getElementById('ui-geo');
+      uiGeo.textContent = rawGeo;
+      uiGeo.title = rawGeo;
+
+      const fullPath = window.location.pathname + window.location.search;
+      const uiPath = document.getElementById('ui-path');
+      uiPath.textContent = fullPath;
+      uiPath.title = fullPath;
+
+      const box1000 = document.getElementById('cf-box-1000') ? document.getElementById('cf-box-1000').textContent.trim() : '';
+      let detectedCode = null;
+      const codeRegex = /\b(1\d{3}|429)\b/;
+      const match1000 = box1000.match(codeRegex);
+      if (match1000 && !box1000.startsWith('::')) {
+        detectedCode = match1000[0];
+      }
+
+      const urlParams = new URLSearchParams(window.location.search);
+      const queryCode = urlParams.get('code');
+      const hashCode = window.location.hash ? window.location.hash.substring(1) : null;
+
+      if (queryCode) {
+        detectedCode = queryCode;
+      } else if (hashCode) {
+        const hashMatch = hashCode.match(/\b(1\d{3}|429)\b/);
+        detectedCode = hashMatch ? hashMatch[0] : hashCode;
+      }
+
+      updateErrorCode(detectedCode || '1000');
+    }
+
+    function updateErrorCode(code) {
+      currentCode = code;
+      const root = document.documentElement;
+      root.className = root.classList.contains('dark-mode') ? 'dark-mode' : 'light-mode';
+
+      let details = errorDetails[code];
+      if (!details) {
+        // Dynamic fallback details
+        const codeNum = parseInt(code);
+        if (codeNum >= 400 && codeNum < 500) {
+          details = {
+            title: `Penyesuaian Akses (${code})`,
+            desc: `Permintaan Anda tidak dapat dilanjutkan karena memerlukan penyelarasan pada browser atau pembatasan otorisasi klien.`,
+            category: 'CLIENT REQ',
+            label: `CLIENT REQ ${code}`,
+            theme: 'theme-client',
+            statusText: 'PENYESUAIAN AKSES',
+            instruction: 'Periksa kembali tautan yang Anda klik atau data masukan Anda. Bersihkan berkas cookie bila perlu.'
+          };
+        } else if (codeNum >= 1000 && codeNum < 1200) {
+          details = {
+            title: `Akses Dibatasi Proteksi Keamanan (${code})`,
+            desc: `Permintaan diselaraskan oleh perantara Web Proxy / WAF karena terindikasi menyalahi kebijakan keamanan jaringan.`,
+            category: 'PROXY SECURE',
+            label: `PROXY ERROR ${code}`,
+            theme: 'theme-security',
+            statusText: 'PROTEKSI AKTIF',
+            instruction: 'Pembatasan ini otomatis demi menjaga keamanan sistem. Hubungi tim SecDevOps dengan menyertakan Ray ID Anda.'
+          };
+        } else {
+          details = {
+            title: `Penyesuaian Komunikasi Sistem (${code})`,
+            desc: `Terjadi kendala interkoneksi atau eksekusi pada server aplikasi utama.`,
+            category: 'SERVER REQ',
+            label: `SERVER REQ ${code}`,
+            theme: 'theme-server',
+            statusText: 'PENYESUAIAN SYSTEM',
+            instruction: 'Tim operasional sedang meneliti log error server. Silakan muat ulang halaman beberapa saat lagi.'
+          };
+        }
+      }
+
+      root.classList.add(details.theme);
+      document.getElementById('ui-code').textContent = code;
+      document.getElementById('ui-label').textContent = details.label;
+      document.getElementById('ui-title').textContent = details.title;
+      document.getElementById('ui-desc').textContent = details.desc;
+      document.getElementById('ui-status-text').textContent = details.statusText;
+      document.getElementById('ui-instruction').textContent = details.instruction;
+
+      updateWhatsAppUrl();
+      setTimeout(drawTicketOutline, 50);
+    }
+
+    function updateWhatsAppUrl() {
+      const waBtn = document.getElementById('wa-btn');
+      if (!waBtn) return;
+
+      const currentTime = formatIndonesianDate(new Date());
+      const currentUrl = window.location.href;
+      const userAgent = navigator.userAgent;
+      const domainName = window.location.hostname || 'aplikasi.domain.com';
+      const fullPath = window.location.pathname + window.location.search;
+
+      const text = `Halo Tim JabarCloud Diskominfo,
+
+Saya mengalami kendala saat mengakses aplikasi. Berikut rincian laporan teknis untuk pemeriksaan:
+
+*Rincian Umum:*
+- Kode Status: ${currentCode}
+- Waktu Laporan: ${currentTime}
+- Domain Terakses: ${domainName}
+- Path Halaman: ${fullPath}
+- Halaman/URL: ${currentUrl}
+- User Agent: ${userAgent}
+
+*Informasi Diagnostik Keamanan (Web Proxy):*
+- IP Publik: ${rawClientIp}
+- Ray ID: ${rawRayId || 'Tidak Tersedia (Lokal)'}
+- Lokasi Geografis: ${rawGeo || 'Tidak Tersedia'}
+
+Mohon bantuannya untuk memeriksa kendala akses ini agar saya dapat kembali menggunakan layanan. Terima kasih!`;
+
+      const encodedText = encodeURIComponent(text);
+      waBtn.href = `https://wa.me/6281255559400?text=${encodedText}`;
+    }
+
+    window.addEventListener('DOMContentLoaded', () => {
+      initThemeMode();
+      initDiagnostics();
+      window.addEventListener('resize', drawTicketOutline);
+
+      if (typeof ResizeObserver !== 'undefined') {
+        const resizeObserver = new ResizeObserver(() => {
+          drawTicketOutline();
         });
-    </script>
+        resizeObserver.observe(document.querySelector('.ticket-card'));
+      } else {
+        setInterval(drawTicketOutline, 500);
+      }
+
+      const themeToggle = document.getElementById('theme-toggle');
+      themeToggle.addEventListener('click', () => {
+        const isDark = document.documentElement.classList.contains('dark-mode');
+        setTheme(isDark ? 'light' : 'dark');
+      });
+
+      const cardWrapper = document.getElementById('ticket-wrapper');
+      document.addEventListener('mousemove', (e) => {
+        const halfWidth = window.innerWidth / 2;
+        const halfHeight = window.innerHeight / 2;
+        const mouseX = (e.clientX - halfWidth) / halfWidth;
+        const mouseY = (e.clientY - halfHeight) / halfHeight;
+        const tiltX = (mouseY * -6).toFixed(2);
+        const tiltY = (mouseX * 6).toFixed(2);
+        cardWrapper.style.transform = `rotateX(${tiltX}deg) rotateY(${tiltY}deg)`;
+      });
+
+      document.addEventListener('mouseleave', () => {
+        cardWrapper.style.transform = 'rotateX(0deg) rotateY(0deg)';
+      });
+    });
+  </script>
 </body>
+
 </html>
