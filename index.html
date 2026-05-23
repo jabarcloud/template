@@ -870,67 +870,50 @@
       }
     }
 
-    /* Admin Debug Panel */
-    .admin-panel {
-      margin-top: 12px;
-      background: var(--bg-card);
-      border: 1px solid var(--card-border);
-      border-radius: 12px;
-      padding: 16px;
+    /* Astronaut badge & Floating Animation styles */
+    .astronaut-badge {
       display: flex;
       flex-direction: column;
-      gap: 12px;
-      z-index: 10;
-      transition: background-color 0.5s ease, border-color 0.5s ease;
-    }
-
-    .admin-header {
-      font-size: 0.7rem;
-      font-weight: 700;
-      letter-spacing: 0.1em;
-      color: var(--text-dim);
-      text-transform: uppercase;
-      display: flex;
-      justify-content: space-between;
       align-items: center;
-      cursor: pointer;
+      gap: 12px;
+      width: 100%;
     }
 
-    .admin-header:hover {
-      color: var(--text-muted);
+    .astronaut-badge img {
+      width: 100px;
+      height: 100px;
+      border-radius: 50%;
+      object-fit: cover;
+      border: 2px solid var(--theme-color);
+      box-shadow: 0 0 15px var(--theme-glow);
+      animation: float 4s ease-in-out infinite;
+      transition: border-color 0.8s ease, box-shadow 0.8s ease;
     }
 
-    .admin-content {
-      display: none;
-      grid-template-columns: repeat(auto-fill, minmax(80px, 1fr));
-      gap: 8px;
+    @keyframes float {
+      0% { transform: translateY(0px); }
+      50% { transform: translateY(-8px); }
+      100% { transform: translateY(0px); }
     }
 
-    .admin-content.show {
-      display: grid;
-    }
-
-    .btn-debug {
-      background: rgba(var(--card-shadow-rgb), 0.05);
-      color: var(--text-muted);
-      border: 1px solid var(--card-border);
-      padding: 6px;
-      border-radius: 4px;
-      font-size: 0.7rem;
-      font-family: 'JetBrains Mono', monospace;
-      cursor: pointer;
-      transition: all 0.2s ease;
-    }
-
-    .btn-debug:hover {
-      background: rgba(var(--card-shadow-rgb), 0.10);
-      color: var(--text-main);
-      border-color: var(--theme-color);
+    /* Mobile override for astronaut badge layout */
+    @media (max-width: 600px) {
+      .astronaut-badge {
+        flex-direction: row !important;
+        width: auto !important;
+        gap: 12px !important;
+        flex-shrink: 0;
+      }
+      
+      .astronaut-badge img {
+        width: 48px !important;
+        height: 48px !important;
+      }
     }
   </style>
 </head>
 
-<body class="theme-server">
+<body class="theme-success">
 
   <!-- Ambient background glow elements -->
   <div class="glow-container">
@@ -974,9 +957,12 @@
 
           <!-- Left Column: Status Badge & Connection Details -->
           <div class="ticket-left">
-            <div class="error-code-badge">
-              <span class="error-code-num" id="ui-code">502</span>
-              <span class="error-code-label" id="ui-label">SERVER ERR</span>
+            <div class="astronaut-badge">
+              <img src="assets/astronaut.png" alt="Astronaut Maskot">
+              <div class="error-code-badge">
+                <span class="error-code-num" id="ui-code">200</span>
+                <span class="error-code-label" id="ui-label">SUCCESS OK</span>
+              </div>
             </div>
             
             <!-- Connection Details (Moved here for better layout balance) -->
@@ -1007,9 +993,8 @@
             </div>
 
             <div class="ticket-body">
-              <h1 class="error-title" id="ui-title">Konektivitas Layanan Terhambat</h1>
-              <p class="error-desc" id="ui-desc">Server perantara menerima respon yang memerlukan penyesuaian dari
-                server utama. Kondisi ini umumnya bersifat sementara dan sedang dalam penanganan.</p>
+              <h1 class="error-title" id="ui-title">Koneksi Aman & Layanan Aktif</h1>
+              <p class="error-desc" id="ui-desc">Seluruh sistem operasional JabarCloud berjalan dengan normal. Akses komunikasi ke server utama aman dan lancar.</p>
 
               <!-- URL Path stays in the right column as a full width callout block -->
               <div class="meta-item full-width" style="margin-top: 16px;">
@@ -1021,7 +1006,7 @@
             <div class="ticket-footer">
               <div class="diagnostic-teaser">
                 <span class="teaser-label">Status Akses</span>
-                <span class="teaser-value" id="ui-status-text">PENYESUAIAN SISTEM</span>
+                <span class="teaser-value" id="ui-status-text">KONEKSI AKTIF</span>
               </div>
 
               <!-- WhatsApp Report Action Group -->
@@ -1051,9 +1036,7 @@
         Pemberitahuan Sistem
       </div>
       <p class="info-note-desc" id="ui-instruction">
-        Untuk pengunjung umum, Anda dapat mencoba memuat ulang halaman secara berkala atau membersihkan cache peramban
-        Anda. Bila kondisi penyesuaian sistem ini terus berlangsung, silakan laporkan ke admin/SecDevOps melalui tombol
-        laporan di atas untuk koordinasi penanganan lebih lanjut.
+        Halaman ini mengindikasikan konektivitas berjalan lancar. Apabila terdapat alur aplikasi yang belum sesuai, silakan tinjau kembali parameter routing Anda.
       </p>
       <!-- Encouraging note for reporting -->
       <div class="info-note-cta" style="margin-top: 12px; padding-top: 12px; border-top: 1px dashed var(--card-border); display: flex; align-items: flex-start; gap: 8px;">
@@ -1065,36 +1048,7 @@
       </div>
     </div>
 
-    <!-- Admin Tester Dashboard -->
-    <div class="admin-panel">
-      <div class="admin-header" id="admin-toggle">
-        <span>Panel Pengujian Tim Aplikasi & SecDevOps</span>
-        <span id="admin-arrow">▼</span>
-      </div>
-      <div class="admin-content" id="admin-content">
-        <button class="btn-debug" data-code="200">200 OK</button>
-        <button class="btn-debug" data-code="301">301 Move</button>
-        <button class="btn-debug" data-code="400">400 Bad</button>
-        <button class="btn-debug" data-code="401">401 Auth</button>
-        <button class="btn-debug" data-code="403">403 Fbdn</button>
-        <button class="btn-debug" data-code="404">404 NFound</button>
-        <button class="btn-debug" data-code="429">429 Rate</button>
-        <button class="btn-debug" data-code="500">500 Srv</button>
-        <button class="btn-debug" data-code="502">502 BGate</button>
-        <button class="btn-debug" data-code="503">503 Unav</button>
-        <button class="btn-debug" data-code="504">504 Time</button>
-        <button class="btn-debug" data-code="520">520 Unk</button>
-        <button class="btn-debug" data-code="521">521 Down</button>
-        <button class="btn-debug" data-code="522">522 TCP</button>
-        <button class="btn-debug" data-code="524">524 Read</button>
-        <button class="btn-debug" data-code="1000">1000 DNS</button>
-        <button class="btn-debug" data-code="1006">1006 Ban</button>
-        <button class="btn-debug" data-code="1009">1009 Geo</button>
-        <button class="btn-debug" data-code="1015">1015 Rate</button>
-        <button class="btn-debug" data-code="1016">1016 DNS</button>
-        <button class="btn-debug" data-code="1020">1020 WAF</button>
-      </div>
-    </div>
+
   </main>
 
   <!-- Hidden Web Proxy variables for JS parsing -->
@@ -1325,7 +1279,7 @@
     };
 
     // Global variables
-    let currentCode = '502';
+    let currentCode = '200';
     let rawRayId = '';
     let rawClientIp = '';
     let rawGeo = '';
@@ -1483,11 +1437,14 @@
     // Initialize Diagnostic Data from Hidden Web Proxy DOM & Browser
     function initDiagnostics() {
       // Get Ray ID
-      rawRayId = sanitizeProxyToken('cf-ray', 'MOCK-RAY-' + Math.random().toString(36).substring(2, 10).toUpperCase());
+      rawRayId = sanitizeProxyToken('cf-ray', '');
+      if (!rawRayId) {
+        rawRayId = 'MOCK-RAY-' + Math.random().toString(36).substring(2, 10).toUpperCase();
+      }
       // Get Client IP
-      rawClientIp = sanitizeProxyToken('cf-ip', '110.138.89.242'); // Mockup default
+      rawClientIp = sanitizeProxyToken('cf-ip', '');
       // Get Geo
-      rawGeo = sanitizeProxyToken('cf-geo', 'ID (Indonesia)');
+      rawGeo = sanitizeProxyToken('cf-geo', '');
 
       // Display Domain accessed
       const domainName = window.location.hostname || 'aplikasi.domain.com';
@@ -1497,13 +1454,13 @@
 
       // Display IP Address in connection meta block
       const uiIp = document.getElementById('ui-ip');
-      uiIp.textContent = rawClientIp;
-      uiIp.title = rawClientIp;
+      uiIp.textContent = rawClientIp || 'Mendeteksi...';
+      uiIp.title = rawClientIp || 'Mendeteksi...';
 
       // Display Geo Location
       const uiGeo = document.getElementById('ui-geo');
-      uiGeo.textContent = rawGeo;
-      uiGeo.title = rawGeo;
+      uiGeo.textContent = rawGeo || 'Mendeteksi...';
+      uiGeo.title = rawGeo || 'Mendeteksi...';
 
       // Display full accessed URL path
       const fullPath = window.location.pathname + window.location.search;
@@ -1511,35 +1468,25 @@
       uiPath.textContent = fullPath;
       uiPath.title = fullPath;
 
-      // Attempt to auto-detect error code from Web Proxy's injected boxes
-      const box500 = document.getElementById('cf-box-500') ? document.getElementById('cf-box-500').textContent.trim() : '';
-      const box1000 = document.getElementById('cf-box-1000') ? document.getElementById('cf-box-1000').textContent.trim() : '';
-
-      let detectedCode = null;
-      const codeRegex = /\b(5\d{2}|1\d{3}|4\d{2})\b/;
-      const match500 = box500.match(codeRegex);
-      const match1000 = box1000.match(codeRegex);
-
-      if (match500 && !box500.startsWith('::')) {
-        detectedCode = match500[0];
-      } else if (match1000 && !box1000.startsWith('::')) {
-        detectedCode = match1000[0];
+      // Check if we need to run lookup
+      if (!rawClientIp || !rawGeo || rawRayId.startsWith('MOCK-')) {
+        fetchTraceDiagnostics();
       }
 
-      // If we have an URL query parameter or hash, use it
+      // Default error code to load
       const urlParams = new URLSearchParams(window.location.search);
       const queryCode = urlParams.get('code');
       const hashCode = window.location.hash ? window.location.hash.substring(1) : null;
+      let codeToLoad = '200';
 
       if (queryCode) {
-        detectedCode = queryCode;
+        codeToLoad = queryCode;
       } else if (hashCode) {
-        const hashMatch = hashCode.match(/\b(5\d{2}|1\d{3}|4\d{2})\b/);
-        detectedCode = hashMatch ? hashMatch[0] : hashCode;
+        const hashMatch = hashCode.match(/\b(2\d{2}|3\d{2}|4\d{2}|5\d{2}|10\d{2})\b/);
+        codeToLoad = hashMatch ? hashMatch[0] : hashCode;
       }
 
-      // Apply detected code or default
-      updateErrorCode(detectedCode || '502');
+      updateErrorCode(codeToLoad);
     }
 
     // Dynamic UI Update based on error code
@@ -1658,9 +1605,349 @@ Mohon bantuannya untuk memeriksa kendala akses ini agar saya dapat kembali mengg
       waBtn.href = `https://wa.me/6281255559400?text=${encodedText}`;
     }
 
+    // Interactive space particles background canvas
+    function initSpaceParticles() {
+      const canvas = document.createElement('canvas');
+      canvas.id = 'space-particles';
+      canvas.style.position = 'fixed';
+      canvas.style.top = '0';
+      canvas.style.left = '0';
+      canvas.style.width = '100vw';
+      canvas.style.height = '100vh';
+      canvas.style.zIndex = '0';
+      canvas.style.pointerEvents = 'none';
+      document.body.prepend(canvas);
+
+      const ctx = canvas.getContext('2d');
+      let particles = [];
+      const particleCount = 100;
+      let mouse = { x: null, y: null, radius: 120 };
+
+      function resizeCanvas() {
+        canvas.width = window.innerWidth;
+        canvas.height = window.innerHeight;
+      }
+      resizeCanvas();
+      window.addEventListener('resize', resizeCanvas);
+
+      window.addEventListener('mousemove', (e) => {
+        mouse.x = e.clientX;
+        mouse.y = e.clientY;
+      });
+
+      window.addEventListener('mouseleave', () => {
+        mouse.x = null;
+        mouse.y = null;
+      });
+
+      class Particle {
+        constructor() {
+          this.reset(true);
+        }
+
+        reset(init = false) {
+          this.x = Math.random() * canvas.width;
+          this.y = init ? Math.random() * canvas.height : -10;
+          this.vx = (Math.random() - 0.5) * 0.4;
+          this.vy = (Math.random() - 0.5) * 0.4 + 0.15;
+          this.radius = Math.random() * 2 + 1;
+          this.baseAlpha = Math.random() * 0.4 + 0.2;
+          this.alpha = this.baseAlpha;
+        }
+
+        update() {
+          this.x += this.vx;
+          this.y += this.vy;
+
+          if (this.x < 0) this.x = canvas.width;
+          if (this.x > canvas.width) this.x = 0;
+          if (this.y > canvas.height) this.reset();
+
+          if (mouse.x !== null && mouse.y !== null) {
+            const dx = this.x - mouse.x;
+            const dy = this.y - mouse.y;
+            const dist = Math.sqrt(dx * dx + dy * dy);
+            
+            if (dist < mouse.radius) {
+              const force = (mouse.radius - dist) / mouse.radius;
+              const angle = Math.atan2(dy, dx);
+              this.x += Math.cos(angle) * force * 2;
+              this.y += Math.sin(angle) * force * 2;
+              this.alpha = Math.min(1.0, this.baseAlpha + force * 0.5);
+            } else {
+              this.alpha = this.baseAlpha;
+            }
+          } else {
+            this.alpha = this.baseAlpha;
+          }
+        }
+
+        draw() {
+          ctx.beginPath();
+          ctx.arc(this.x, this.y, this.radius, 0, Math.PI * 2);
+          ctx.fillStyle = `rgba(147, 197, 253, ${this.alpha})`;
+          ctx.shadowBlur = this.radius * 2;
+          ctx.shadowColor = 'rgba(147, 197, 253, 0.4)';
+          ctx.fill();
+          ctx.shadowBlur = 0;
+        }
+      }
+
+      for (let i = 0; i < particleCount; i++) {
+        particles.push(new Particle());
+      }
+
+      function drawConnections() {
+        for (let i = 0; i < particles.length; i++) {
+          const p1 = particles[i];
+          
+          for (let j = i + 1; j < particles.length; j++) {
+            const p2 = particles[j];
+            const dx = p1.x - p2.x;
+            const dy = p1.y - p2.y;
+            const dist = Math.sqrt(dx * dx + dy * dy);
+            
+            if (dist < 80) {
+              const alpha = (1 - (dist / 80)) * 0.08;
+              ctx.beginPath();
+              ctx.moveTo(p1.x, p1.y);
+              ctx.lineTo(p2.x, p2.y);
+              ctx.strokeStyle = `rgba(147, 197, 253, ${alpha})`;
+              ctx.lineWidth = 0.6;
+              ctx.stroke();
+            }
+          }
+
+          if (mouse.x !== null && mouse.y !== null) {
+            const dx = p1.x - mouse.x;
+            const dy = p1.y - mouse.y;
+            const dist = Math.sqrt(dx * dx + dy * dy);
+            
+            if (dist < mouse.radius) {
+              const alpha = (1 - (dist / mouse.radius)) * 0.15;
+              ctx.beginPath();
+              ctx.moveTo(p1.x, p1.y);
+              ctx.lineTo(mouse.x, mouse.y);
+              ctx.strokeStyle = `rgba(167, 139, 250, ${alpha})`;
+              ctx.lineWidth = 0.8;
+              ctx.stroke();
+            }
+          }
+        }
+      }
+
+      function animate() {
+        ctx.clearRect(0, 0, canvas.width, canvas.height);
+        
+        particles.forEach(p => {
+          p.update();
+          p.draw();
+        });
+        
+        drawConnections();
+        requestAnimationFrame(animate);
+      }
+      
+      animate();
+    }
+
+    function fetchGeoIP(ip) {
+      const providers = [
+        {
+          name: 'freeipapi',
+          url: 'https://freeipapi.com/api/json/' + ip,
+          parse: (data) => {
+            if (data && data.countryName) {
+              const code = data.countryCode || '';
+              return (code ? code + ' ' : '') + '(' + data.countryName + ')';
+            }
+            throw new Error('Invalid freeipapi data');
+          }
+        },
+        {
+          name: 'geojs',
+          url: 'https://get.geojs.io/v1/ip/geo/' + ip + '.json',
+          parse: (data) => {
+            if (data && data.country) {
+              const code = data.country_code || '';
+              return (code ? code + ' ' : '') + '(' + data.country + ')';
+            }
+            throw new Error('Invalid geojs data');
+          }
+        },
+        {
+          name: 'ipwhois',
+          url: 'https://ipwho.is/' + ip,
+          parse: (data) => {
+            if (data && data.success && data.country) {
+              const code = data.country_code || '';
+              return (code ? code + ' ' : '') + '(' + data.country + ')';
+            }
+            throw new Error('Invalid ipwhois data');
+          }
+        },
+        {
+          name: 'countryis',
+          url: 'https://api.country.is/' + ip,
+          parse: (data) => {
+            if (data && data.country) {
+              const code = data.country;
+              const names = {
+                'ID': 'Indonesia', 'SG': 'Singapore', 'US': 'United States',
+                'MY': 'Malaysia', 'JP': 'Japan', 'DE': 'Germany', 'KR': 'South Korea'
+              };
+              const name = names[code] || code;
+              return code + ' (' + name + ')';
+            }
+            throw new Error('Invalid country.is data');
+          }
+        }
+      ];
+
+      let index = 0;
+      function tryNext() {
+        if (index >= providers.length) {
+          console.error('All GeoIP lookup providers failed');
+          const uiGeo = document.getElementById('ui-geo');
+          if (uiGeo.textContent === 'Mendeteksi...') {
+            uiGeo.textContent = 'Proxy Lokal';
+          }
+          return;
+        }
+
+        const provider = providers[index];
+        index++;
+
+        fetch(provider.url)
+          .then(res => {
+            if (!res.ok) throw new Error(`${provider.name} returned status ${res.status}`);
+            return res.json();
+          })
+          .then(data => {
+            const geoText = provider.parse(data);
+            const uiGeo = document.getElementById('ui-geo');
+            rawGeo = geoText;
+            uiGeo.textContent = geoText;
+            uiGeo.title = geoText;
+            updateWhatsAppUrl();
+          })
+          .catch(err => {
+            console.warn(`${provider.name} failed:`, err);
+            tryNext();
+          });
+      }
+
+      tryNext();
+    }
+
+    function fetchTraceDiagnostics() {
+      fetch('/cdn-cgi/trace')
+        .then(res => {
+          if (!res.ok) throw new Error('Relative trace returned non-ok status');
+          return res.text();
+        })
+        .then(text => {
+          parseTraceData(text);
+        })
+        .catch(err => {
+          console.warn('Relative trace failed, falling back to public CORS APIs:', err);
+          fetch('https://api.db-ip.com/v2/free/self')
+            .then(res => {
+              if (!res.ok) throw new Error('db-ip returned non-ok status');
+              return res.json();
+            })
+            .then(data => {
+              if (!data || !data.ipAddress) {
+                throw new Error('db-ip returned invalid data');
+              }
+              const uiIp = document.getElementById('ui-ip');
+              rawClientIp = data.ipAddress;
+              uiIp.textContent = data.ipAddress;
+              uiIp.title = data.ipAddress;
+
+              if (data.countryName) {
+                const geoText = (data.countryCode ? data.countryCode + ' ' : '') + '(' + data.countryName + ')';
+                rawGeo = geoText;
+                const uiGeo = document.getElementById('ui-geo');
+                uiGeo.textContent = geoText;
+                uiGeo.title = geoText;
+                updateWhatsAppUrl();
+              } else {
+                fetchGeoIP(data.ipAddress);
+              }
+            })
+            .catch(err2 => {
+              console.warn('db-ip failed, trying ipify fallback:', err2);
+              fetch('https://api.ipify.org?format=json')
+                .then(res => {
+                  if (!res.ok) throw new Error('ipify returned non-ok status');
+                  return res.json();
+                })
+                .then(data => {
+                  if (data && data.ip) {
+                    rawClientIp = data.ip;
+                    const uiIp = document.getElementById('ui-ip');
+                    uiIp.textContent = data.ip;
+                    uiIp.title = data.ip;
+                    fetchGeoIP(data.ip);
+                  } else {
+                    throw new Error('ipify returned invalid data');
+                  }
+                })
+                .catch(err3 => {
+                  console.error('All diagnostic lookup attempts failed:', err3);
+                  const uiIp = document.getElementById('ui-ip');
+                  const uiGeo = document.getElementById('ui-geo');
+                  if (uiIp.textContent === 'Mendeteksi...') uiIp.textContent = '127.0.0.1';
+                  if (uiGeo.textContent === 'Mendeteksi...') uiGeo.textContent = 'Proxy Lokal';
+                });
+            });
+        });
+    }
+
+    function parseTraceData(text) {
+      const lines = text.split('\n');
+      const data = {};
+      lines.forEach(line => {
+        const parts = line.split('=');
+        if (parts.length === 2) {
+          data[parts[0].trim()] = parts[1].trim();
+        }
+      });
+
+      const uiIp = document.getElementById('ui-ip');
+      const uiGeo = document.getElementById('ui-geo');
+      
+      if (data.ip) {
+        rawClientIp = data.ip;
+        uiIp.textContent = data.ip;
+        uiIp.title = data.ip;
+      }
+      if (data.loc) {
+        const countryMap = {
+          'ID': 'ID (Indonesia)',
+          'SG': 'SG (Singapore)',
+          'US': 'US (United States)',
+          'MY': 'MY (Malaysia)',
+          'JP': 'JP (Japan)',
+          'DE': 'DE (Germany)'
+        };
+        const geoText = countryMap[data.loc] || data.loc;
+        rawGeo = geoText;
+        uiGeo.textContent = geoText;
+        uiGeo.title = geoText;
+      }
+      if (rawRayId.startsWith('MOCK-') && data.ray) {
+        rawRayId = data.ray;
+      }
+      
+      updateWhatsAppUrl();
+    }
+
     // Initialize page
     window.addEventListener('DOMContentLoaded', () => {
-      // Initialize Theme and Diagnostics
+      // Initialize Space Particles, Theme, and Diagnostics
+      initSpaceParticles();
       initThemeMode();
       initDiagnostics();
 
@@ -1706,30 +1993,6 @@ Mohon bantuannya untuk memeriksa kendala akses ini agar saya dapat kembali mengg
       // Reset tilt on mouse leave
       document.addEventListener('mouseleave', () => {
         cardWrapper.style.transform = 'rotateX(0deg) rotateY(0deg)';
-      });
-
-      // Admin Panel Toggle
-      const adminToggle = document.getElementById('admin-toggle');
-      const adminContent = document.getElementById('admin-content');
-      const adminArrow = document.getElementById('admin-arrow');
-
-      adminToggle.addEventListener('click', () => {
-        const isShown = adminContent.classList.toggle('show');
-        adminArrow.textContent = isShown ? '▲' : '▼';
-      });
-
-      // Admin Debug Buttons Action
-      const debugButtons = document.querySelectorAll('.btn-debug');
-      debugButtons.forEach(btn => {
-        btn.addEventListener('click', (e) => {
-          const code = e.target.getAttribute('data-code');
-          updateErrorCode(code);
-
-          if (history.pushState) {
-            const newurl = window.location.protocol + "//" + window.location.host + window.location.pathname + '#code-' + code;
-            window.history.pushState({ path: newurl }, '', newurl);
-          }
-        });
       });
     });
   </script>
